@@ -17,6 +17,7 @@ const HomeInput = ({
   defaultValue,
   onInputChange,
   onKeyPress,
+  maxLength,
 }: InputProps) => {
   const [visible, setVisible] = useState<boolean>(false);
   const handleTogglePassword = () => {
@@ -28,6 +29,7 @@ const HomeInput = ({
       {label && <Label htmlFor={name}>{label}</Label>}
       <div className='relative'>
         <Input
+          maxLength={maxLength}
           id={name}
           name={name}
           value={value}

@@ -61,4 +61,16 @@ export const salesSchema = z.object({
   sellingPrice: z.string().regex(/^\d+$/, 'sellingPrice is required'),
   qtyBuy: z.string().regex(/^\d+$/, 'Quantity must be a valid number'),
   totalPrice: z.string().nonempty('Total price is required'),
+  customerName: z
+    .string()
+    .optional()
+    .refine((value) => !value || value.trim().length > 2, {
+      message: 'Customer name must be at least 3 characters',
+    }),
+  customerNumber: z
+    .string()
+    .optional()
+    .refine((value) => !value || /^[0-9]{10,15}$/.test(value), {
+      message: 'Customer number must be a valid phone number',
+    }),
 });

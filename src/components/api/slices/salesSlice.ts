@@ -2,6 +2,8 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 interface Sale {
+  customerNumber: string;
+  // _id: Key | null | undefined;
   id: string;
   productId: string;
   sellingPrice: number;

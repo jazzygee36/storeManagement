@@ -16,7 +16,7 @@ const Footer = () => {
           {/* <a href=''>Twitter</a> */}
         </div>
       </div>
-      <h1 className='text-2xl md:text-9xl'>INVENTORY</h1>
+      <h1 className='text-2xl md:text-8xl'>INVENTORY</h1>
       <hr className='my-4' />
       <h3 className='text-xs'>
         (c) 2025 Inventory System. All Rights Reserved

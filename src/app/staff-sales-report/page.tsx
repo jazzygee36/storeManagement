@@ -17,14 +17,6 @@ import MainStaffDashboard from '@/components/common/staff-dashboard/main-staff-d
 import useAuth from '@/components/hook/useAuth';
 import { Sale } from '@/components/utils/interface';
 
-// const STATUS_COLORS: Record<PaymentType, string> = {
-//   Transfer: 'blue',
-//   Cash: 'green',
-//   POS: 'orange',
-//   'Cash & Transfer': 'black',
-//   'Cash & POS': 'purple',
-// };
-
 const StaffSalesReport: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { sales, loading, error } = useSelector(
@@ -41,7 +33,6 @@ const StaffSalesReport: React.FC = () => {
   useEffect(() => {
     const staffId = localStorage.getItem('staffId');
     if (staffId) {
-      console.log('Fetching sales for staffId:', staffId);
       dispatch(fetchSales(staffId));
     }
 
@@ -51,7 +42,10 @@ const StaffSalesReport: React.FC = () => {
   }, [dispatch]);
 
   const openModal = (salesData: Sale[]) => {
-    setSelectedSales(salesData);
+    const filteredSales = salesData.filter(
+      (sale) => sale.paymentMethod !== 'Credit'
+    );
+    setSelectedSales(filteredSales);
     setIsModalOpen(true);
   };
 
@@ -86,7 +80,15 @@ const StaffSalesReport: React.FC = () => {
                       <TableHead className='text-center'>
                         <p>
                           Total Sales:
-                          <strong> {formatNumber(saleData.grandTotal)}</strong>
+                          <strong>
+                            {formatNumber(
+                              saleData.sales
+                                .filter(
+                                  (sale) => sale.paymentMethod !== 'Credit'
+                                )
+                                .reduce((acc, sale) => acc + sale.totalPrice, 0)
+                            )}
+                          </strong>
                         </p>
                       </TableHead>
                       <TableHead

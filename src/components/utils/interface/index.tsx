@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 
 export interface InputProps {
+  maxLength?: number;
   label?: string;
   placeholder?: string;
   type?: string;
@@ -19,7 +20,7 @@ export interface ButtonProps {
   className?: string;
   type?: 'submit' | 'button';
   color: string;
-  onClick?: () => void;
+  onClick?: (e?: React.FormEvent) => void;
   disabled?: boolean;
   bg?: string;
   width?: string;
@@ -68,6 +69,7 @@ export type PaymentType =
   | 'Cash & POS';
 
 export interface Sale {
+  customerNumber: string;
   id: string;
   productName?: string; // Optional productName
   qtySold: number;

@@ -11,6 +11,7 @@ import salesReducer from '../api/slices/salesSlice';
 import productUpdateReducer from '../api/slices/updateProductSlice';
 import emailVerificationReducer from '../api/slices/emailVerificationSlice';
 import passwordResetReducer from '../api/slices/resetPasswordVerification';
+import updatePaymentSliceReducer from '../api/slices/updatePaymentSlice';
 
 export const store = configureStore({
   reducer: {
@@ -26,6 +27,7 @@ export const store = configureStore({
     updateProducts: productUpdateReducer,
     emailVerification: emailVerificationReducer,
     passwordReset: passwordResetReducer,
+    updatePaymentSlice: updatePaymentSliceReducer,
   },
 });
 

@@ -29,6 +29,8 @@ const StaffSellProduct = () => {
     qtyBuy: '',
     totalPrice: '',
     paymentMethod: '',
+    customerName: '',
+    customerNumber: '',
   });
 
   const [currentSales, setCurrentSales] = useState<FormData[]>([]);
@@ -132,18 +134,28 @@ const StaffSellProduct = () => {
       return;
     }
 
+    const newErrors: { [key: string]: string } = {};
+
     if (!data.paymentMethod) {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        paymentMethod: 'Select a payment method',
-      }));
+      newErrors.paymentMethod = 'Select a payment method';
+    }
+
+    if (data.paymentMethod === 'Credit') {
+      if (!data.customerName) {
+        newErrors.customerName = 'Customer name is required ';
+      }
+      if (!data.customerNumber) {
+        newErrors.customerNumber = 'Customer number is required ';
+      }
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      console.log('Validation Errors:', newErrors);
+      setErrors(newErrors);
       return;
     }
 
-    setErrors((prevErrors) => ({
-      ...prevErrors,
-      paymentMethod: '',
-    }));
+    setErrors({}); // Clear errors if validation passes
 
     if (currentSales.length === 0) {
       return;
@@ -163,6 +175,10 @@ const StaffSellProduct = () => {
           qtySold: parseInt(sale.qtyBuy, 10),
           totalPrice: parseFloat(sale.totalPrice.replace(/,/g, '')),
           paymentMethod: data.paymentMethod,
+          customerName:
+            data.paymentMethod === 'Credit' ? data.customerName || '' : '',
+          customerNumber:
+            data.paymentMethod === 'Credit' ? data.customerNumber || '' : '',
           date: new Date().toISOString(),
         };
       })
@@ -171,7 +187,9 @@ const StaffSellProduct = () => {
     if (salesData.length === 0) {
       return;
     }
+
     setLoading(true);
+    console.log('Sales Data:', salesData);
     try {
       const response = await dispatch(
         addSale({
@@ -179,7 +197,8 @@ const StaffSellProduct = () => {
           staffId,
           showToast: () => addToast('Sale recorded successfully', 'success'),
         })
-      ).unwrap(); // `unwrap` ensures we get the action payload
+      ).unwrap();
+      console.log('Sales response:', response);
 
       if (response.length > 0) {
         addToast('Sale recorded successfully', 'success');
@@ -292,7 +311,7 @@ const StaffSellProduct = () => {
           </Card>
 
           <div>
-            <table className='w-full'>
+            <table className='w-[95%] m-auto '>
               <thead>
                 <tr className='bg-gray-100'>
                   <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
@@ -355,6 +374,64 @@ const StaffSellProduct = () => {
             </table>
             {currentSales.length > 0 && (
               <>
+                {data.paymentMethod === 'Credit' && (
+                  <div className='flex flex-col  my-4 gap-4 w-[90%] m-auto'>
+                    <div className='flex items-center justify-between md:justify-around  gap-2'>
+                      <div>
+                        <HomeInput
+                          label='Customer Name'
+                          name='customerName'
+                          value={data.customerName ?? ''}
+                          onChange={(e) => {
+                            setData((prev) => ({
+                              ...prev,
+                              customerName: e.target.value,
+                            }));
+                            setErrors((prev) => ({
+                              ...prev,
+                              customerName: '',
+                            })); // Clear error
+                          }}
+                        />
+                        {errors.customerName && (
+                          <p className='text-red-500 text-[13px]'>
+                            {errors.customerName}
+                          </p>
+                        )}
+                      </div>
+                      <div>
+                        <HomeInput
+                          label='Customer Number'
+                          name='customerNumber'
+                          value={data.customerNumber ?? ''}
+                          onChange={(e) => {
+                            setData((prev) => ({
+                              ...prev,
+                              customerNumber: e.target.value,
+                            }));
+                            setErrors((prev) => ({
+                              ...prev,
+                              customerNumber: '',
+                            })); // Clear error
+                          }}
+                          onKeyPress={(
+                            event: React.KeyboardEvent<HTMLInputElement>
+                          ) => {
+                            if (!/[0-9 +]/.test(event.key)) {
+                              event.preventDefault();
+                            }
+                          }}
+                          maxLength={11} // Ensures max length
+                        />
+                        {errors.customerNumber && (
+                          <p className='text-red-500 text-[13px]'>
+                            {errors.customerNumber}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
                 <div className='mt-5 flex justify-around items-center'>
                   <label className='text-sm'>Payment Method</label>
                   <div>
@@ -368,6 +445,7 @@ const StaffSellProduct = () => {
                       <option value='Cash'>Cash</option>
                       <option value='POS'>POS</option>
                       <option value='Transfer'>Transfer</option>
+                      <option value='Credit'>Credit</option>
                     </select>
                     {errors.paymentMethod && (
                       <p className='text-red-500 text-[13px]'>
@@ -376,12 +454,13 @@ const StaffSellProduct = () => {
                     )}
                   </div>
                 </div>
-                <div className='w-[50%] mt-5 m-auto'>
+
+                <div className='w-[50%] my-5 m-auto'>
                   <HomeButton
                     title={loading ? 'Processing...' : 'Complete Sales'}
                     color={'white'}
                     onClick={handleSales}
-                    className='w-[100%] mt-5 m-auto bg-green-600'
+                    className='w-[100%] my-5 m-auto bg-green-600'
                     disabled={loading}
                   />
                 </div>

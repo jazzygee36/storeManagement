@@ -26,7 +26,7 @@ const Navigation = [
     subItems: [
       { description: 'Daily sales', path: '/admin-reports' },
       { description: 'Monthly sales summary', path: '/admin-monthly-review' },
-      { description: 'Credit note', path: '/coming-soon' },
+      { description: 'Credit note', path: '/admin-credit-note' },
     ],
   },
   {
@@ -67,7 +67,7 @@ const Sidebar = () => {
 
   const handleLogOut = () => {
     localStorage.clear();
-    router.push('/');
+    router.push('/login');
   };
 
   return (

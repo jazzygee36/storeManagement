@@ -17,6 +17,10 @@ const Navigation = [
     description: ' Daily Sales',
     path: '/staff-sales-report',
   },
+  {
+    description: ' Credit Note',
+    path: '/staff-credit-note',
+  },
   // {
   //   description: ' Receipt',
   //   path: '/receipt',
@@ -57,7 +61,7 @@ const StaffHeader = () => {
 
   const handleLogOut = () => {
     localStorage.clear();
-    router.push('/');
+    router.push('/login');
   };
 
   const getActiveDescription = () => {

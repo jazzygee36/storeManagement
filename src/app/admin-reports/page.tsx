@@ -16,17 +16,14 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 
 interface Report {
+  paymentMethod: string;
   qtySold: number;
   unitPrice: number;
-  _id: string;
-  date: string;
   totalPrice: number;
 }
 
 interface StaffReport {
   username: string;
-  totalPrice: number;
-  totalProfit: number;
   reports: Report[];
 }
 
@@ -34,6 +31,21 @@ interface SalesReport {
   date: string;
   staffReports: StaffReport[];
 }
+
+const formatNumber = (num: number): string =>
+  new Intl.NumberFormat().format(num);
+
+const calculateTotalSales = (reports: Report[]): number =>
+  reports
+    .filter((r) => r.paymentMethod !== 'Credit')
+    .reduce((total, r) => total + r.totalPrice, 0);
+
+const calculateProfit = (reports: Report[]): number =>
+  Math.abs(
+    reports
+      .filter((r) => r.paymentMethod !== 'Credit')
+      .reduce((total, r) => total + (r.totalPrice - r.qtySold * r.unitPrice), 0)
+  );
 
 const SalesReports: React.FC = () => {
   const isAuthenticated = useAuth();
@@ -43,36 +55,20 @@ const SalesReports: React.FC = () => {
 
   useEffect(() => {
     const fetchSalesReports = async () => {
-      const userId = localStorage.getItem('userId');
       try {
-        const response = await axios(
+        const userId = localStorage.getItem('userId');
+        const response = await axios.get(
           `${process.env.NEXT_PUBLIC_BASE_URL}/${userId}/staff/sales/report`
         );
         if (Array.isArray(response.data?.salesReports)) {
           setSalesReports(response.data.salesReports);
-        } else {
-          console.error(
-            'salesReports is not an array',
-            response.data?.salesReports
-          );
         }
       } catch (error) {
         console.error('Error fetching sales reports:', error);
       }
     };
-
     fetchSalesReports();
   }, []);
-
-  const formatNumber = (num: number): string =>
-    new Intl.NumberFormat().format(num);
-
-  const calculateProfit = (reports?: Report[]): number =>
-    reports?.reduce(
-      (total, item) =>
-        total + (item.totalPrice - item.qtySold * item.unitPrice),
-      0
-    ) || 0;
 
   const totalPages = Math.ceil(salesReports.length / itemsPerPage);
   const currentSlice = salesReports.slice(
@@ -93,39 +89,31 @@ const SalesReports: React.FC = () => {
                 <TableHead>Staff Name</TableHead>
                 <TableHead>Total Sales</TableHead>
                 <TableHead>Profit</TableHead>
-                {/* <TableHead className='text-center'>More</TableHead> */}
               </TableRow>
             </TableHeader>
             <TableBody>
               {salesReports.length > 0 ? (
                 currentSlice.map(({ date, staffReports }, index) => (
                   <React.Fragment key={index}>
-                    {staffReports.map(
-                      ({ username, totalPrice, reports }, reportIndex) => {
-                        return (
-                          <TableRow key={reportIndex}>
-                            <TableCell>
-                              {new Date(date).toLocaleDateString()}
-                            </TableCell>
-                            <TableCell className='capitalize'>
-                              {username}
-                            </TableCell>
-                            <TableCell>N{formatNumber(totalPrice)}</TableCell>
-                            <TableCell>
-                              N{formatNumber(calculateProfit(reports))}
-                            </TableCell>
-                            {/* <TableCell className='text-center cursor-pointer'>
-                            View More
-                          </TableCell> */}
-                          </TableRow>
-                        );
-                      }
-                    )}
+                    {staffReports.map(({ username, reports }, reportIndex) => (
+                      <TableRow key={reportIndex}>
+                        <TableCell>
+                          {new Date(date).toLocaleDateString()}
+                        </TableCell>
+                        <TableCell className='capitalize'>{username}</TableCell>
+                        <TableCell>
+                          N{formatNumber(calculateTotalSales(reports))}
+                        </TableCell>
+                        <TableCell>
+                          N{formatNumber(calculateProfit(reports))}
+                        </TableCell>
+                      </TableRow>
+                    ))}
                   </React.Fragment>
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={5} className='text-center'>
+                  <TableCell colSpan={4} className='text-center'>
                     No Sales Reports Available
                   </TableCell>
                 </TableRow>
