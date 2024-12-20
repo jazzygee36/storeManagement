@@ -1,15 +1,20 @@
 import React from 'react';
+import Image from 'next/image';
+import Stock from '@/components/assets/svg/Suppliers.svg';
+import OutOfStock from '@/components/assets/svg/Categories.svg';
 
 const ProductSummary = () => {
   return (
     <div className='grid grid-cols-2 gap-4 mt-3 justify-between items-center text-center text-sm'>
       <div>
-        <h5>3</h5>
+        <Image src={Stock} alt='sales' className='m-auto mb-4' />
+
         <p className='text-[green] font-medium'>Product In-Stock</p>
       </div>
 
       <div>
-        <h5>3</h5>
+        <Image src={OutOfStock} alt='sales' className='m-auto mb-4' />
+
         <p className='text-[red] font-medium'>Product Out-Of-Stock</p>
       </div>
     </div>

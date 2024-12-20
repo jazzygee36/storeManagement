@@ -58,17 +58,27 @@ const Products = ({
                 Products
               </th>
               <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
-                Buying Price
+                Unit Price(1)
               </th>
               <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
-                Qty Given
+                Qty Bought
               </th>
               <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
-                Selling Price
+                Goods Value
               </th>
               <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
-                Qty Remaining
+                Sales Price(1)
               </th>
+              <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
+                Qty Sold
+              </th>
+              <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
+                Sales Value
+              </th>
+              <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
+                Remaining Items
+              </th>
+
               <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
                 Expire Date
               </th>
@@ -100,6 +110,15 @@ const Products = ({
                 </td>
                 <td className='border border-gray-200 px-4 py-2 text-sm'>
                   {product.sellingPrice}
+                </td>
+                <td className='border border-gray-200 px-4 py-2 text-sm'>
+                  {product.qtyRemaning}
+                </td>
+                <td className='border border-gray-200 px-4 py-2 text-sm'>
+                  {product.qtyRemaning}
+                </td>
+                <td className='border border-gray-200 px-4 py-2 text-sm'>
+                  {product.qtyRemaning}
                 </td>
                 <td className='border border-gray-200 px-4 py-2 text-sm'>
                   {product.qtyRemaning}

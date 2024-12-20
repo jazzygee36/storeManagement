@@ -4,6 +4,7 @@ import DashboardLogo from '@/components/assets/svg/dasboardLogo.svg';
 import DashbaordIcon from '@/components/assets/icons/dashboard';
 import InventoryIcon from '@/components/assets/icons/inventory';
 import StoreIcon from '@/components/assets/icons/store';
+import BookIcon from '@/components/assets/icons/book';
 
 const Navigation = [
   {
@@ -15,6 +16,11 @@ const Navigation = [
     icon: <InventoryIcon />,
     description: 'Inventory',
     path: '/inventory',
+  },
+  {
+    icon: <BookIcon />,
+    description: 'Daily Sales Report',
+    path: '/reports',
   },
   {
     icon: <StoreIcon />,
