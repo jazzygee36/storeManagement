@@ -27,8 +27,8 @@ const Register = () => {
           </p>
           <form className=' md:px-5 lg:px-[130px]'>
             <HomeInput
-              label={'Name'}
-              placeholder={'Enter your name'}
+              label={'Username'}
+              placeholder={'Enter your username'}
               type={'text'}
             />
             <HomeInput

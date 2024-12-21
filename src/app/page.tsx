@@ -3,12 +3,11 @@ import AdminIcon from '@/components/assets/icons/admin';
 import StaffIcon from '@/components/assets/icons/staff';
 import SmallLogo from '@/components/assets/svg/smallLogo.svg';
 import Image from 'next/image';
-import Dashboard from './dashboard/page';
 
 export default function Home() {
   return (
     <>
-       <div className='flex justify-end absolute right-2 top-2'>
+      <div className='flex justify-end absolute right-2 top-2'>
         <Image src={SmallLogo} alt='smallLogo' />
       </div>
       <div className='text-center h-screen w-[90%] md:w-[45%] m-auto  flex flex-col items-center justify-center'>
@@ -39,8 +38,7 @@ export default function Home() {
             <h5>Staff Login</h5>
           </div>
         </div>
-      </div> 
-   
+      </div>
     </>
   );
 }

@@ -33,7 +33,7 @@ const LowStocks = () => {
               Remaining Quantity: {lowStock.RemaningQuantity}
             </h4>
           </div>
-          <div className='text-[red]'>Low</div>
+          <div className='text-[orange]'>Low</div>
         </div>
       ))}
     </div>

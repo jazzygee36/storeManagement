@@ -1,9 +1,8 @@
 'use client';
-import MoreIcon from '@/components/assets/icons/more';
 import DropdownMenu from '@/components/common/dropdown-menu';
 import ReusableModal from '@/components/common/modal';
 import { ProductProps } from '@/components/utils/interface';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 
 type Status = 'Out-of-stock' | 'In-stock' | 'Low';
 
@@ -19,11 +18,23 @@ const ProductStatusColor = {
   Low: 'orange',
 };
 
+interface ProductItem {
+  product: string;
+  buyingPrice: string;
+  qty: string;
+  sellingPrice: string;
+  exp: string;
+  status: string;
+  purchaseAmt: string;
+  amtGain: string;
+  qtyRemaning: string;
+}
+
 interface Props {
-  currentPage: any;
-  productItems: any;
-  setCurrentPage: any;
-  totalPages: any;
+  currentPage: number;
+  productItems: ProductItem[];
+  setCurrentPage: Dispatch<SetStateAction<number>>;
+  totalPages: number;
 }
 
 const Products = ({

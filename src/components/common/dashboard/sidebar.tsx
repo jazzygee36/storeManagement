@@ -30,7 +30,7 @@ const Navigation = [
 ];
 const Sidebar = () => {
   return (
-    <div className='w-[280px] px-6'>
+    <div className='w-[280px] px-6 '>
       <div className='m-auto mt-6'>
         <Image src={DashboardLogo} alt='logo' />
       </div>
