@@ -1,7 +1,7 @@
 import React from 'react';
 import { ButtonProps } from '../utils/interface';
 
-const HomeButton = ({ title, bg, type, color, onClick }: ButtonProps) => {
+const HomeButton = ({ title, bg, color, onClick }: ButtonProps) => {
   return (
     <button
       style={{ backgroundColor: bg, color: color }}

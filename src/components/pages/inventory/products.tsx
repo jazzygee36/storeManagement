@@ -102,7 +102,7 @@ const Products = ({
             </tr>
           </thead>
           <tbody>
-            {productItems.map((product: any, index: any) => (
+            {productItems.map((product, index) => (
               <tr
                 key={index}
                 onClick={() => {
@@ -158,7 +158,9 @@ const Products = ({
       <div className='flex justify-between items-center mt-5 mb-3'>
         <button
           className='px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300 disabled:opacity-50'
-          onClick={() => setCurrentPage((prev: any) => Math.max(prev - 1, 1))}
+          onClick={() =>
+            setCurrentPage((prev: number) => Math.max(prev - 1, 1))
+          }
           disabled={currentPage === 1}
         >
           Previous
@@ -169,7 +171,7 @@ const Products = ({
         <button
           className='px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300 disabled:opacity-50'
           onClick={() =>
-            setCurrentPage((prev: any) => Math.min(prev + 1, totalPages))
+            setCurrentPage((prev: number) => Math.min(prev + 1, totalPages))
           }
           disabled={currentPage === totalPages}
         >

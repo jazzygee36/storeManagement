@@ -1,3 +1,5 @@
+import { ReactNode } from 'react';
+
 export interface InputProps {
   label?: string;
   placeholder: string;
@@ -14,7 +16,7 @@ export interface ButtonProps {
 
 export interface PaperProps {
   title: string;
-  container?: any;
+  container?: ReactNode;
 }
 
 export interface ProductProps {
