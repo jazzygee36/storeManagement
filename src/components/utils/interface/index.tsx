@@ -9,7 +9,7 @@ export interface ButtonProps {
   bg: string;
   type: 'Submit' | 'Button';
   color: string;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 export interface PaperProps {
