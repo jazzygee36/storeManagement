@@ -1,8 +1,9 @@
 'use client';
 import HomeButton from '@/components/common/button';
 import MainDashboard from '@/components/common/dashboard/main-dasboard';
+import ReusableModal from '@/components/common/modal';
 import PaperBackground from '@/components/common/paper-bg';
-import Overall from '@/components/pages/inventory/overall';
+import AllProductModal from '@/components/pages/inventory/add-product-modal';
 import Products from '@/components/pages/inventory/products';
 import { useState } from 'react';
 
@@ -98,6 +99,7 @@ const AllProducts = [
 ];
 
 const Inventory = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [filter, setFilter] = useState('');
   const itemsPerPage = 5;
@@ -115,11 +117,19 @@ const Inventory = () => {
     currentPage * itemsPerPage
   );
 
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <MainDashboard>
-      <PaperBackground title={'Overall Inventory'}>
+      {/* <PaperBackground title={'Overall Inventory'}>
         <Overall />
-      </PaperBackground>
+      </PaperBackground> */}
 
       <div className='mt-5'>
         <PaperBackground
@@ -131,6 +141,7 @@ const Inventory = () => {
                 bg={'#4285F4'}
                 type={'Submit'}
                 color={'white'}
+                onClick={openModal}
               />
               <select
                 className='border border-gray-300 p-2 rounded-md'
@@ -156,6 +167,9 @@ const Inventory = () => {
           />
         </PaperBackground>
       </div>
+      <ReusableModal isOpen={isModalOpen} onClose={closeModal}>
+        <AllProductModal />
+      </ReusableModal>
     </MainDashboard>
   );
 };

@@ -84,10 +84,10 @@ const Products = ({
                 Qty Sold
               </th>
               <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
-                Sales Value
+                Remaining Items
               </th>
               <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
-                Remaining Items
+                Sales Value
               </th>
 
               <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
