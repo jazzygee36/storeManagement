@@ -5,8 +5,13 @@ import SmallLogo from '../../components/assets/svg/smallLogo.svg';
 import HomeInput from '@/components/common/input';
 import HomeButton from '@/components/common/button';
 import BackArrow from '@/components/assets/icons/back';
+import { useRouter } from 'next/router';
 
 const StaffLogin = () => {
+  const handleSubmit = () => {
+    window.location.href = '/staff-dashboard';
+  };
+
   return (
     <>
       <BackArrow />
@@ -24,7 +29,7 @@ const StaffLogin = () => {
           <p className='text-[#667085] text-[16px] mt-3 mb-8 text-center'>
             Welcome back! Please enter your details.
           </p>
-          <form className=' md:px-5 lg:px-[130px]'>
+          <form onSubmit={handleSubmit} className=' md:px-5 lg:px-[130px]'>
             <HomeInput
               label={'Username'}
               placeholder={'Enter your username'}
@@ -41,8 +46,9 @@ const StaffLogin = () => {
             <HomeButton
               title={'Login'}
               bg={'#4285F4'}
-              type={'Submit'}
+              // type={'submit'}
               color='white'
+              onClick={() => (window.location.href = '/staff-dashboard')}
             />
           </form>
           <div className='mt-2'>

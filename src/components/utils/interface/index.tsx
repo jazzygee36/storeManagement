@@ -3,13 +3,13 @@ import { ReactNode } from 'react';
 export interface InputProps {
   label?: string;
   placeholder: string;
-  type: string;
+  type?: string;
 }
 
 export interface ButtonProps {
   title: string;
   bg: string;
-  type: 'Submit' | 'Button';
+  type?: 'submit' | 'button';
   color: string;
   onClick?: () => void;
 }

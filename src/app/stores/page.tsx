@@ -1,7 +1,7 @@
 import HomeButton from '@/components/common/button';
 import MainDashboard from '@/components/common/dashboard/main-dasboard';
 import PaperBackground from '@/components/common/paper-bg';
-import StaffStore from '@/components/pages/staff/staff-store';
+import StaffStore from '@/components/pages/create-staff/staff-store';
 import React from 'react';
 
 const Stores = () => {
