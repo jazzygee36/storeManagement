@@ -2,11 +2,8 @@ import React from 'react';
 import HomeInput from '../input';
 import NotificationIcon from '@/components/assets/icons/notification';
 import DownArrow from '@/components/assets/icons/down-arrow';
-interface HeaderProps {
-  onToggleSidebar?: () => void;
-}
 
-const StaffHeader: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
+const StaffHeader = () => {
   return (
     <div className='w-[100%] flex justify-between items-center px-2  relative top-2  bg-white rounded-lg m-auto'>
       {/* Sidebar Toggle Button */}

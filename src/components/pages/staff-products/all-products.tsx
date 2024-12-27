@@ -1,34 +1,7 @@
 'use client';
-import DropdownMenu from '@/components/common/dropdown-menu';
-import ReusableModal from '@/components/common/modal';
+
 import { ProductProps } from '@/components/utils/interface';
-import { Dispatch, SetStateAction, useState } from 'react';
-
-type Status = 'Out-of-stock' | 'In-stock' | 'Low';
-
-const color: Record<Status, string> = {
-  'Out-of-stock': 'red',
-  'In-stock': 'green',
-  Low: 'orange',
-};
-
-const ProductStatusColor = {
-  'Out-of-stock': 'red',
-  'In-stock': 'green',
-  Low: 'orange',
-};
-
-interface ProductItem {
-  product: string;
-  buyingPrice: string;
-  qty: string;
-  sellingPrice: string;
-  exp: string;
-  status: string;
-  purchaseAmt: string;
-  amtGain: string;
-  qtyRemaning: string;
-}
+import { useState } from 'react';
 
 // interface Props {
 //   currentPage: number;
@@ -38,22 +11,6 @@ interface ProductItem {
 // }
 
 const StaffProducts = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const [selectedTransaction, setSelectedTransaction] =
-    useState<ProductProps | null>(null);
-
-  // Open modal and set selected transaction
-  const openModal = (transaction: ProductProps) => {
-    setSelectedTransaction(transaction);
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setSelectedTransaction(null);
-    setIsModalOpen(false);
-  };
-
   return (
     <>
       <div className='overflow-x-auto mt-5'>

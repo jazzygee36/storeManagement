@@ -1,7 +1,6 @@
 import PaperBackground from '@/components/common/paper-bg';
 import StaffHeader from '@/components/common/staff-dashboard/staff-header';
 import StaffProducts from '@/components/pages/staff-products/all-products';
-import { SetStateAction } from 'react';
 
 const StaffDashboard = () => {
   return (

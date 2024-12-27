@@ -5,7 +5,6 @@ import SmallLogo from '../../components/assets/svg/smallLogo.svg';
 import HomeInput from '@/components/common/input';
 import HomeButton from '@/components/common/button';
 import BackArrow from '@/components/assets/icons/back';
-import { useRouter } from 'next/router';
 
 const StaffLogin = () => {
   const handleSubmit = () => {
