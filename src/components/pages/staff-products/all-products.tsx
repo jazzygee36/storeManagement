@@ -1,8 +1,5 @@
 'use client';
 
-import { ProductProps } from '@/components/utils/interface';
-import { useState } from 'react';
-
 // interface Props {
 //   currentPage: number;
 //   productItems: ProductItem[];
