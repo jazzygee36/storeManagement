@@ -14,7 +14,7 @@ const Stores = () => {
             <HomeButton
               title={'Create Staff'}
               bg={'#4285F4'}
-              type={'Submit'}
+              type={'submit'}
               color={'white'}
             />
           </>

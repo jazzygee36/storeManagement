@@ -16,13 +16,13 @@ const StaffStore = () => {
           <HomeButton
             title={'Edit'}
             bg={'grey'}
-            type={'Submit'}
+            type={'submit'}
             color={'white'}
           />
           <HomeButton
             title={'Delete'}
             bg={'red'}
-            type={'Submit'}
+            type={'submit'}
             color={'white'}
           />
         </div>

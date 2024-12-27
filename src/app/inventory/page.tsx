@@ -139,7 +139,7 @@ const Inventory = () => {
               <HomeButton
                 title={'Add Products'}
                 bg={'#4285F4'}
-                type={'Submit'}
+                type={'submit'}
                 color={'white'}
                 onClick={openModal}
               />

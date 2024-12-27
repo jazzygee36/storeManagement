@@ -52,7 +52,7 @@ const Register = () => {
             <HomeButton
               title={'Get Started'}
               bg={'#4285F4'}
-              type={'Submit'}
+              type={'submit'}
               color='white'
             />
           </form>
