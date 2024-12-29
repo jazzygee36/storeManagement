@@ -4,6 +4,9 @@ export interface InputProps {
   label?: string;
   placeholder: string;
   type?: string;
+  value?: string;
+  onChange?: any;
+  name?: string;
 }
 
 export interface ButtonProps {
@@ -12,6 +15,7 @@ export interface ButtonProps {
   type?: 'submit' | 'button';
   color: string;
   onClick?: () => void;
+  disabled?: boolean;
 }
 
 export interface PaperProps {

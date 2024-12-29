@@ -1,8 +1,10 @@
 'use client';
 import HomeButton from '@/components/common/button';
 import MainDashboard from '@/components/common/dashboard/main-dasboard';
+import Loading from '@/components/common/loadingState';
 import ReusableModal from '@/components/common/modal';
 import PaperBackground from '@/components/common/paper-bg';
+import useAuth from '@/components/hook/useAuth';
 import AllProductModal from '@/components/pages/inventory/add-product-modal';
 import Products from '@/components/pages/inventory/products';
 import { useState } from 'react';
@@ -99,6 +101,11 @@ const AllProducts = [
 ];
 
 const Inventory = () => {
+  const isAuthenticated = useAuth();
+
+  if (!isAuthenticated) {
+    return <Loading />;
+  }
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [filter, setFilter] = useState('');

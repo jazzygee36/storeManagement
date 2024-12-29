@@ -3,8 +3,11 @@ import AdminIcon from '@/components/assets/icons/admin';
 import StaffIcon from '@/components/assets/icons/staff';
 import SmallLogo from '@/components/assets/svg/smallLogo.svg';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
+  const router = useRouter();
+
   return (
     <>
       <div className='flex justify-end absolute right-2 top-2'>
@@ -37,6 +40,19 @@ export default function Home() {
             </div>
             <h5>Staff Login</h5>
           </div>
+        </div>
+        <div className='mt-4'>
+          <h3 className='text-center'>
+            Don&apos;t have an account?{' '}
+            <span
+              className='text-[#4285F4] cursor-pointer'
+              onClick={() => {
+                router.push('/register');
+              }}
+            >
+              Sign up
+            </span>
+          </h3>
         </div>
       </div>
     </>

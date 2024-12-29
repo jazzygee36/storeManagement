@@ -12,7 +12,7 @@ const Navigation = [
   {
     icon: <DashbaordIcon />,
     description: 'Dashboard',
-    path: '/dashboard',
+    path: '/admin-dashboard',
   },
   {
     icon: <InventoryIcon />,

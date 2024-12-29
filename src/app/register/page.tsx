@@ -5,8 +5,38 @@ import SmallLogo from '../../components/assets/svg/smallLogo.svg';
 import HomeInput from '@/components/common/input';
 import HomeButton from '@/components/common/button';
 import BackArrow from '@/components/assets/icons/back';
+import { z } from 'zod';
+import { registerSchema } from '@/components/utils/validation';
+import { useState } from 'react';
+
+type FormData = z.infer<typeof registerSchema>;
 
 const Register = () => {
+  const [data, setData] = useState<FormData>({
+    username: '',
+    email: '',
+    password: '',
+  });
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setData((prevData) => ({ ...prevData, [name]: value }));
+  };
+  const handleRegisterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const result = registerSchema.safeParse(data);
+
+    if (!result.success) {
+      const validationErrors = result.error.format();
+      setErrors({
+        email: validationErrors.email?._errors[0] || '',
+        password: validationErrors.password?._errors[0] || '',
+        username: validationErrors.username?._errors[0] || '',
+      });
+      console.log('register');
+    }
+  };
   return (
     <>
       <BackArrow />
@@ -25,22 +55,43 @@ const Register = () => {
           <p className='text-[#667085] text-[16px] mt-3 mb-8 text-center'>
             Star your 30-days free trial
           </p>
-          <form className=' md:px-5 lg:px-[130px]'>
+          <form
+            onSubmit={handleRegisterSubmit}
+            className=' md:px-5 lg:px-[130px]'
+          >
             <HomeInput
               label={'Username'}
               placeholder={'Enter your username'}
               type={'text'}
+              name='username'
+              value={data.username}
+              onChange={handleChange}
             />
+            {errors.username && (
+              <p className='text-red-500 text-[13px]'>{errors.username}</p>
+            )}
             <HomeInput
               label={'Email'}
               placeholder={'Enter your email'}
-              type={'text'}
+              type={'email'}
+              name='email'
+              value={data.email}
+              onChange={handleChange}
             />
+            {errors.email && (
+              <p className='text-red-500 text-[13px]'>{errors.email}</p>
+            )}
             <HomeInput
               label={'Password'}
               placeholder={'Enter your password'}
               type={'password'}
+              name='password'
+              value={data.password}
+              onChange={handleChange}
             />
+            {errors.password && (
+              <p className='text-red-500 text-[13px]'>{errors.password}</p>
+            )}
             {/* <p className='text-[14px] text-[#D0D5DD]'>
             Must be at least 8 characters.
           </p> */}
