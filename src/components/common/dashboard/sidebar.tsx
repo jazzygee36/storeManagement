@@ -7,6 +7,7 @@ import InventoryIcon from '@/components/assets/icons/inventory';
 import StoreIcon from '@/components/assets/icons/store';
 import BookIcon from '@/components/assets/icons/book';
 import LogoutIcon from '@/components/assets/icons/logout';
+import { useRouter } from 'next/navigation';
 
 const Navigation = [
   {
@@ -17,21 +18,22 @@ const Navigation = [
   {
     icon: <InventoryIcon />,
     description: 'Inventory',
-    path: '/inventory',
+    path: '/admin-inventory',
   },
   {
     icon: <BookIcon />,
     description: 'Daily Sales Report',
-    path: '/reports',
+    path: '/admin-reports',
   },
   {
     icon: <StoreIcon />,
     description: 'Manage Store',
-    path: '/stores',
+    path: '/admin-stores',
   },
 ];
 
 const Sidebar = () => {
+  const router = useRouter();
   const [activePath, setActivePath] = useState<string>('');
 
   useEffect(() => {
@@ -42,6 +44,11 @@ const Sidebar = () => {
   const handleNavigation = (path: string) => {
     setActivePath(path); // Update active state
     window.location.href = path; // Navigate to the selected path
+  };
+
+  const handleLogOut = () => {
+    localStorage.clear();
+    router.push('/');
   };
 
   return (
@@ -70,7 +77,12 @@ const Sidebar = () => {
       {/* Logout Section */}
       <div className='flex items-center gap-3 mb-6'>
         <LogoutIcon />
-        <button className='text-[red] hover:text-red-700'>LogOut</button>
+        <button
+          onClick={handleLogOut}
+          className='text-[red] hover:text-red-700'
+        >
+          LogOut
+        </button>
       </div>
     </div>
   );

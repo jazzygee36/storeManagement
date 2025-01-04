@@ -1,4 +1,3 @@
-'use client';
 // src/app/hooks/useAuth.ts
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';

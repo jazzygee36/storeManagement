@@ -11,10 +11,13 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { loginSchema } from '@/components/utils/validation';
+import { useDispatch } from 'react-redux';
+import { setUserLogin } from '@/components/api/slices/loginSlice';
 
 type FormData = z.infer<typeof loginSchema>;
 
 const AdminLogin = () => {
+  const dispatch = useDispatch();
   const router = useRouter();
 
   const [data, setData] = useState<FormData>({
@@ -22,6 +25,7 @@ const AdminLogin = () => {
     password: '',
   });
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -39,7 +43,28 @@ const AdminLogin = () => {
         email: validationErrors.email?._errors[0] || '',
         password: validationErrors.password?._errors[0] || '',
       });
-      console.log('wisdome');
+      return;
+    }
+
+    setLoading(true);
+    setErrors({}); // Clear previous errors
+
+    try {
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_URL_LOCALLY}/login`,
+        data
+      );
+      dispatch(setUserLogin(res.data)); // Update Redux store
+      router.push('/admin-dashboard'); // Redirect on success
+    } catch (err: any) {
+      console.error('Login failed:', err);
+      setErrors({
+        general:
+          err.response?.data?.message ||
+          'Invalid email or password. Please try again.',
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -85,6 +110,12 @@ const AdminLogin = () => {
               <p className='text-red-500 text-[13px]'>{errors.password}</p>
             )}
 
+            {errors.general && (
+              <p className='text-red-500 text-[13px] text-center mt-4'>
+                {errors.general}
+              </p>
+            )}
+
             <p className='text-[14px] text-[#4285F4] py-5 text-right cursor-pointer'>
               Forgot Password?
             </p>
@@ -93,7 +124,7 @@ const AdminLogin = () => {
               bg='#4285F4'
               type='submit'
               color='white'
-              // disabled={loading}
+              disabled={loading}
             />
           </form>
           <div className='mt-2'>
