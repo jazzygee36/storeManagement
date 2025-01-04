@@ -7,7 +7,7 @@ import SalesOverview from '@/components/pages/dashbaord/sale-overview';
 import TopSelling from '@/components/pages/dashbaord/top-selling';
 import React from 'react';
 // import useAuth from '../../components/hook/useAuth';
-import Loading from '@/components/common/loadingState';
+// import Loading from '@/components/common/loadingState';
 
 const Dashboard = () => {
   // const isAuthenticated = useAuth();

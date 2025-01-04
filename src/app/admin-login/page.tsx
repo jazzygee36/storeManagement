@@ -9,7 +9,7 @@ import BackArrow from '@/components/assets/icons/back';
 import { z } from 'zod';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { loginSchema } from '@/components/utils/validation';
 import { useDispatch } from 'react-redux';
 import { setUserLogin } from '@/components/api/slices/loginSlice';
@@ -56,7 +56,7 @@ const AdminLogin = () => {
       );
       dispatch(setUserLogin(res.data)); // Update Redux store
       router.push('/admin-dashboard'); // Redirect on success
-    } catch (err: any) {
+    } catch (err: string | any) {
       console.error('Login failed:', err);
       setErrors({
         general:
