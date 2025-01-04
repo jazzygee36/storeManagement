@@ -58,11 +58,15 @@ const AdminLogin = () => {
       router.push('/admin-dashboard'); // Redirect on success
     } catch (err: unknown) {
       console.error('Login failed:', err);
-      if (err instanceof Error) {
+      if (axios.isAxiosError(err) && err.response) {
         setErrors({
           general:
-            (err as any).response?.data?.message ||
+            err.response.data?.message ||
             'Invalid email or password. Please try again.',
+        });
+      } else {
+        setErrors({
+          general: 'An unexpected error occurred. Please try again.',
         });
       }
     } finally {
