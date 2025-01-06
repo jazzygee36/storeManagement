@@ -6,15 +6,15 @@ import ProductSummary from '@/components/pages/dashbaord/product-summary';
 import SalesOverview from '@/components/pages/dashbaord/sale-overview';
 import TopSelling from '@/components/pages/dashbaord/top-selling';
 import React from 'react';
-// import useAuth from '../../components/hook/useAuth';
-// import Loading from '@/components/common/loadingState';
+import useAuth from '../../components/hook/useAuth';
+import Loading from '@/components/common/loadingState';
 
 const Dashboard = () => {
-  // const isAuthenticated = useAuth();
+  const isAuthenticated = useAuth();
 
-  // if (!isAuthenticated) {
-  //   return <Loading />;
-  // }
+  if (!isAuthenticated) {
+    return <Loading />;
+  }
   return (
     <MainDashboard>
       <div className='grid grid-cols-1 md:grid-cols-2 gap-5'>

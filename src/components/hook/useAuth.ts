@@ -12,7 +12,7 @@ const useAuth = () => {
     if (!token) {
       router.push('/admin-login'); // Redirect to login if no token
     } else {
-      fetch('/api/auth/verifyToken', {
+      fetch(`${process.env.NEXT_PUBLIC_BASE_URL}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
         .then((res) => {

@@ -8,11 +8,15 @@ export const fetchUserProfile = createAsyncThunk(
   async (userId, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_BASE_URL_LOCALLY}profile/${userId}`
+        `${process.env.NEXT_PUBLIC_BASE_URL}/profile?userId=${userId}`
       );
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      if (axios.isAxiosError(error) && error.response) {
+        return rejectWithValue(error.response.data);
+      } else {
+        return rejectWithValue(error);
+      }
     }
   }
 );
@@ -22,7 +26,7 @@ const userSlice = createSlice({
   initialState: {
     profile: null,
     loading: false,
-    error: null,
+    error: null as unknown,
   },
   reducers: {},
   extraReducers: (builder) => {

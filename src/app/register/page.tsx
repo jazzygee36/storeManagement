@@ -8,16 +8,24 @@ import BackArrow from '@/components/assets/icons/back';
 import { z } from 'zod';
 import { registerSchema } from '@/components/utils/validation';
 import { useState } from 'react';
+import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { useRouter } from 'next/navigation';
+import { setUserSignUp } from '@/components/api/slices/signUpSlice';
 
 type FormData = z.infer<typeof registerSchema>;
 
 const Register = () => {
+  const dispatch = useDispatch();
+  const router = useRouter();
   const [data, setData] = useState<FormData>({
     username: '',
     email: '',
     password: '',
   });
+  const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  console.log('errors', errors);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setData((prevData) => ({ ...prevData, [name]: value }));
@@ -34,7 +42,35 @@ const Register = () => {
         password: validationErrors.password?._errors[0] || '',
         username: validationErrors.username?._errors[0] || '',
       });
-      console.log('register');
+      return; // Exit if validation fails
+    }
+    setLoading(true);
+    setErrors({}); // Clear errors before submission
+
+    try {
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/register`,
+        data
+      );
+      dispatch(setUserSignUp(res.data)); // Update Redux store
+
+      router.push('/admin-login'); // Redirect on success
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        if (err.response?.data?.message) {
+          setErrors({ general: err.response.data.message });
+        } else if (err.response?.data?.errors) {
+          setErrors(err.response.data.errors);
+        } else {
+          setErrors({ general: 'An error occurred. Please try again later.' });
+        }
+      } else {
+        setErrors({
+          general: 'An unexpected error occurred. Please try again.',
+        });
+      }
+    } finally {
+      setLoading(false);
     }
   };
   return (
@@ -99,12 +135,15 @@ const Register = () => {
             <p className='text-[14px] text-[#667085]  font-medium mb-5  cursor-pointer'>
               Must be at least 8 characters.
             </p>
-
+            {errors && (
+              <p className='text-center text-[red]'>{errors.general}</p>
+            )}
             <HomeButton
-              title={'Get Started'}
+              title={loading ? 'LOADING...' : 'Get Started'}
               bg={'#4285F4'}
               type={'submit'}
               color='white'
+              disabled={loading}
             />
           </form>
           <div className='mt-2'>

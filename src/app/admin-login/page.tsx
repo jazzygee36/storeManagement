@@ -13,6 +13,7 @@ import axios from 'axios';
 import { loginSchema } from '@/components/utils/validation';
 import { useDispatch } from 'react-redux';
 import { setUserLogin } from '@/components/api/slices/loginSlice';
+import { fetchUserProfile } from '@/components/api/slices/userProfileSlice';
 
 type FormData = z.infer<typeof loginSchema>;
 
@@ -43,20 +44,22 @@ const AdminLogin = () => {
         email: validationErrors.email?._errors[0] || '',
         password: validationErrors.password?._errors[0] || '',
       });
-      return;
+      return; // Exit if validation fails
     }
 
     setLoading(true);
-    setErrors({}); // Clear previous errors
+    setErrors({}); // Clear errors before submission
 
     try {
       const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_BASE_URL_LOCALLY}/login`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/login`,
         data
       );
       dispatch(setUserLogin(res.data)); // Update Redux store
+      localStorage.setItem('token', res.data.token);
+
       router.push('/admin-dashboard'); // Redirect on success
-    } catch (err: unknown) {
+    } catch (err) {
       console.error('Login failed:', err);
       if (axios.isAxiosError(err) && err.response) {
         setErrors({
@@ -126,7 +129,7 @@ const AdminLogin = () => {
               Forgot Password?
             </p>
             <HomeButton
-              title='LOGIN'
+              title={loading ? 'LOADING...' : 'LOGIN'}
               bg='#4285F4'
               type='submit'
               color='white'
@@ -138,9 +141,7 @@ const AdminLogin = () => {
               Don&apos;t have an account?{' '}
               <span
                 className='text-[#4285F4] cursor-pointer'
-                onClick={() => {
-                  router.push('/register');
-                }}
+                onClick={() => router.push('/register')}
               >
                 Sign up
               </span>
