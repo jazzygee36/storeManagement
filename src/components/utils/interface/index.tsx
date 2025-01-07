@@ -23,13 +23,32 @@ export interface PaperProps {
   container?: ReactNode;
 }
 
-export interface ProductProps {
+export interface LocalProductItem {
   product: string;
   buyingPrice: string;
   qty: string;
   sellingPrice: string;
   exp: string;
   status: string;
-  purchaseAmt?: string;
-  amtGain?: string;
+  purchaseAmt: string;
+  amtGain: string;
+  qtyRemaning: string;
+}
+
+export interface ProductItem {
+  // "_id": "676b1b6602d4fa6966fe0f64",
+  productName: string;
+  unitPrice: number;
+  qtyBought: number;
+  goodsValue: number;
+  salesPrice: number;
+  qtySold: number;
+  salesValue: number;
+  remainingItems: number;
+  exp: null;
+  availability: string;
+  qtyRemaning: number;
+  purchaseAmt: number;
+  amtGain: number;
+  status: string;
 }

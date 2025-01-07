@@ -1,7 +1,7 @@
 'use client';
 import DropdownMenu from '@/components/common/dropdown-menu';
 import ReusableModal from '@/components/common/modal';
-import { ProductProps } from '@/components/utils/interface';
+import { LocalProductItem, ProductItem } from '@/components/utils/interface';
 import { Dispatch, SetStateAction, useState } from 'react';
 
 type Status = 'Out-of-stock' | 'In-stock' | 'Low';
@@ -17,18 +17,6 @@ const ProductStatusColor = {
   'In-stock': 'green',
   Low: 'orange',
 };
-
-interface ProductItem {
-  product: string;
-  buyingPrice: string;
-  qty: string;
-  sellingPrice: string;
-  exp: string;
-  status: string;
-  purchaseAmt: string;
-  amtGain: string;
-  qtyRemaning: string;
-}
 
 interface Props {
   currentPage: number;
@@ -46,10 +34,10 @@ const Products = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [selectedTransaction, setSelectedTransaction] =
-    useState<ProductProps | null>(null);
+    useState<LocalProductItem | null>(null);
 
   // Open modal and set selected transaction
-  const openModal = (transaction: ProductProps) => {
+  const openModal = (transaction: LocalProductItem) => {
     setSelectedTransaction(transaction);
     setIsModalOpen(true);
   };
@@ -102,7 +90,7 @@ const Products = ({
             </tr>
           </thead>
           <tbody>
-            {productItems.map((product, index) => (
+            {productItems.map((product: any, index) => (
               <tr
                 key={index}
                 onClick={() => {
@@ -111,28 +99,28 @@ const Products = ({
                 className='even:bg-gray-50 cursor-pointer'
               >
                 <td className='border border-gray-200 px-4 py-2 text-sm'>
-                  {product.product}
+                  {product.productName}
                 </td>
                 <td className='border border-gray-200 px-4 py-2 text-sm'>
-                  {product.buyingPrice}
+                  {product.unitPrice}
                 </td>
                 <td className='border border-gray-200 px-4 py-2 text-sm'>
-                  {product.qty}
+                  {product.qtyBought}
                 </td>
                 <td className='border border-gray-200 px-4 py-2 text-sm'>
-                  {product.sellingPrice}
+                  {product.goodsValue}
                 </td>
                 <td className='border border-gray-200 px-4 py-2 text-sm'>
-                  {product.qtyRemaning}
+                  {product.salesPrice}
                 </td>
                 <td className='border border-gray-200 px-4 py-2 text-sm'>
-                  {product.qtyRemaning}
+                  {product.salesPrice}
                 </td>
                 <td className='border border-gray-200 px-4 py-2 text-sm'>
-                  {product.qtyRemaning}
+                  {product.qtySold}
                 </td>
                 <td className='border border-gray-200 px-4 py-2 text-sm'>
-                  {product.qtyRemaning}
+                  {product.remainingItems}
                 </td>
                 <td className='border border-gray-200 px-4 py-2 text-sm'>
                   {product.exp}
@@ -141,7 +129,7 @@ const Products = ({
                   className={`border border-gray-200 px-4 py-2 text-sm ${ProductStatusColor}`}
                   style={{ color: color[product.status as Status] }}
                 >
-                  {product.status}
+                  {product.availability}
                 </td>
                 <td
                   onClick={(e) => e.stopPropagation()}

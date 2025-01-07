@@ -13,7 +13,7 @@ import axios from 'axios';
 import { loginSchema } from '@/components/utils/validation';
 import { useDispatch } from 'react-redux';
 import { setUserLogin } from '@/components/api/slices/loginSlice';
-import { fetchUserProfile } from '@/components/api/slices/userProfileSlice';
+// import { fetchUserProfile } from '@/components/api/slices/userProfileSlice';
 
 type FormData = z.infer<typeof loginSchema>;
 
@@ -57,6 +57,7 @@ const AdminLogin = () => {
       );
       dispatch(setUserLogin(res.data)); // Update Redux store
       localStorage.setItem('token', res.data.token);
+      localStorage.setItem('userId', res.data.userId);
 
       router.push('/admin-dashboard'); // Redirect on success
     } catch (err) {
