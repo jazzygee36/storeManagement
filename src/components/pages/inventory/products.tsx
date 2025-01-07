@@ -12,12 +12,6 @@ const color: Record<Status, string> = {
   Low: 'orange',
 };
 
-const ProductStatusColor = {
-  'Out-of-stock': 'red',
-  'In-stock': 'green',
-  Low: 'orange',
-};
-
 interface Props {
   currentPage: number;
   productItems: ProductItem[];
