@@ -17,6 +17,10 @@ const AllProductModal = () => {
     availability: '',
   });
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setData((prevData) => ({ ...prevData, [name]: value }));
+  };
   const handleAddProduct = (e: React.FormEvent) => {
     e.preventDefault();
     const result = addProductSchema.safeParse(data);
@@ -37,16 +41,57 @@ const AllProductModal = () => {
   return (
     <div className=''>
       <form onSubmit={handleAddProduct}>
-        <HomeInput placeholder={'PRODUCT NAME'} />
+        <HomeInput
+          placeholder={'PRODUCT NAME'}
+          value={data.productName}
+          name='productName'
+          onChange={handleChange}
+        />
+
         {errors.productName && (
           <p className='text-red-500 text-[13px]'>{errors.productName}</p>
         )}
-        <HomeInput placeholder={'BUYING PRICE'} />
-        <HomeInput placeholder={'QTY BOUGHT'} />
-        <HomeInput placeholder={'SALES PRICE'} />
-        <HomeInput placeholder={'QTY SOLD'} />
-        <HomeInput placeholder={'EXPIRED'} />
-        <HomeInput placeholder={'AVAILABILITY'} />
+        <HomeInput
+          placeholder={'BUYING PRICE'}
+          value={data.buyingPrice}
+          name='buyingPrice'
+          onChange={handleChange}
+        />
+        <HomeInput
+          placeholder={'QTY BOUGHT'}
+          value={data.qtyBought}
+          name='qtyBought'
+          onChange={handleChange}
+        />
+
+        <HomeInput
+          placeholder={'SALES PRICE'}
+          value={data.salesPrice}
+          name='salesPrice'
+          onChange={handleChange}
+        />
+
+        <HomeInput
+          placeholder={'QTY SOLD'}
+          value={data.qtySold}
+          name='qtySold'
+          onChange={handleChange}
+        />
+
+        <HomeInput
+          placeholder={'EXPIRED'}
+          value={data.expired}
+          name='expired'
+          onChange={handleChange}
+        />
+
+        <HomeInput
+          placeholder={'AVAILABILITY'}
+          value={data.availability}
+          name='availability'
+          onChange={handleChange}
+        />
+
         <div className='mt-3'>
           <HomeButton
             title={'Add Product'}
