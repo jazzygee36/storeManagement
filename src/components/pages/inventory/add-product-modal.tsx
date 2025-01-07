@@ -51,18 +51,32 @@ const AllProductModal = () => {
         {errors.productName && (
           <p className='text-red-500 text-[13px]'>{errors.productName}</p>
         )}
-        <HomeInput
-          placeholder={'BUYING PRICE'}
-          value={data.buyingPrice}
-          name='buyingPrice'
-          onChange={handleChange}
-        />
-        <HomeInput
-          placeholder={'QTY BOUGHT'}
-          value={data.qtyBought}
-          name='qtyBought'
-          onChange={handleChange}
-        />
+
+        <div className='flex justify-between gap-2'>
+          <div>
+            <HomeInput
+              placeholder={'BUYING PRICE'}
+              value={data.buyingPrice}
+              name='buyingPrice'
+              onChange={handleChange}
+            />
+            {errors.buyingPrice && (
+              <p className='text-red-500 text-[13px]'>{errors.buyingPrice}</p>
+            )}
+          </div>
+
+          <div>
+            <HomeInput
+              placeholder={'QTY BOUGHT'}
+              value={data.qtyBought}
+              name='qtyBought'
+              onChange={handleChange}
+            />
+            {errors.qtyBought && (
+              <p className='text-red-500 text-[13px]'>{errors.qtyBought}</p>
+            )}
+          </div>
+        </div>
 
         <HomeInput
           placeholder={'SALES PRICE'}
@@ -70,6 +84,9 @@ const AllProductModal = () => {
           name='salesPrice'
           onChange={handleChange}
         />
+        {errors.salesPrice && (
+          <p className='text-red-500 text-[13px]'>{errors.salesPrice}</p>
+        )}
 
         <HomeInput
           placeholder={'QTY SOLD'}
@@ -77,6 +94,9 @@ const AllProductModal = () => {
           name='qtySold'
           onChange={handleChange}
         />
+        {errors.qtySold && (
+          <p className='text-red-500 text-[13px]'>{errors.qtySold}</p>
+        )}
 
         <HomeInput
           placeholder={'EXPIRED'}
@@ -84,6 +104,9 @@ const AllProductModal = () => {
           name='expired'
           onChange={handleChange}
         />
+        {errors.expired && (
+          <p className='text-red-500 text-[13px]'>{errors.expired}</p>
+        )}
 
         <HomeInput
           placeholder={'AVAILABILITY'}
@@ -91,6 +114,9 @@ const AllProductModal = () => {
           name='availability'
           onChange={handleChange}
         />
+        {errors.availability && (
+          <p className='text-red-500 text-[13px]'>{errors.availability}</p>
+        )}
 
         <div className='mt-3'>
           <HomeButton
