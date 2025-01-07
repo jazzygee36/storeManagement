@@ -11,18 +11,7 @@ import Products from '@/components/pages/inventory/products';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/components/state/store';
 import { fetchUserProfile } from '@/components/api/slices/userProfileSlice';
-import { ProductItem } from '@/components/utils/interface/index'; // Adjust the import path as necessary
-
-export const useFilteredProducts = (
-  products: ProductItem[],
-  filter: string
-) => {
-  return useMemo(() => {
-    return filter
-      ? products.filter((item) => item.availability === filter)
-      : products;
-  }, [products, filter]);
-};
+import { useFilteredProducts } from '@/components/utils/interface/index'; // Adjust the import path as necessary
 
 const Inventory = () => {
   const isAuthenticated = useAuth();
