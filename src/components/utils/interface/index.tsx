@@ -25,14 +25,15 @@ export interface PaperProps {
 
 export interface LocalProductItem {
   product: string;
-  buyingPrice: string;
-  qty: string;
-  sellingPrice: string;
-  exp: string;
+  buyingPrice: number;
+  qty: number;
+  sellingPrice: number;
+  exp: null;
   status: string;
-  purchaseAmt: string;
-  amtGain: string;
-  qtyRemaning: string;
+  purchaseAmt: number;
+  amtGain: number;
+  availability: string;
+  // qtyRemaning: number;
 }
 
 export interface ProductItem {

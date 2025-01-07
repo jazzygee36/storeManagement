@@ -43,7 +43,7 @@ const Sidebar = () => {
 
   const handleNavigation = (path: string) => {
     setActivePath(path); // Update active state
-    window.location.href = path; // Navigate to the selected path
+    router.push(path); // Navigate to the selected path
   };
 
   const handleLogOut = () => {
@@ -60,16 +60,19 @@ const Sidebar = () => {
         </div>
         <div className='mt-10 flex flex-col gap-10'>
           {Navigation.map((navigate) => (
-            <div
+            <button
               key={navigate.description}
-              className={`flex gap-3 cursor-pointer ${
+              className={`flex gap-3 items-center cursor-pointer ${
                 activePath === navigate.path ? 'text-[#4285F4]' : ''
               }`}
-              onClick={() => handleNavigation(navigate.path)}
+              onClick={(e) => {
+                e.preventDefault(); // Prevent default browser behavior
+                handleNavigation(navigate.path);
+              }}
             >
               <div>{navigate.icon}</div>
               <h3>{navigate.description}</h3>
-            </div>
+            </button>
           ))}
         </div>
       </div>

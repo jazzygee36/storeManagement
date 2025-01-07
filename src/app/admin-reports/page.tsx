@@ -7,10 +7,14 @@ import React from 'react';
 const Reports = () => {
   const isAuthenticated = useAuth();
 
-  if (!isAuthenticated) {
-    return <Loading />;
-  }
-  return <MainDashboard>Reports</MainDashboard>;
+  // if (!isAuthenticated) {
+  //   return <Loading />;
+  // }
+  return (
+    <MainDashboard>
+      {!isAuthenticated ? <Loading /> : <h1>Reports</h1>}
+    </MainDashboard>
+  );
 };
 
 export default Reports;

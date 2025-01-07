@@ -10,26 +10,32 @@ import React from 'react';
 const Stores = () => {
   const isAuthenticated = useAuth();
 
-  if (!isAuthenticated) {
-    return <Loading />;
-  }
+  // if (!isAuthenticated) {
+  //   return <Loading />;
+  // }
   return (
     <MainDashboard>
-      <PaperBackground
-        title={'Manage Store'}
-        container={
-          <>
-            <HomeButton
-              title={'Create Staff'}
-              bg={'#4285F4'}
-              type={'submit'}
-              color={'white'}
-            />
-          </>
-        }
-      >
-        <StaffStore />
-      </PaperBackground>
+      {!isAuthenticated ? (
+        <Loading />
+      ) : (
+        <>
+          <PaperBackground
+            title={'Manage Store'}
+            container={
+              <>
+                <HomeButton
+                  title={'Create Staff'}
+                  bg={'#4285F4'}
+                  type={'submit'}
+                  color={'white'}
+                />
+              </>
+            }
+          >
+            <StaffStore />
+          </PaperBackground>
+        </>
+      )}
     </MainDashboard>
   );
 };

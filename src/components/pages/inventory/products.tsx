@@ -47,6 +47,10 @@ const Products = ({
     setIsModalOpen(false);
   };
 
+  const formatNumber = (num: number): string => {
+    return new Intl.NumberFormat().format(num);
+  };
+
   return (
     <>
       <div className='overflow-x-auto mt-5'>
@@ -57,7 +61,7 @@ const Products = ({
                 Products
               </th>
               <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
-                Unit Price(1)
+                Buying Price(per 1)
               </th>
               <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
                 Qty Bought
@@ -71,11 +75,12 @@ const Products = ({
               <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
                 Qty Sold
               </th>
-              <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
-                Remaining Items
-              </th>
+
               <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
                 Sales Value
+              </th>
+              <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
+                Remaining Items
               </th>
 
               <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
@@ -90,55 +95,74 @@ const Products = ({
             </tr>
           </thead>
           <tbody>
-            {productItems.map((product: any, index) => (
-              <tr
-                key={index}
-                onClick={() => {
-                  openModal(product);
-                }}
-                className='even:bg-gray-50 cursor-pointer'
-              >
-                <td className='border border-gray-200 px-4 py-2 text-sm'>
-                  {product.productName}
-                </td>
-                <td className='border border-gray-200 px-4 py-2 text-sm'>
-                  {product.unitPrice}
-                </td>
-                <td className='border border-gray-200 px-4 py-2 text-sm'>
-                  {product.qtyBought}
-                </td>
-                <td className='border border-gray-200 px-4 py-2 text-sm'>
-                  {product.goodsValue}
-                </td>
-                <td className='border border-gray-200 px-4 py-2 text-sm'>
-                  {product.salesPrice}
-                </td>
-                <td className='border border-gray-200 px-4 py-2 text-sm'>
-                  {product.salesPrice}
-                </td>
-                <td className='border border-gray-200 px-4 py-2 text-sm'>
-                  {product.qtySold}
-                </td>
-                <td className='border border-gray-200 px-4 py-2 text-sm'>
-                  {product.remainingItems}
-                </td>
-                <td className='border border-gray-200 px-4 py-2 text-sm'>
-                  {product.exp}
-                </td>
-                <td
-                  className={`border border-gray-200 px-4 py-2 text-sm ${ProductStatusColor}`}
-                  style={{ color: color[product.status as Status] }}
+            {productItems.map((product: ProductItem, index) => {
+              const localProduct: LocalProductItem = {
+                product: product.productName, // Map 'productName' to 'product'
+                buyingPrice: product.unitPrice, // Assuming unitPrice is the buying price
+                qty: product.qtyBought, // Map 'qtyBought' to 'qty'
+                sellingPrice: product.salesPrice, // Assuming salesPrice is selling price
+                exp: product.exp, // Expiration date
+                purchaseAmt: product.unitPrice * product.qtyBought, // Calculate purchase amount
+                amtGain:
+                  product.unitPrice * product.qtyBought -
+                  product.salesPrice * product.qtyBought, // Calculate gain
+                status: product.availability,
+                availability: product.availability,
+              };
+              const goodsValue = product.unitPrice * product.qtyBought; // Calculate goods value dynamically
+
+              return (
+                <tr
+                  key={index}
+                  onClick={() => {
+                    openModal(localProduct);
+                  }}
+                  className='even:bg-gray-50 cursor-pointer'
                 >
-                  {product.availability}
-                </td>
-                <td
-                  onClick={(e) => e.stopPropagation()}
-                  className='border border-gray-200 px-4 py-2 text-sm'
-                >
-                  <DropdownMenu />
-                </td>
-              </tr>
-            ))}
+                  <td className='border border-gray-200 px-4 py-2 text-sm font-semibold'>
+                    {product.productName}
+                  </td>
+                  <td className='border border-gray-200 px-4 py-2 text-sm'>
+                    {formatNumber(product.unitPrice)}
+                  </td>
+                  <td className='border border-gray-200 px-4 py-2 text-sm'>
+                    {product.qtyBought}
+                  </td>
+                  <td className='border border-gray-200 px-4 py-2 text-sm text-blue-700'>
+                    {formatNumber(goodsValue)} {/* Display goods value */}
+                  </td>
+                  <td className='border border-gray-200 px-4 py-2 text-sm'>
+                    {formatNumber(product.salesPrice)}
+                  </td>
+                  <td className='border border-gray-200 px-4 py-2 text-sm'>
+                    {product.qtySold}
+                  </td>
+
+                  <td className='border border-gray-200 px-4 py-2 text-sm text-green-600'>
+                    {formatNumber(product.salesPrice * product.qtySold)}{' '}
+                    {/* Sales value */}
+                  </td>
+                  <td className='border border-gray-200 px-4 py-2 text-sm'>
+                    {product.qtyBought - product.qtySold}
+                  </td>
+                  <td className='border border-gray-200 px-4 py-2 text-sm'>
+                    {product.exp}
+                  </td>
+                  <td
+                    className={`border border-gray-200 px-4 py-2 text-sm`}
+                    style={{ color: color[product.status as Status] }}
+                  >
+                    {product.availability}
+                  </td>
+                  <td
+                    onClick={(e) => e.stopPropagation()}
+                    className='border border-gray-200 px-4 py-2 text-sm'
+                  >
+                    <DropdownMenu />
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
@@ -209,7 +233,7 @@ const Products = ({
             </div>
             <hr className='my-3' />
             <div className='flex justify-between text-sm'>
-              <p>Amount Gain:</p>
+              <p>Expected Gain:</p>
               <p className='font-semibold'>{selectedTransaction.amtGain}</p>
             </div>
             <hr className='my-3' />
@@ -220,7 +244,7 @@ const Products = ({
                 className='font-semibold'
                 style={{ color: color[selectedTransaction.status as Status] }}
               >
-                {selectedTransaction.status}
+                {selectedTransaction.availability}
               </span>
             </div>
           </div>
