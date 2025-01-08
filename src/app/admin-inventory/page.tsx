@@ -75,7 +75,7 @@ const Inventory = () => {
             <PaperBackground
               title='All Products'
               container={
-                <div className='flex items-center gap-3'>
+                <div className='flex items-center gap-3 text-sm'>
                   <HomeButton
                     title='Add Products'
                     bg='#4285F4'

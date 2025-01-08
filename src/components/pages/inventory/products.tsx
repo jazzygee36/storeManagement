@@ -60,21 +60,21 @@ const Products = ({
               <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
                 Qty Bought
               </th>
-              <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
+              <th className='border border-gray-300 px-4 py-2 text-left text-sm bg-[blue] text-white'>
                 Goods Value
               </th>
               <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
-                Sales Price(1)
+                Selling Price(1)
               </th>
-              <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
+              {/* <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
                 Qty Sold
-              </th>
+              </th> */}
 
-              <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
+              {/* <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
                 Sales Value
-              </th>
+              </th> */}
               <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
-                Remaining Items
+                Qty Remaining
               </th>
 
               <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
@@ -122,31 +122,35 @@ const Products = ({
                   <td className='border border-gray-200 px-4 py-2 text-sm'>
                     {product.qtyBought}
                   </td>
-                  <td className='border border-gray-200 px-4 py-2 text-sm text-blue-700'>
+                  <td className='border border-gray-200 px-4 py-2 text-sm bg-blue-800 text-white font-bold'>
                     {formatNumber(goodsValue)} {/* Display goods value */}
                   </td>
                   <td className='border border-gray-200 px-4 py-2 text-sm'>
                     {formatNumber(product.salesPrice)}
                   </td>
-                  <td className='border border-gray-200 px-4 py-2 text-sm'>
+                  {/* <td className='border border-gray-200 px-4 py-2 text-sm'>
                     {product.qtySold}
-                  </td>
+                  </td> */}
 
-                  <td className='border border-gray-200 px-4 py-2 text-sm text-green-600'>
+                  {/* <td className='border border-gray-200 px-4 py-2 text-sm text-green-600'>
                     {formatNumber(product.salesPrice * product.qtySold)}{' '}
-                    {/* Sales value */}
-                  </td>
+                  
+                  </td> */}
                   <td className='border border-gray-200 px-4 py-2 text-sm'>
-                    {product.qtyBought - product.qtySold}
+                    {product.qtyBought}
                   </td>
                   <td className='border border-gray-200 px-4 py-2 text-sm'>
                     {product.exp}
                   </td>
                   <td
                     className={`border border-gray-200 px-4 py-2 text-sm`}
-                    style={{ color: color[product.status as Status] }}
+                    style={{ color: color[product.availability as Status] }}
                   >
-                    {product.availability}
+                    {product.remainingItems < 4
+                      ? 'Low'
+                      : product.remainingItems === 0
+                      ? 'Out-of-stock'
+                      : 'In-stock'}
                   </td>
                   <td
                     onClick={(e) => e.stopPropagation()}

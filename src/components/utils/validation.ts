@@ -26,10 +26,10 @@ export const staffLoginSchema = z.object({
 
 export const addProductSchema = z.object({
   productName: z.string().min(3, 'Product is required'),
-  buyingPrice: z.string().min(2, 'Buying price is required'),
+  unitPrice: z.string().min(2, 'Buying price is required'),
   qtyBought: z.string().min(1, 'Quantity bought is required'),
   salesPrice: z.string().min(1, 'Selling price is required'),
-  qtySold: z.string().min(1, 'Quantity sold is required'),
-  expired: z.string().min(1, 'Expired date is required'),
-  availability: z.string().min(3, 'Availability is required'),
+  // qtySold: z.string().min(1, 'Quantity sold is required'),
+  exp: z.string().min(1, 'Expired date is required'),
+  // availability: z.string().min(3, 'Availability is required'),
 });

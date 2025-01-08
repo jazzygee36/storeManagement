@@ -1,43 +1,78 @@
 import HomeButton from '@/components/common/button';
 import HomeInput from '@/components/common/input';
 import { addProductSchema } from '@/components/utils/validation';
+import axios from 'axios';
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { z } from 'zod';
+import { AppDispatch } from '@/components/state/store';
+import { fetchUserProfile } from '@/components/api/slices/userProfileSlice';
+import { format } from 'date-fns'; // Install with: npm install date-fns
 
 type FormData = z.infer<typeof addProductSchema>;
 
 const AllProductModal = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const [apiErr, setApiErr] = useState('');
+  console.log('apiErr', apiErr);
+
   const [data, setData] = useState<FormData>({
     productName: '',
-    buyingPrice: '',
+    unitPrice: '',
     qtyBought: '',
     salesPrice: '',
-    qtySold: '',
-    expired: '',
-    availability: '',
+
+    exp: '',
   });
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setData((prevData) => ({ ...prevData, [name]: value }));
   };
-  const handleAddProduct = (e: React.FormEvent) => {
+
+  const handleAddProduct = async (e: React.FormEvent) => {
     e.preventDefault();
-    const result = addProductSchema.safeParse(data);
+
+    // Ensure the date is formatted to YYYY-MM-DD
+    const formattedData = {
+      ...data,
+      exp: data.exp ? format(new Date(data.exp), 'yyyy-MM-dd') : '', // Format the date or leave empty
+    };
+
+    const result = addProductSchema.safeParse(formattedData);
     if (!result.success) {
       const validationErrors = result.error.format();
       setErrors({
         productName: validationErrors.productName?._errors[0] || '',
-        buyingPrice: validationErrors.buyingPrice?._errors[0] || '',
+        buyingPrice: validationErrors.unitPrice?._errors[0] || '',
         qtyBought: validationErrors.qtyBought?._errors[0] || '',
         salesPrice: validationErrors.salesPrice?._errors[0] || '',
-        qtySold: validationErrors.qtySold?._errors[0] || '',
-        expired: validationErrors.expired?._errors[0] || '',
-        availability: validationErrors.availability?._errors[0] || '',
       });
+      const userId = localStorage.getItem('userId');
+      if (userId) {
+        try {
+          await axios.post(
+            `${process.env.NEXT_PUBLIC_BASE_URL}/${userId}/add-products`,
+            formattedData
+          );
+          // Reset API error if the request succeeds
+          setApiErr('');
+          dispatch(fetchUserProfile(userId));
+        } catch (error) {
+          // Handle and set the API error message
+          if (axios.isAxiosError(error)) {
+            const errorMessage =
+              error.response?.data?.message || 'Something went wrong!';
+            setApiErr(errorMessage);
+          } else {
+            setApiErr('An unexpected error occurred.');
+          }
+        }
+      }
       return;
     }
   };
+
   return (
     <div className=''>
       <form onSubmit={handleAddProduct}>
@@ -51,13 +86,14 @@ const AllProductModal = () => {
         {errors.productName && (
           <p className='text-red-500 text-[13px]'>{errors.productName}</p>
         )}
+        <p className='text-red-500 text-[13px]'>{apiErr}</p>
 
         <div className='flex justify-between gap-2'>
           <div>
             <HomeInput
               placeholder={'BUYING PRICE'}
-              value={data.buyingPrice}
-              name='buyingPrice'
+              value={data.unitPrice}
+              name='unitPrice'
               onChange={handleChange}
             />
             {errors.buyingPrice && (
@@ -78,45 +114,30 @@ const AllProductModal = () => {
           </div>
         </div>
 
-        <HomeInput
-          placeholder={'SALES PRICE'}
-          value={data.salesPrice}
-          name='salesPrice'
-          onChange={handleChange}
-        />
-        {errors.salesPrice && (
-          <p className='text-red-500 text-[13px]'>{errors.salesPrice}</p>
-        )}
+        <div className='flex justify-between gap-2'>
+          <div>
+            <HomeInput
+              placeholder={'SALES PRICE'}
+              value={data.salesPrice}
+              name='salesPrice'
+              onChange={handleChange}
+            />
+            {errors.salesPrice && (
+              <p className='text-red-500 text-[13px]'>{errors.salesPrice}</p>
+            )}
+          </div>
 
-        <HomeInput
-          placeholder={'QTY SOLD'}
-          value={data.qtySold}
-          name='qtySold'
-          onChange={handleChange}
-        />
-        {errors.qtySold && (
-          <p className='text-red-500 text-[13px]'>{errors.qtySold}</p>
-        )}
-
-        <HomeInput
-          placeholder={'EXPIRED'}
-          value={data.expired}
-          name='expired'
-          onChange={handleChange}
-        />
-        {errors.expired && (
-          <p className='text-red-500 text-[13px]'>{errors.expired}</p>
-        )}
-
-        <HomeInput
-          placeholder={'AVAILABILITY'}
-          value={data.availability}
-          name='availability'
-          onChange={handleChange}
-        />
-        {errors.availability && (
-          <p className='text-red-500 text-[13px]'>{errors.availability}</p>
-        )}
+          <div>
+            <HomeInput
+              placeholder={'EXPIRED'}
+              value={data.exp}
+              name='exp'
+              onChange={handleChange}
+              type='date'
+            />
+            <p className='text-gray-400 text-[13px] text-center'>Optional</p>
+          </div>
+        </div>
 
         <div className='mt-3'>
           <HomeButton
