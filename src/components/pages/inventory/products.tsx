@@ -3,6 +3,7 @@ import DropdownMenu from '@/components/common/dropdown-menu';
 import ReusableModal from '@/components/common/modal';
 import { LocalProductItem, ProductItem } from '@/components/utils/interface';
 import { Dispatch, SetStateAction, useState } from 'react';
+import { format } from 'date-fns';
 
 type Status = 'Out-of-stock' | 'In-stock' | 'Low';
 
@@ -140,7 +141,9 @@ const Products = ({
                     {product.qtyBought}
                   </td>
                   <td className='border border-gray-200 px-4 py-2 text-sm'>
-                    {product.exp}
+                    {product.exp
+                      ? format(new Date(product.exp), 'dd MMM yyyy')
+                      : ''}
                   </td>
                   <td
                     className={`border border-gray-200 px-4 py-2 text-sm`}
