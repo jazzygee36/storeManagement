@@ -51,7 +51,7 @@ const DropdownMenu = () => {
               Edit
             </li>
             <li
-              className='px-4 py-2 text-sm hover:bg-gray-100 cursor-pointer'
+              className='px-4 py-2 text-sm hover:bg-gray-100 cursor-pointer text-[red] z-[100]'
               onClick={(e) => {
                 e.stopPropagation();
                 console.log('Delete clicked');

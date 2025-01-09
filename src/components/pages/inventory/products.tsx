@@ -51,20 +51,20 @@ const Products = ({
       <div className='overflow-x-auto mt-5'>
         <table className='min-w-full border-collapse border border-gray-300'>
           <thead>
-            <tr className='bg-gray-100'>
-              <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
+            <tr className='bg-black text-white'>
+              <th className='border border-gray-300 px-4 py-2 text-left text-sm  text-white font-bold'>
                 Products
               </th>
               <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
                 Buying Price(per 1)
               </th>
-              <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
+              <th className='border border-gray-300 px-4 py-2 text-left text-sm bg-black text-white'>
                 Qty Bought
               </th>
-              <th className='border border-gray-300 px-4 py-2 text-left text-sm bg-[blue] text-white'>
+              <th className='border border-gray-300 px-4 py-2 text-left text-sm text-white'>
                 Goods Value
               </th>
-              <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
+              <th className='border border-gray-300 px-4 py-2 text-left text-sm '>
                 Selling Price(1)
               </th>
               {/* <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
@@ -99,10 +99,11 @@ const Products = ({
                 exp: product.exp, // Expiration date
                 purchaseAmt: product.unitPrice * product.qtyBought, // Calculate purchase amount
                 amtGain:
-                  product.unitPrice * product.qtyBought -
-                  product.salesPrice * product.qtyBought, // Calculate gain
+                  product.salesPrice * product.qtyBought -
+                  product.unitPrice * product.qtyBought, // Calculate gain
                 status: product.availability,
                 availability: product.availability,
+                remainingItems: product.remainingItems,
               };
               const goodsValue = product.unitPrice * product.qtyBought; // Calculate goods value dynamically
 
@@ -114,7 +115,7 @@ const Products = ({
                   }}
                   className='even:bg-gray-50 cursor-pointer'
                 >
-                  <td className='border border-gray-200 px-4 py-2 text-sm font-semibold'>
+                  <td className='border border-gray-200 px-4 py-2 text-sm font-semibold bg-blue-800 text-white'>
                     {product.productName}
                   </td>
                   <td className='border border-gray-200 px-4 py-2 text-sm'>
@@ -123,10 +124,10 @@ const Products = ({
                   <td className='border border-gray-200 px-4 py-2 text-sm'>
                     {product.qtyBought}
                   </td>
-                  <td className='border border-gray-200 px-4 py-2 text-sm bg-blue-800 text-white font-bold'>
+                  <td className='border border-gray-200 px-4 py-2 text-sm bg-[blue] text-white font-bold'>
                     {formatNumber(goodsValue)} {/* Display goods value */}
                   </td>
-                  <td className='border border-gray-200 px-4 py-2 text-sm'>
+                  <td className='border border-gray-200 px-4 py-2 text-sm bg-gray-500'>
                     {formatNumber(product.salesPrice)}
                   </td>
                   {/* <td className='border border-gray-200 px-4 py-2 text-sm'>
@@ -223,10 +224,10 @@ const Products = ({
             </div>
             <hr className='my-3' />
 
-            <div className='flex justify-between text-sm'>
+            {/* <div className='flex justify-between text-sm'>
               <p>Expired At:</p>
               <p className='font-semibold'>{selectedTransaction.exp}</p>
-            </div>
+            </div> */}
             <hr className='my-3' />
             <div className='flex justify-between text-sm'>
               <p>Purchase Amount:</p>
@@ -245,7 +246,11 @@ const Products = ({
                 className='font-semibold'
                 style={{ color: color[selectedTransaction.status as Status] }}
               >
-                {selectedTransaction.availability}
+                {selectedTransaction.remainingItems < 4
+                  ? 'Low'
+                  : selectedTransaction.remainingItems === 0
+                  ? 'Out-of-stock'
+                  : 'In-stock'}
               </span>
             </div>
           </div>

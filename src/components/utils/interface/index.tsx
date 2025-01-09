@@ -46,6 +46,7 @@ export interface LocalProductItem {
   amtGain: number;
   availability: string;
   // qtyRemaning: number;
+  remainingItems: number;
 }
 
 export interface ProductItem {
