@@ -21,7 +21,7 @@ export const loginSchema = z.object({
 
 export const staffLoginSchema = z.object({
   username: z.string().min(3, 'Username is required'),
-  password: z.string().min(6, 'Password must be at least 6 characters long'),
+  phoneNumber: z.string().min(11, 'Password must be at least 11 numbers long'),
 });
 
 export const addProductSchema = z.object({
