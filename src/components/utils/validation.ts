@@ -29,7 +29,16 @@ export const addProductSchema = z.object({
   unitPrice: z.string().min(2, 'Buying price is required'),
   qtyBought: z.string().min(1, 'Quantity bought is required'),
   salesPrice: z.string().min(1, 'Selling price is required'),
-  // qtySold: z.string().min(1, 'Quantity sold is required'),
-  exp: z.string().min(1, 'Expired date is required'),
-  // availability: z.string().min(3, 'Availability is required'),
+  exp: z
+    .string()
+    .optional()
+    .refine(
+      (value) => {
+        // Allow an empty string or a valid date
+        return (
+          value === '' || (value !== undefined && !isNaN(Date.parse(value)))
+        );
+      },
+      { message: 'Invalid date format' }
+    ),
 });

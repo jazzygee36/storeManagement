@@ -8,14 +8,19 @@ import { z } from 'zod';
 import { AppDispatch } from '@/components/state/store';
 import { fetchUserProfile } from '@/components/api/slices/userProfileSlice';
 import { format } from 'date-fns'; // Install with: npm install date-fns
+// import Toast from '@/components/common/toast';
+import { useToast } from '@/components/hook/context/useContext';
 
 type FormData = z.infer<typeof addProductSchema>;
 
-const AllProductModal = () => {
+const AllProductModal = ({ closeModal }: { closeModal: () => void }) => {
+  const { addToast } = useToast();
+  const showToast = () => {
+    addToast('Product added successfully', 'success');
+  };
   const dispatch = useDispatch<AppDispatch>();
   const [apiErr, setApiErr] = useState('');
-  console.log('apiErr', apiErr);
-
+  const [loading, setLoading] = useState('Add Product');
   const [data, setData] = useState<FormData>({
     productName: '',
     unitPrice: '',
@@ -48,28 +53,40 @@ const AllProductModal = () => {
         qtyBought: validationErrors.qtyBought?._errors[0] || '',
         salesPrice: validationErrors.salesPrice?._errors[0] || '',
       });
-      const userId = localStorage.getItem('userId');
-      if (userId) {
-        try {
-          await axios.post(
-            `${process.env.NEXT_PUBLIC_BASE_URL}/${userId}/add-products`,
-            formattedData
-          );
-          // Reset API error if the request succeeds
-          setApiErr('');
-          dispatch(fetchUserProfile(userId));
-        } catch (error) {
-          // Handle and set the API error message
-          if (axios.isAxiosError(error)) {
-            const errorMessage =
-              error.response?.data?.message || 'Something went wrong!';
-            setApiErr(errorMessage);
-          } else {
-            setApiErr('An unexpected error occurred.');
+      return;
+    }
+
+    const userId = localStorage.getItem('userId');
+    if (userId) {
+      try {
+        setLoading('Processing...');
+        const res = await axios.post(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/${userId}/add-products`,
+          formattedData
+        );
+        // Reset API error if the request succeeds
+
+        dispatch(fetchUserProfile(userId));
+
+        if (res.data.message === 'Product added successfully') {
+          showToast();
+          closeModal();
+        }
+
+        setLoading(loading);
+      } catch (error) {
+        // Handle and set the API error message
+        if (axios.isAxiosError(error)) {
+          const errorMessage =
+            error.response?.data?.message || 'Something went wrong!';
+          setApiErr(errorMessage);
+          if (errorMessage) {
+            setLoading(loading);
           }
+        } else {
+          setApiErr('An unexpected error occurred.');
         }
       }
-      return;
     }
   };
 
@@ -141,7 +158,7 @@ const AllProductModal = () => {
 
         <div className='mt-3'>
           <HomeButton
-            title={'Add Product'}
+            title={loading}
             bg={'#2E5BFF'}
             color={'white'}
             type='submit'

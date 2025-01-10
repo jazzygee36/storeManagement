@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { Provider } from 'react-redux';
 import { store } from '@/components/state/store';
+import { ToastProvider } from '@/components/hook/context/useContext';
 
 // Define the fonts for use
 const geistSans = Geist({
@@ -26,7 +27,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Provider store={store}>{children}</Provider>
+        <Provider store={store}>
+          <ToastProvider>{children}</ToastProvider>
+        </Provider>
       </body>
     </html>
   );

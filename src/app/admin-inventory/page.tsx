@@ -111,7 +111,7 @@ const Inventory = () => {
             </PaperBackground>
           </div>
           <ReusableModal isOpen={isModalOpen} onClose={closeModal}>
-            <AllProductModal />
+            <AllProductModal closeModal={closeModal} />
           </ReusableModal>
         </>
       )}

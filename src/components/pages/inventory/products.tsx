@@ -64,7 +64,7 @@ const Products = ({
               <th className='border border-gray-300 px-4 py-2 text-left text-sm text-white'>
                 Goods Value
               </th>
-              <th className='border border-gray-300 px-4 py-2 text-left text-sm '>
+              <th className='border border-gray-300 px-4 py-2 text-left text-sm text-white'>
                 Selling Price(1)
               </th>
               {/* <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
@@ -127,7 +127,7 @@ const Products = ({
                   <td className='border border-gray-200 px-4 py-2 text-sm bg-[blue] text-white font-bold'>
                     {formatNumber(goodsValue)} {/* Display goods value */}
                   </td>
-                  <td className='border border-gray-200 px-4 py-2 text-sm bg-gray-500'>
+                  <td className='border border-gray-200 px-4 py-2 text-sm bg-gray-500 text-white font-bold'>
                     {formatNumber(product.salesPrice)}
                   </td>
                   {/* <td className='border border-gray-200 px-4 py-2 text-sm'>
@@ -206,7 +206,9 @@ const Products = ({
 
             <div className='flex justify-between text-sm'>
               <p>Buying Price:</p>
-              <p className='font-semibold'>{selectedTransaction.buyingPrice}</p>
+              <p className='font-semibold'>
+                {formatNumber(selectedTransaction.buyingPrice)}
+              </p>
             </div>
             <hr className='my-3' />
 
@@ -219,10 +221,10 @@ const Products = ({
             <div className='flex justify-between text-sm'>
               <p>Selling Price:</p>
               <p className='font-semibold'>
-                {selectedTransaction.sellingPrice}
+                {formatNumber(selectedTransaction.sellingPrice)}
               </p>
             </div>
-            <hr className='my-3' />
+            {/* <hr className='my-3' /> */}
 
             {/* <div className='flex justify-between text-sm'>
               <p>Expired At:</p>
@@ -231,12 +233,16 @@ const Products = ({
             <hr className='my-3' />
             <div className='flex justify-between text-sm'>
               <p>Purchase Amount:</p>
-              <p className='font-semibold'>{selectedTransaction.purchaseAmt}</p>
+              <p className='font-semibold'>
+                {formatNumber(selectedTransaction.purchaseAmt)}
+              </p>
             </div>
             <hr className='my-3' />
             <div className='flex justify-between text-sm'>
               <p>Expected Gain:</p>
-              <p className='font-semibold'>{selectedTransaction.amtGain}</p>
+              <p className='font-semibold'>
+                {formatNumber(selectedTransaction.amtGain)}
+              </p>
             </div>
             <hr className='my-3' />
 

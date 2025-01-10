@@ -37,7 +37,7 @@ const ReusableModal: React.FC<ModalProps> = ({
       <div className='bg-white rounded-lg w-full max-w-md mx-4 p-6 relative'>
         <button
           onClick={onClose}
-          className='absolute top-2 right-2 text-gray-500 hover:text-gray-800'
+          className='absolute top-2 right-2 text-gray-500 hover:text-gray-800 text-xl'
           aria-label='Close modal'
         >
           &times;
