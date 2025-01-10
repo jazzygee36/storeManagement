@@ -19,7 +19,7 @@ export const loginSchema = z.object({
   password: z.string().min(6, 'Password must be at least 6 characters long'),
 });
 
-export const staffLoginSchema = z.object({
+export const createStaffSchema = z.object({
   username: z.string().min(3, 'Username is required'),
   phoneNumber: z.string().min(11, 'Password must be at least 11 numbers long'),
 });

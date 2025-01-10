@@ -1,5 +1,5 @@
 'use client';
-import { fetchUserProfile } from '@/components/api/slices/userProfileSlice';
+
 import HomeButton from '@/components/common/button';
 import MainDashboard from '@/components/common/dashboard/main-dasboard';
 import HomeInput from '@/components/common/input';
@@ -10,13 +10,14 @@ import { useToast } from '@/components/hook/context/useContext';
 import useAuth from '@/components/hook/useAuth';
 import StaffStore from '@/components/pages/create-staff/staff-store';
 import { AppDispatch } from '@/components/state/store';
-import { staffLoginSchema } from '@/components/utils/validation';
+import { createStaffSchema } from '@/components/utils/validation';
 import axios from 'axios';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { z } from 'zod';
+import { fetchStaffs } from '@/components/api/slices/staffProfileSlice';
 
-type FormData = z.infer<typeof staffLoginSchema>;
+type FormData = z.infer<typeof createStaffSchema>;
 
 const Stores = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -44,10 +45,10 @@ const Stores = () => {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  const handleStaffLoginSubmit = async (e: React.FormEvent) => {
+  const handleCreateStaffSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const result = staffLoginSchema.safeParse(data);
+    const result = createStaffSchema.safeParse(data);
 
     if (!result.success) {
       const validationErrors = result.error.format();
@@ -68,12 +69,13 @@ const Stores = () => {
         );
         // Reset API error if the request succeeds
 
-        dispatch(fetchUserProfile(userId));
+        dispatch(fetchStaffs(userId));
 
         if (res.data.message === 'Staff created successfully') {
           showToast();
           closeModal();
         }
+        setData({ username: '', phoneNumber: '' });
 
         setLoading(loading);
       } catch (error) {
@@ -115,7 +117,7 @@ const Stores = () => {
           </PaperBackground>
           <ReusableModal isOpen={isModalOpen} onClose={closeModal}>
             <h3>Create Staff</h3>
-            <form onSubmit={handleStaffLoginSubmit}>
+            <form onSubmit={handleCreateStaffSubmit}>
               <p className='text-red-500 text-[13px] text-center my-2'>
                 {apiErr}
               </p>

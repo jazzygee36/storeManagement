@@ -31,7 +31,7 @@ export default function Home() {
           </div>
           <div
             onClick={() => {
-              window.location.href = '/staff-login';
+              router.push('/staff-login');
             }}
             className='border border-[#D0D5DD] text-center font-inter font-medium p-5 rounded-md cursor-pointer '
           >
