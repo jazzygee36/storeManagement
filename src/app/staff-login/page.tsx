@@ -14,7 +14,7 @@ type FormData = z.infer<typeof staffLoginSchema>;
 const StaffLogin = () => {
   const [data, setData] = useState<FormData>({
     username: '',
-    password: '',
+    phoneNumber: '',
   });
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
@@ -32,7 +32,7 @@ const StaffLogin = () => {
       const validationErrors = result.error.format();
       setErrors({
         username: validationErrors.username?._errors[0] || '',
-        password: validationErrors.password?._errors[0] || '',
+        password: validationErrors.phoneNumber?._errors[0] || '',
       });
       console.log('Staff Login');
     }
@@ -71,7 +71,7 @@ const StaffLogin = () => {
               label={'Password'}
               placeholder={'Enter your password'}
               type={'password'}
-              value={data.password}
+              value={data.phoneNumber}
               name='password'
               onChange={handleChange}
             />
