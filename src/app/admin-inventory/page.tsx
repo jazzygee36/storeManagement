@@ -11,7 +11,7 @@ import Products from '@/components/pages/inventory/products';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/components/state/store';
 import { fetchUserProfile } from '@/components/api/slices/userProfileSlice';
-import { useFilteredProducts } from '@/components/utils/interface/index'; // Adjust the import path as necessary
+import { useFilteredProducts } from '@/components/utils/interface';
 
 const Inventory = () => {
   const isAuthenticated = useAuth();
@@ -60,9 +60,6 @@ const Inventory = () => {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  // if (!isAuthenticated) return <Loading />;
-
-  // if (status === 'loading') return <Loading />;
   if (status === 'failed') return <div>Error: {error}</div>;
 
   return (
