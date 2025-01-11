@@ -11,19 +11,14 @@ import Products from '@/components/pages/inventory/products';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/components/state/store';
 import { fetchUserProfile } from '@/components/api/slices/userProfileSlice';
-import { useFilteredProducts } from '@/components/utils/interface';
+import { useFilteredProducts } from '@/components/utils/interface/index';
 
 const Inventory = () => {
   const isAuthenticated = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [filter, setFilter] = useState('');
-  const [userId, setUserId] = useState<string | null>(null);
   const itemsPerPage = 5;
-
-  useEffect(() => {
-    setUserId(localStorage.getItem('userId'));
-  }, []);
 
   const dispatch = useDispatch<AppDispatch>();
   const { products, status, error } = useSelector(
@@ -32,22 +27,8 @@ const Inventory = () => {
 
   useEffect(() => {
     const userId = localStorage.getItem('userId');
-
     if (userId) dispatch(fetchUserProfile(userId));
-
-    const socket = new WebSocket(`wss://${process.env.NEXT_PUBLIC_BASE_URL}`);
-
-    socket.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      if (data.type === 'PROFILE_UPDATED') {
-        dispatch(fetchUserProfile(userId as string));
-      }
-    };
-
-    return () => {
-      socket.close();
-    };
-  }, [dispatch, userId]);
+  }, [dispatch]);
 
   const filteredProducts = useFilteredProducts(products, filter);
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
