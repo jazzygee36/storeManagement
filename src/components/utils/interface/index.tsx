@@ -1,16 +1,4 @@
 import { ReactNode } from 'react';
-import { useMemo } from 'react';
-
-export const useFilteredProducts = (
-  products: ProductItem[],
-  filter: string
-) => {
-  return useMemo(() => {
-    return filter
-      ? products.filter((item) => item.availability === filter)
-      : products;
-  }, [products, filter]);
-};
 
 export interface InputProps {
   label?: string;
