@@ -34,6 +34,8 @@ export interface ButtonProps {
 export interface PaperProps {
   title: string;
   container?: ReactNode;
+  input?: boolean;
+  onInputChange?: (value: string) => void;
 }
 
 export interface LocalProductItem {
@@ -47,11 +49,12 @@ export interface LocalProductItem {
   amtGain: number;
   availability: string;
   // qtyRemaning: number;
-  remainingItems: number;
+  qtyRemaining: number;
+  id?: string;
 }
 
 export interface ProductItem {
-  // "_id": "676b1b6602d4fa6966fe0f64",
+  _id?: string;
   productName: string;
   unitPrice: number;
   qtyBought: number;
@@ -59,10 +62,10 @@ export interface ProductItem {
   salesPrice: number;
   qtySold: number;
   salesValue: number;
-  remainingItems: number;
+  qtyRemaining: number;
   exp: null;
   availability: string;
-  qtyRemaning: number;
+  // qtyRemaning: number;
   purchaseAmt: number;
   amtGain: number;
   status: string;
