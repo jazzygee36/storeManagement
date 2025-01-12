@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
+import { ProductItem } from '@/components/utils/interface/index';
 import HomeButton from '@/components/common/button';
 import MainDashboard from '@/components/common/dashboard/main-dasboard';
 import Loading from '@/components/common/loadingState';
@@ -23,7 +24,11 @@ const Inventory = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { products, status, error } = useSelector(
     (state: RootState) => state.userProfile
-  );
+  ) as {
+    products: ProductItem[];
+    status: string;
+    error: string | null;
+  };
 
   useEffect(() => {
     const userId = localStorage.getItem('userId');
@@ -60,6 +65,7 @@ const Inventory = () => {
                     color='white'
                     onClick={openModal}
                   />
+
                   <select
                     aria-label='Filter products by stock status'
                     className='border border-gray-300 p-2 rounded-md'

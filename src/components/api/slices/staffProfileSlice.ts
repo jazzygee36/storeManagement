@@ -8,7 +8,7 @@ interface StaffProfile {
   username: string; // Ensure this field exists
   phoneNumber: string; // Ensure this field exists
   // email: string;
-  [key: string]: any; // For additional fields
+  // For additional fields
 }
 
 interface StaffProfileState {
@@ -32,9 +32,10 @@ export const fetchStaffs = createAsyncThunk(
         `${process.env.NEXT_PUBLIC_BASE_URL}/${userId}/all-staffs`
       );
       return res.data; // Assuming the response contains the list of staffs
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const error = err as any;
       return rejectWithValue(
-        err.response?.data?.message || 'Failed to fetch staff data'
+        error.response?.data?.message || 'Failed to fetch staff data'
       );
     }
   }

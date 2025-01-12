@@ -102,6 +102,7 @@ const Register = () => {
               name='username'
               value={data.username}
               onChange={handleChange}
+              mt='5'
             />
             {errors.username && (
               <p className='text-red-500 text-[13px]'>{errors.username}</p>
@@ -113,6 +114,7 @@ const Register = () => {
               name='email'
               value={data.email}
               onChange={handleChange}
+              mt='5'
             />
             {errors.email && (
               <p className='text-red-500 text-[13px]'>{errors.email}</p>
@@ -124,6 +126,7 @@ const Register = () => {
               name='password'
               value={data.password}
               onChange={handleChange}
+              mt='5'
             />
             {errors.password && (
               <p className='text-red-500 text-[13px]'>{errors.password}</p>

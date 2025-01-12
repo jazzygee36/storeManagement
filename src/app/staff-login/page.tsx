@@ -7,9 +7,9 @@ import HomeButton from '@/components/common/button';
 import BackArrow from '@/components/assets/icons/back';
 import { useState } from 'react';
 import { z } from 'zod';
-import { staffLoginSchema } from '@/components/utils/validation';
+import { createStaffSchema } from '@/components/utils/validation';
 
-type FormData = z.infer<typeof staffLoginSchema>;
+type FormData = z.infer<typeof createStaffSchema>;
 
 const StaffLogin = () => {
   const [data, setData] = useState<FormData>({
@@ -26,7 +26,7 @@ const StaffLogin = () => {
   const handleStaffLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const result = staffLoginSchema.safeParse(data);
+    const result = createStaffSchema.safeParse(data);
 
     if (!result.success) {
       const validationErrors = result.error.format();
@@ -63,6 +63,7 @@ const StaffLogin = () => {
               value={data.username}
               name='username'
               onChange={handleChange}
+              mt='5'
             />
             {errors.username && (
               <p className='text-red-500 text-[13px]'>{errors.username}</p>
@@ -74,6 +75,7 @@ const StaffLogin = () => {
               value={data.phoneNumber}
               name='password'
               onChange={handleChange}
+              mt='5'
             />
             {errors.password && (
               <p className='text-red-500 text-[13px]'>{errors.password}</p>

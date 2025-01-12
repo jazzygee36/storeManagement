@@ -8,7 +8,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
   return (
-    <div className='w-full flex justify-between items-center px-5  bg-gray-100'>
+    <div className='w-full flex justify-between items-center px-5 my-3  bg-gray-100'>
       {/* Sidebar Toggle Button */}
       <button
         className='lg:hidden text-gray-700 text-xl'
@@ -19,9 +19,7 @@ const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
       </button>
 
       {/* Search Input */}
-      <div className='mb-5 flex-2 px-4 w-[50%]'>
-        <HomeInput label={''} placeholder={'Search Products'} type={'text'} />
-      </div>
+      <div className='  w-[50%] text-1xl'>Manage your store</div>
 
       {/* Notification Icon */}
       <div className='flex items-center gap-2'>

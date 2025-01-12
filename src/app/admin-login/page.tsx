@@ -103,6 +103,7 @@ const AdminLogin = () => {
               value={data.email}
               name='email'
               onChange={handleChange}
+              mt='5'
             />
             {errors.email && (
               <p className='text-red-500 text-[13px]'>{errors.email}</p>
@@ -115,6 +116,7 @@ const AdminLogin = () => {
               value={data.password}
               name='password'
               onChange={handleChange}
+              mt='5'
             />
             {errors.password && (
               <p className='text-red-500 text-[13px]'>{errors.password}</p>

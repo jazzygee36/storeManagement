@@ -8,9 +8,10 @@ const HomeInput = ({
   type,
   value,
   onChange,
+  mt,
 }: InputProps) => {
   return (
-    <div className='flex flex-col justify-center mt-5'>
+    <div className={`flex flex-col justify-center mt-${mt}`}>
       <label className='text-[14px] font-medium mb-[6px] '>{label}</label>
       <input
         name={name}
@@ -18,7 +19,7 @@ const HomeInput = ({
         onChange={onChange}
         type={type}
         placeholder={placeholder}
-        className='w-full h-11 border border-[#D0D5DD] rounded-md px-3 outline-none'
+        className={`w-full h-11 border border-[#D0D5DD] rounded-md px-3 outline-none `}
       />
     </div>
   );

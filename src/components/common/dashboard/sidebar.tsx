@@ -17,7 +17,7 @@ const Navigation = [
   },
   {
     icon: <InventoryIcon />,
-    description: 'Inventory',
+    description: 'Products',
     path: '/admin-inventory',
   },
   {
@@ -27,7 +27,7 @@ const Navigation = [
   },
   {
     icon: <StoreIcon />,
-    description: 'Manage Store',
+    description: 'Create Staff',
     path: '/admin-stores',
   },
 ];
