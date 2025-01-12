@@ -1,14 +1,18 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 
+interface ErrorPayload {
+  message: string;
+  statusCode: number;
+}
+
 interface StaffProfile {
   id: string;
   name: string;
   position: string;
   username: string; // Ensure this field exists
   phoneNumber: string; // Ensure this field exists
-  // email: string;
-  // For additional fields
+  // Additional fields can be added as required
 }
 
 interface StaffProfileState {
@@ -24,31 +28,32 @@ const initialState: StaffProfileState = {
 };
 
 // Async thunk to fetch staff data
-export const fetchStaffs = createAsyncThunk(
-  'staffProfile/fetchStaffs',
-  async (userId: string, { rejectWithValue }) => {
-    try {
-      const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/${userId}/all-staffs`
+export const fetchStaffs = createAsyncThunk<
+  StaffProfile[], // Success return type
+  string, // Argument type
+  { rejectValue: ErrorPayload } // Reject value type
+>('staffProfile/fetchStaffs', async (userId, { rejectWithValue }) => {
+  try {
+    const res = await axios.get(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/${userId}/all-staffs`
+    );
+    return res.data; // Assuming the response contains the list of staffs
+  } catch (error: unknown) {
+    // Type guard to ensure error is an instance of AxiosError
+    if (axios.isAxiosError(error)) {
+      return rejectWithValue(
+        error.response?.data || {
+          message: 'Unknown error occurred',
+          statusCode: 500,
+        }
       );
-      return res.data; // Assuming the response contains the list of staffs
-    } catch (error: unknown) {
-      // Type guard to ensure error is an instance of AxiosError
-      if (axios.isAxiosError(error)) {
-        return rejectWithValue(
-          error.response?.data || {
-            message: 'Unknown error occurred',
-            statusCode: 500,
-          }
-        );
-      }
-      return rejectWithValue({
-        message: 'Unknown error occurred',
-        statusCode: 500,
-      });
     }
+    return rejectWithValue({
+      message: 'Unknown error occurred',
+      statusCode: 500,
+    });
   }
-);
+});
 
 const staffProfileSlice = createSlice({
   name: 'staffProfile',
@@ -71,15 +76,16 @@ const staffProfileSlice = createSlice({
           state.staffs = action.payload;
         }
       )
-      .addCase(fetchStaffs.rejected, (state, action: PayloadAction<any>) => {
-        state.loading = false;
-        state.error = action.payload;
-      });
+      .addCase(
+        fetchStaffs.rejected,
+        (state, action: PayloadAction<ErrorPayload | undefined>) => {
+          state.loading = false;
+          state.error = action.payload?.message || 'Unknown error occurred';
+        }
+      );
   },
 });
 
 export const { addStaff } = staffProfileSlice.actions;
 
 export default staffProfileSlice.reducer;
-
-// export default staffProfileSlice.reducer;
