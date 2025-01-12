@@ -32,11 +32,20 @@ export const fetchStaffs = createAsyncThunk(
         `${process.env.NEXT_PUBLIC_BASE_URL}/${userId}/all-staffs`
       );
       return res.data; // Assuming the response contains the list of staffs
-    } catch (err: unknown) {
-      const error = err as any;
-      return rejectWithValue(
-        error.response?.data?.message || 'Failed to fetch staff data'
-      );
+    } catch (error: unknown) {
+      // Type guard to ensure error is an instance of AxiosError
+      if (axios.isAxiosError(error)) {
+        return rejectWithValue(
+          error.response?.data || {
+            message: 'Unknown error occurred',
+            statusCode: 500,
+          }
+        );
+      }
+      return rejectWithValue({
+        message: 'Unknown error occurred',
+        statusCode: 500,
+      });
     }
   }
 );

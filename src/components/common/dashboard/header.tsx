@@ -1,5 +1,4 @@
 import React from 'react';
-import HomeInput from '../input';
 import NotificationIcon from '@/components/assets/icons/notification';
 
 interface HeaderProps {

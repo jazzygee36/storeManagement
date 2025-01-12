@@ -33,13 +33,20 @@ export const deleteProduct = createAsyncThunk<
       `${process.env.NEXT_PUBLIC_BASE_URL}/${productId}/delete/product`
     );
     return { productId, message: response.data.message };
-  } catch (error: any) {
-    return rejectWithValue(
-      error.response?.data || {
-        message: 'Unknown error occurred',
-        statusCode: 500,
-      }
-    );
+  } catch (error: unknown) {
+    // Type guard to ensure error is an instance of AxiosError
+    if (axios.isAxiosError(error)) {
+      return rejectWithValue(
+        error.response?.data || {
+          message: 'Unknown error occurred',
+          statusCode: 500,
+        }
+      );
+    }
+    return rejectWithValue({
+      message: 'Unknown error occurred',
+      statusCode: 500,
+    });
   }
 });
 
