@@ -7,7 +7,7 @@ interface ErrorPayload {
 }
 
 interface StaffProfile {
-  id: string;
+  _id: string;
   name: string;
   position: string;
   username: string; // Ensure this field exists
