@@ -42,7 +42,7 @@ const StaffSellProduct = () => {
                 <td className=' px-4 py-2 text-sm'>5</td>
                 <td className=' px-4 py-2 text-sm flex items-center justify-between'>
                   15000
-                  <div>X</div>
+                  <div className='text-[red]'>X</div>
                 </td>
               </tr>
             </tbody>
