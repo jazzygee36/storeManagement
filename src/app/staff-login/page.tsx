@@ -8,15 +8,23 @@ import BackArrow from '@/components/assets/icons/back';
 import { useState } from 'react';
 import { z } from 'zod';
 import { createStaffSchema } from '@/components/utils/validation';
+import { useRouter } from 'next/navigation';
+import { useDispatch } from 'react-redux';
+import axios from 'axios';
+import { setStaffLogin } from '@/components/api/slices/staffLoginSlice';
 
 type FormData = z.infer<typeof createStaffSchema>;
 
 const StaffLogin = () => {
+  const dispatch = useDispatch();
+  const router = useRouter();
   const [data, setData] = useState<FormData>({
     username: '',
     phoneNumber: '',
   });
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -32,9 +40,36 @@ const StaffLogin = () => {
       const validationErrors = result.error.format();
       setErrors({
         username: validationErrors.username?._errors[0] || '',
-        password: validationErrors.phoneNumber?._errors[0] || '',
+        phoneNumber: validationErrors.phoneNumber?._errors[0] || '',
       });
-      console.log('Staff Login');
+      return; // Exit if validation fails
+    }
+    setLoading(true);
+
+    try {
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/staff/login`,
+        data
+      );
+      dispatch(setStaffLogin(res.data)); // Update Redux store
+      localStorage.setItem('token', res.data.token);
+      localStorage.setItem('staffId', res.data.userId);
+
+      router.push('/staff-dashboard'); // Redirect on success
+    } catch (err) {
+      if (axios.isAxiosError(err) && err.response) {
+        setErrors({
+          general:
+            err.response.data?.message ||
+            'Invalid email or password. Please try again.',
+        });
+      } else {
+        setErrors({
+          general: 'An unexpected error occurred. Please try again.',
+        });
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -69,27 +104,31 @@ const StaffLogin = () => {
               <p className='text-red-500 text-[13px]'>{errors.username}</p>
             )}
             <HomeInput
-              label={'Password'}
+              label={'Phone number'}
               placeholder={'Enter your password'}
-              type={'password'}
+              type={'number'}
               value={data.phoneNumber}
-              name='password'
+              name='phoneNumber'
               onChange={handleChange}
               mt='5'
             />
-            {errors.password && (
-              <p className='text-red-500 text-[13px]'>{errors.password}</p>
+            {errors.phoneNumber && (
+              <p className='text-red-500 text-[13px]'>{errors.phoneNumber}</p>
             )}
-            <p className='text-[14px] text-[#4285F4] py-5 text-right cursor-pointer'>
-              {/* Forget Password? */}
-            </p>
-            <HomeButton
-              title={'Login'}
-              bg={'#4285F4'}
-              type={'submit'}
-              color='white'
-              // onClick={() => (window.location.href = '/staff-dashboard')}
-            />
+
+            {errors.general && (
+              <p className='text-red-500 text-[13px] text-center mt-4'>
+                {errors.general}
+              </p>
+            )}
+            <div className='mt-5'>
+              <HomeButton
+                title={loading ? 'LOADING...' : 'LOGIN'}
+                bg={'#4285F4'}
+                type={'submit'}
+                color='white'
+              />
+            </div>
           </form>
           <div className='mt-2'>
             {/* <h3 className='text-center'>

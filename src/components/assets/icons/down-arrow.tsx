@@ -1,6 +1,6 @@
 import React from 'react';
 
-const DownArrow = () => {
+const DownArrow = ({ onClick }: { onClick: () => void }) => {
   return (
     <svg
       className='w-6 h-6 text-gray-800 dark:text-white cursor-pointer'
@@ -10,6 +10,7 @@ const DownArrow = () => {
       height='24'
       fill='none'
       viewBox='0 0 24 24'
+      onClick={onClick}
     >
       <path
         stroke='currentColor'

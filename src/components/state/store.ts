@@ -5,6 +5,7 @@ import userSignUpReducer from '../api/slices/signUpSlice';
 import staffProfileReducer from '../api/slices/staffProfileSlice';
 import productReducer from '../api/slices/deleteSlice'; // Ensure the file exists at this path
 import deleteStaffReducer from '../api/slices/deleteStaffSlice';
+import staffLoginReducer from '../api/slices/staffLoginSlice';
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
     staffProfile: staffProfileReducer,
     product: productReducer,
     deleteStaff: deleteStaffReducer,
+    staffLogin: staffLoginReducer,
   },
 });
 

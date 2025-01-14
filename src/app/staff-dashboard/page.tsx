@@ -1,17 +1,18 @@
-import PaperBackground from '@/components/common/paper-bg';
-import StaffHeader from '@/components/common/staff-dashboard/staff-header';
-import StaffProducts from '@/components/pages/staff-products/all-products';
+'use client';
+import Loading from '@/components/common/loadingState';
+// import PaperBackground from '@/components/common/paper-bg';
+import MainStaffDashboard from '@/components/common/staff-dashboard/main-staff-dashboard';
+// import StaffHeader from '@/components/common/staff-dashboard/staff-header';
+import useAuth from '@/components/hook/useAuth';
+// import StaffProducts from '@/components/pages/staff-products/all-products';
 
 const StaffDashboard = () => {
+  const isAuthenticated = useAuth();
+
   return (
-    <div className='bg-gray-100 h-screen px-5'>
-      <div className='mb-10'>
-        <StaffHeader />
-      </div>
-      <PaperBackground title={'All Prodcuts'}>
-        <StaffProducts />
-      </PaperBackground>
-    </div>
+    <MainStaffDashboard>
+      {!isAuthenticated ? <Loading /> : 'jgjgjkk'}
+    </MainStaffDashboard>
   );
 };
 

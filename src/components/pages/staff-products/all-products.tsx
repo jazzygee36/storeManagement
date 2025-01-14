@@ -15,40 +15,20 @@ const StaffProducts = () => {
           <thead>
             <tr className='bg-gray-100'>
               <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
-                Products
+                Item Name
               </th>
               {/* <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
                 Unit Price(1)
               </th> */}
               <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
-                Qty Stock
+                Qty in Stock
               </th>
               {/* <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
                 Goods Value
               </th> */}
               <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
-                Remaining Items
+                Selling Price
               </th>
-              <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
-                Sales Price(1)
-              </th>
-              <th className='border border-gray-300 px-4 py-2 text-left text-sm text-[blue]'>
-                Qty Sold
-              </th>
-
-              <th className='border border-gray-300 px-4 py-2 text-left text-sm text-[green]'>
-                Sales Value
-              </th>
-
-              <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
-                Expire Date
-              </th>
-              <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
-                Availability
-              </th>
-              {/* <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
-                Action
-              </th> */}
             </tr>
           </thead>
           <tbody>
