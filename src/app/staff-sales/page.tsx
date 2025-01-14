@@ -1,6 +1,5 @@
 'use client';
 import HomeButton from '@/components/common/button';
-import HomeInput from '@/components/common/input';
 import Loading from '@/components/common/loadingState';
 import PaperBackground from '@/components/common/paper-bg';
 import MainStaffDashboard from '@/components/common/staff-dashboard/main-staff-dashboard';
