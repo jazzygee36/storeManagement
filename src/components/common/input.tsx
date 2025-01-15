@@ -9,6 +9,7 @@ const HomeInput = ({
   value,
   onChange,
   mt,
+  readOnly,
 }: InputProps) => {
   return (
     <div className={`flex flex-col justify-center mt-${mt}`}>
@@ -19,6 +20,7 @@ const HomeInput = ({
         onChange={onChange}
         type={type}
         placeholder={placeholder}
+        readOnly={readOnly}
         className={`w-full h-11 border border-[#D0D5DD] rounded-md px-3 outline-none `}
       />
     </div>

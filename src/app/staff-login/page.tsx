@@ -53,9 +53,9 @@ const StaffLogin = () => {
       );
       dispatch(setStaffLogin(res.data)); // Update Redux store
       localStorage.setItem('token', res.data.token);
-      localStorage.setItem('staffId', res.data.userId);
+      localStorage.setItem('staffId', res.data.staffId);
 
-      router.push('/staff-dashboard'); // Redirect on success
+      router.push('/staff-store'); // Redirect on success
     } catch (err) {
       if (axios.isAxiosError(err) && err.response) {
         setErrors({

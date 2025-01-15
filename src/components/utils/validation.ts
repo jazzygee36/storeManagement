@@ -42,3 +42,10 @@ export const addProductSchema = z.object({
       { message: 'Invalid date format' }
     ),
 });
+
+export const salesSchema = z.object({
+  productName: z.string().nonempty('Product name is required'),
+  unitPrice: z.string().regex(/^\d+$/, 'Unit price is required'),
+  qtyBuy: z.string().regex(/^\d+$/, 'Quantity must be a valid number'),
+  totalPrice: z.string().nonempty('Total price is required'),
+});

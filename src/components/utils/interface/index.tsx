@@ -8,6 +8,7 @@ export interface InputProps {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   name?: string;
   mt?: string;
+  readOnly?: boolean;
 }
 
 export interface ButtonProps {

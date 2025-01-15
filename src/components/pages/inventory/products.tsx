@@ -78,7 +78,7 @@ const Products = ({
                 'Products',
                 'Buying Price (per 1)',
                 'Qty Bought',
-                'Goods Value',
+                'Total Value',
                 'Selling Price (1)',
                 'Qty Remaining',
                 'Expire Date',
@@ -96,8 +96,6 @@ const Products = ({
           </thead>
           <tbody>
             {productItems.map((product, index) => {
-              console.log('product', product.qtyRemaining);
-
               const localProduct = mapProductToLocal(product);
               const goodsValue = localProduct.purchaseAmt;
               const statusColor = STATUS_COLORS[localProduct.status as Status];
@@ -110,7 +108,7 @@ const Products = ({
                   }
                   className='even:bg-gray-50 cursor-pointer'
                 >
-                  <td className='border border-gray-200 px-4 py-2 text-sm font-semibold bg-blue-800 text-white'>
+                  <td className='capitalize border border-gray-200 px-4 py-2 text-sm font-semibold bg-blue-800 text-white'>
                     {product.productName}
                   </td>
                   <td className='border border-gray-200 px-4 py-2 text-sm'>
@@ -134,7 +132,7 @@ const Products = ({
                       : ''}
                   </td>
                   <td
-                    className='border border-gray-200 px-4 py-2 text-sm'
+                    className='border border-gray-200 px-4 py-2 text-sm '
                     style={{ color: statusColor }}
                   >
                     {product.availability}

@@ -6,16 +6,16 @@ import DownArrow from '@/components/assets/icons/down-arrow';
 
 const Navigation = [
   {
-    description: 'Dashboard',
-    path: '/staff-dashboard',
-  },
-  {
     description: 'Store',
     path: '/staff-store',
   },
   {
     description: 'Sell-Product',
     path: '/staff-sales',
+  },
+  {
+    description: 'Daily-sales-report',
+    path: 'staff-sales-report',
   },
 ];
 
