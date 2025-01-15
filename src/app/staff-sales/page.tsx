@@ -16,9 +16,7 @@ type FormData = z.infer<typeof salesSchema>;
 
 const StaffSellProduct = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { products, loading } = useSelector(
-    (state: RootState) => state.staffProduct
-  );
+  const { products } = useSelector((state: RootState) => state.staffProduct);
 
   const isAuthenticated = useAuth();
 
