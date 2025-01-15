@@ -35,7 +35,6 @@ const StaffLogin = () => {
     e.preventDefault();
 
     const result = createStaffSchema.safeParse(data);
-
     if (!result.success) {
       const validationErrors = result.error.format();
       setErrors({
