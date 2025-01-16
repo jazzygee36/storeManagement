@@ -9,14 +9,15 @@ const HomeButton = ({
   onClick,
   type,
   disabled,
+  bg,
 }: ButtonProps) => {
   return (
     <Button
       disabled={disabled}
-      style={{ color: color }}
+      style={{ background: bg, color: color }}
       onClick={onClick}
       type={type}
-      className={`${className} h-[44px]`}
+      className={`${className} h-[44px] `}
     >
       {title}
     </Button>

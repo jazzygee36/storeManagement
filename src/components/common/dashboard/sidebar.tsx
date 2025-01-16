@@ -28,7 +28,7 @@ const Navigation = [
   {
     icon: <StoreIcon />,
     description: 'Create Staff',
-    path: '/admin-stores',
+    path: '/admin-staff',
   },
 ];
 

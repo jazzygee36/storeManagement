@@ -91,27 +91,32 @@ const AllProductModal = ({ closeModal }: { closeModal: () => void }) => {
   };
 
   return (
-    <div className=''>
+    <div className='p-2'>
+      <p className='text-red-500 text-[13px] text-center'>{apiErr}</p>
+
       <form onSubmit={handleAddProduct}>
-        <HomeInput
-          placeholder={'PRODUCT NAME'}
-          value={data.productName}
-          name='productName'
-          onChange={handleChange}
-        />
+        <div>
+          <HomeInput
+            placeholder={''}
+            value={data.productName}
+            name='productName'
+            onChange={handleChange}
+            label='Product Name'
+          />
 
-        {errors.productName && (
-          <p className='text-red-500 text-[13px]'>{errors.productName}</p>
-        )}
-        <p className='text-red-500 text-[13px]'>{apiErr}</p>
+          {errors.productName && (
+            <p className='text-red-500 text-[13px]'>{errors.productName}</p>
+          )}
+        </div>
 
-        <div className='flex justify-between gap-2'>
+        <div className='flex justify-between gap-2 my-5'>
           <div>
             <HomeInput
-              placeholder={'BUYING PRICE'}
+              placeholder={''}
               value={data.unitPrice}
               name='unitPrice'
               onChange={handleChange}
+              label='Buying Price'
             />
             {errors.buyingPrice && (
               <p className='text-red-500 text-[13px]'>{errors.buyingPrice}</p>
@@ -120,10 +125,11 @@ const AllProductModal = ({ closeModal }: { closeModal: () => void }) => {
 
           <div>
             <HomeInput
-              placeholder={'QTY BOUGHT'}
+              placeholder={''}
               value={data.qtyBought}
               name='qtyBought'
               onChange={handleChange}
+              label='Quantity Bought'
             />
             {errors.qtyBought && (
               <p className='text-red-500 text-[13px]'>{errors.qtyBought}</p>
@@ -131,13 +137,14 @@ const AllProductModal = ({ closeModal }: { closeModal: () => void }) => {
           </div>
         </div>
 
-        <div className='flex justify-between gap-2'>
+        <div className='flex justify-between items-center gap-2'>
           <div>
             <HomeInput
-              placeholder={'SALES PRICE'}
+              placeholder={''}
               value={data.salesPrice}
               name='salesPrice'
               onChange={handleChange}
+              label='Selling Price'
             />
             {errors.salesPrice && (
               <p className='text-red-500 text-[13px]'>{errors.salesPrice}</p>
@@ -146,17 +153,18 @@ const AllProductModal = ({ closeModal }: { closeModal: () => void }) => {
 
           <div>
             <HomeInput
-              placeholder={'EXPIRED'}
+              placeholder={''}
               value={data.exp}
               name='exp'
               onChange={handleChange}
               type='date'
+              label='Expired (Optional)'
             />
-            <p className='text-gray-400 text-[13px] text-center'>Optional</p>
+            {/* <p className='text-gray-400 text-[13px] text-center'>Optional</p> */}
           </div>
         </div>
 
-        <div className='mt-3'>
+        <div className='mt-3 w-full m-auto'>
           <HomeButton
             title={loading}
             bg={'#2E5BFF'}

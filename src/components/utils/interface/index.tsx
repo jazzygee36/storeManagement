@@ -9,6 +9,7 @@ export interface InputProps {
   name?: string;
   mt?: string;
   readOnly?: boolean;
+  onInputChange?: (value: string) => void;
 }
 
 export interface ButtonProps {
@@ -18,6 +19,7 @@ export interface ButtonProps {
   color: string;
   onClick?: () => void;
   disabled?: boolean;
+  bg?: string;
 }
 
 export interface PaperProps {

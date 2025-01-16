@@ -99,6 +99,7 @@ const StaffStore = () => {
                         type={'submit'}
                         color={'white'}
                         onClick={() => openModal(staff._id)}
+                        bg='red'
                       />
                     </div>
                   </div>
@@ -113,7 +114,12 @@ const StaffStore = () => {
           Are you sure you want to delete this staff?
         </h1>
         <div className='flex justify-center gap-4 mt-5'>
-          <HomeButton title='Cancel' onClick={closeModal} color='white' />
+          <HomeButton
+            title='Cancel'
+            onClick={closeModal}
+            color='white'
+            bg='blue'
+          />
           <HomeButton
             title={deleting ? deleting : 'Delete'}
             onClick={() => {
@@ -127,6 +133,7 @@ const StaffStore = () => {
               }
             }}
             color='white'
+            bg='red'
           />
         </div>
       </ReusableModal>

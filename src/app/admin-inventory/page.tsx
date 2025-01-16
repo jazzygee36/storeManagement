@@ -12,6 +12,8 @@ import Products from '@/components/pages/inventory/products';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/components/state/store';
 import { fetchUserProfile } from '@/components/api/slices/userProfileSlice';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import HomeInput from '@/components/common/input';
 
 const Inventory = () => {
   const isAuthenticated = useAuth();
@@ -62,19 +64,23 @@ const Inventory = () => {
       ) : (
         <>
           <div className='mt-5'>
-            <PaperBackground
-              input={true}
-              title='All Products'
-              onInputChange={(value) => setSearchTerm(value)}
-              container={
-                <div className='grid grid-cols-2 items-center text-sm w-full justify-between'>
-                  <HomeButton
-                    title='Add Products'
-                    bg='#4285F4'
-                    color='white'
-                    onClick={openModal}
-                  />
-                  <div className='flex justify-end'>
+            <Card>
+              <CardHeader className='w-full'>
+                <div className='flex justify-between items-center'>
+                  <div className='hidden md:block w-full'>
+                    <HomeInput
+                      placeholder={'Search Product'}
+                      onInputChange={(value) => setSearchTerm(value)}
+                    />
+                  </div>
+
+                  <div className='w-full flex justify-end gap-5'>
+                    <HomeButton
+                      title='Add Products'
+                      color='white'
+                      onClick={openModal}
+                      bg='blue'
+                    />
                     <select
                       aria-label='Filter products by stock status'
                       className='border border-gray-300 p-2 rounded-md focus:outline-none'
@@ -88,21 +94,22 @@ const Inventory = () => {
                     </select>
                   </div>
                 </div>
-              }
-            >
-              {filteredProducts.length === 0 ? (
-                <div className='text-center flex justify-center items-center h-40'>
-                  No products available.
-                </div>
-              ) : (
-                <Products
-                  productItems={productItems}
-                  currentPage={currentPage}
-                  setCurrentPage={setCurrentPage}
-                  totalPages={totalPages}
-                />
-              )}
-            </PaperBackground>
+              </CardHeader>
+              <CardContent>
+                {filteredProducts.length === 0 ? (
+                  <div className='text-center flex justify-center items-center h-40'>
+                    No products available.
+                  </div>
+                ) : (
+                  <Products
+                    productItems={productItems}
+                    currentPage={currentPage}
+                    setCurrentPage={setCurrentPage}
+                    totalPages={totalPages}
+                  />
+                )}
+              </CardContent>
+            </Card>
           </div>
           <ReusableModal isOpen={isModalOpen} onClose={closeModal}>
             <AllProductModal closeModal={closeModal} />

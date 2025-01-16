@@ -16,6 +16,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { z } from 'zod';
 import { fetchStaffs } from '@/components/api/slices/staffProfileSlice';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 
 type FormData = z.infer<typeof createStaffSchema>;
 
@@ -99,10 +100,10 @@ const Stores = () => {
         <Loading />
       ) : (
         <>
-          <PaperBackground
-            title={'Manage Store'}
-            container={
-              <>
+          <Card>
+            <CardHeader>
+              <div className='flex justify-between items-center'>
+                <h2>Manage Store</h2>
                 <HomeButton
                   title={'Create Staff'}
                   bg={'#4285F4'}
@@ -110,27 +111,29 @@ const Stores = () => {
                   color={'white'}
                   onClick={openModal}
                 />
-              </>
-            }
-          >
-            <StaffStore />
-          </PaperBackground>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <StaffStore />
+            </CardContent>
+          </Card>
           <ReusableModal isOpen={isModalOpen} onClose={closeModal}>
-            <h3>Create Staff</h3>
+            <h3 className='text-center'>Create Staff</h3>
             <form onSubmit={handleCreateStaffSubmit}>
               <p className='text-red-500 text-[13px] text-center my-2'>
                 {apiErr}
               </p>
-
-              <HomeInput
-                placeholder={'Username'}
-                value={data.username}
-                name='username'
-                onChange={handleChange}
-              />
-              {errors.username && (
-                <p className='text-red-500 text-[13px]'>{errors.username}</p>
-              )}
+              <div className='my-4'>
+                <HomeInput
+                  placeholder={'Username'}
+                  value={data.username}
+                  name='username'
+                  onChange={handleChange}
+                />
+                {errors.username && (
+                  <p className='text-red-500 text-[13px]'>{errors.username}</p>
+                )}
+              </div>
               <HomeInput
                 placeholder={'Phone Number'}
                 value={data.phoneNumber}

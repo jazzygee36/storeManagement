@@ -10,16 +10,20 @@ const HomeInput = ({
   type,
   value,
   onChange,
-  mt,
   readOnly,
+  onInputChange,
 }: InputProps) => {
   return (
-    <div className={`grid gap-2 `}>
-      <Label>{label}</Label>
+    <div className='grid gap-2'>
+      {label && <Label htmlFor={name}>{label}</Label>}
       <Input
+        id={name}
         name={name}
         value={value}
-        onChange={onChange}
+        onChange={(e) => {
+          onChange?.(e); // Call onChange directly if provided
+          onInputChange?.(e.target.value); // Call onInputChange with value if provided
+        }}
         type={type}
         placeholder={placeholder}
         readOnly={readOnly}
