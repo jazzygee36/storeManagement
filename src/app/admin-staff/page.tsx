@@ -5,7 +5,6 @@ import MainDashboard from '@/components/common/dashboard/main-dasboard';
 import HomeInput from '@/components/common/input';
 import Loading from '@/components/common/loadingState';
 import ReusableModal from '@/components/common/modal';
-import PaperBackground from '@/components/common/paper-bg';
 import { useToast } from '@/components/hook/context/useContext';
 import useAuth from '@/components/hook/useAuth';
 import StaffStore from '@/components/pages/create-staff/staff-store';

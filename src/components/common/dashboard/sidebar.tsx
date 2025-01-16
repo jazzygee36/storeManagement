@@ -52,7 +52,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className='w-[280px] px-6 h-screen flex flex-col justify-between'>
+    <div className=' px-6 h-screen flex flex-col justify-normal md:justify-between gap-8 md:gap-0'>
       {/* Top Section */}
       <div>
         <div className='m-auto mt-6'>

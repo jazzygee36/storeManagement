@@ -1,10 +1,7 @@
 'use client';
-import Image from 'next/image';
-import Logo from '../../components/assets/svg/Logo.svg';
-import SmallLogo from '../../components/assets/svg/smallLogo.svg';
+
 import HomeInput from '@/components/common/input';
 import HomeButton from '@/components/common/button';
-import BackArrow from '@/components/assets/icons/back';
 import { z } from 'zod';
 import { registerSchema } from '@/components/utils/validation';
 import { useState } from 'react';

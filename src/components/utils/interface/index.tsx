@@ -22,13 +22,6 @@ export interface ButtonProps {
   bg?: string;
 }
 
-export interface PaperProps {
-  title: string;
-  container?: ReactNode;
-  input?: boolean;
-  onInputChange?: (value: string) => void;
-}
-
 export interface LocalProductItem {
   product: string;
   buyingPrice: number;
