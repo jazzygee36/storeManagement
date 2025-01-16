@@ -7,7 +7,7 @@ const useAuth = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const router = useRouter();
   const TOKEN_KEY = 'token';
-  const INACTIVITY_TIMEOUT = 10 * 60 * 1000; // 10 minutes in milliseconds
+  const INACTIVITY_TIMEOUT = 10 * 60 * 1000; // 10 minutes
 
   const logout = () => {
     if (typeof window !== 'undefined') {
@@ -21,41 +21,53 @@ const useAuth = () => {
     if (typeof window === 'undefined') return;
 
     const token = localStorage.getItem(TOKEN_KEY);
-
     if (!token) {
       logout();
-    } else {
-      fetch(`${process.env.NEXT_PUBLIC_BASE_URL}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-        .then((res) => {
-          if (res.ok) {
-            setIsAuthenticated(true);
-          } else {
-            logout();
-          }
-        })
-        .catch(() => {
-          logout();
-        });
+      return;
     }
+
+    const abortController = new AbortController();
+
+    fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ''}`, {
+      headers: { Authorization: `Bearer ${token}` },
+      signal: abortController.signal,
+    })
+      .then((res) => {
+        if (res.ok) {
+          setIsAuthenticated(true);
+        } else {
+          logout();
+        }
+      })
+      .catch((err) => {
+        if (err.name !== 'AbortError') {
+          console.error('Auth fetch error:', err);
+          logout();
+        }
+      });
+
+    return () => abortController.abort();
   }, [router]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
-    let timeout: NodeJS.Timeout;
-
-    const resetTimeout = () => {
-      if (timeout) clearTimeout(timeout);
-      timeout = setTimeout(() => logout(), INACTIVITY_TIMEOUT);
+    const debounce = (fn: () => void, delay: number) => {
+      let timer: NodeJS.Timeout;
+      return () => {
+        clearTimeout(timer);
+        timer = setTimeout(fn, delay);
+      };
     };
+
+    const resetTimeout = debounce(() => {
+      logout();
+    }, INACTIVITY_TIMEOUT);
 
     const events = ['mousemove', 'keydown', 'click', 'scroll'];
     events.forEach((event) => window.addEventListener(event, resetTimeout));
 
     return () => {
-      clearTimeout(timeout);
       events.forEach((event) =>
         window.removeEventListener(event, resetTimeout)
       );
