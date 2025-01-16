@@ -74,7 +74,7 @@ const StaffProducts = () => {
               <TableHead className='text-black font-bold uppercase text-center'>
                 Qty Remaining
               </TableHead>
-              <TableHead className='text-black font-bold uppercase text-center'>
+              <TableHead className='text-black font-bold uppercase'>
                 Status
               </TableHead>
             </TableRow>
@@ -99,10 +99,7 @@ const StaffProducts = () => {
                   <TableCell className='text-center'>
                     {product.qtyRemaining}
                   </TableCell>
-                  <TableCell
-                    className='text-center'
-                    style={{ color: statusColor }}
-                  >
+                  <TableCell className='' style={{ color: statusColor }}>
                     {product.availability || 'unknown'}
                   </TableCell>
                 </TableRow>

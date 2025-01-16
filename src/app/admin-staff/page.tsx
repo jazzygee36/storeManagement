@@ -133,21 +133,26 @@ const Stores = () => {
                   <p className='text-red-500 text-[13px]'>{errors.username}</p>
                 )}
               </div>
-              <HomeInput
-                placeholder={'Phone Number'}
-                value={data.phoneNumber}
-                name='phoneNumber'
-                onChange={handleChange}
-              />
-              {errors.phoneNumber && (
-                <p className='text-red-500 text-[13px]'>{errors.phoneNumber}</p>
-              )}
-              <div className='mt-5'>
+              <div>
+                <HomeInput
+                  placeholder={'Phone Number'}
+                  value={data.phoneNumber}
+                  name='phoneNumber'
+                  onChange={handleChange}
+                />
+                {errors.phoneNumber && (
+                  <p className='text-red-500 text-[13px]'>
+                    {errors.phoneNumber}
+                  </p>
+                )}
+              </div>
+              <div className='mt-5 '>
                 <HomeButton
                   title={loading}
                   bg={'blue'}
                   color={'white'}
                   type='submit'
+                  width={'100%'}
                 />
               </div>
             </form>

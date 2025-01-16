@@ -164,7 +164,7 @@ const AllProductModal = ({ closeModal }: { closeModal: () => void }) => {
           </div>
         </div>
 
-        <div className='mt-3 w-full m-auto'>
+        <div className='mt-4 w-full flex justify-center'>
           <HomeButton
             title={loading}
             bg={'#2E5BFF'}

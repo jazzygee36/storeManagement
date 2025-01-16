@@ -100,6 +100,7 @@ const StaffStore = () => {
                         color={'white'}
                         onClick={() => openModal(staff._id)}
                         bg='red'
+                        width={'100%'}
                       />
                     </div>
                   </div>
@@ -119,21 +120,18 @@ const StaffStore = () => {
             onClick={closeModal}
             color='white'
             bg='blue'
+            width={'100%'}
           />
           <HomeButton
             title={deleting ? deleting : 'Delete'}
             onClick={() => {
-              console.log(
-                'Delete button clicked, selectedStaffId:',
-                selectedStaffId
-              ); // Debug
               if (selectedStaffId) {
-                console.log('Delete button clicked'); // Debugging line
                 handleStaffDelete(selectedStaffId);
               }
             }}
             color='white'
             bg='red'
+            width={'100%'}
           />
         </div>
       </ReusableModal>

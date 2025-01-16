@@ -20,6 +20,7 @@ export interface ButtonProps {
   onClick?: () => void;
   disabled?: boolean;
   bg?: string;
+  width?: string;
 }
 
 export interface LocalProductItem {

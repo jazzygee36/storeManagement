@@ -46,9 +46,12 @@ const MainDashboard = ({ children }: { children: React.ReactNode }) => {
       )}
 
       {/* Main Content */}
-      <div className='flex-1 w-full h-screen overflow-y-auto relative bg-gray-100'>
+      <div className='flex-1 w-full h-screen overflow-y-auto bg-gray-100'>
+        {/* Header */}
         <Header onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
-        <div className='px-5 py-5'>{children}</div>
+
+        {/* Adjust for Header Height */}
+        <div className='mt-[64px] px-5 py-5'>{children}</div>
       </div>
     </div>
   );

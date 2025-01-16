@@ -4,20 +4,22 @@ import { Button } from '../ui/button';
 
 const HomeButton = ({
   title,
-  className,
+  className = '',
   color,
   onClick,
-  type,
-  disabled,
+  type = 'button',
+  disabled = false,
   bg,
+  width,
 }: ButtonProps) => {
   return (
     <Button
       disabled={disabled}
-      style={{ background: bg, color: color }}
+      style={{ background: bg, color, width: width }}
       onClick={onClick}
       type={type}
-      className={`${className} h-[44px] `}
+      className={`${className} h-[44px]`}
+      // aria-label={title || 'Button'}
     >
       {title}
     </Button>

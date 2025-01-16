@@ -38,7 +38,7 @@ const Inventory = () => {
 
   const filteredProducts = products.filter((product) => {
     const matchesSearchTerm =
-      searchTerm.length < 2 ||
+      searchTerm.length < 1 ||
       product.productName.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesFilter = filter === '' || product.availability === filter;
 
@@ -65,15 +65,15 @@ const Inventory = () => {
           <div className='mt-5'>
             <Card>
               <CardHeader className='w-full'>
-                <div className='flex justify-between items-center'>
-                  <div className='hidden md:block w-full'>
+                <div className='grid grid-cols-1 md:grid-cols-2 gap-4 justify-between items-center'>
+                  <div className='w-full'>
                     <HomeInput
                       placeholder={'Search Product'}
                       onInputChange={(value) => setSearchTerm(value)}
                     />
                   </div>
 
-                  <div className='w-full flex justify-end gap-5'>
+                  <div className='w-full flex justify-between md:justify-end gap-5'>
                     <HomeButton
                       title='Add Products'
                       color='white'
