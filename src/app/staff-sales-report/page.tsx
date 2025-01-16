@@ -14,3 +14,10 @@ const DailySalesReport = () => {
 };
 
 export default DailySalesReport;
+
+// This forces server-side rendering
+export async function getServerSideProps() {
+  return {
+    props: {}, // Pass props if needed
+  };
+}
