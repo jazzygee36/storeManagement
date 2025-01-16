@@ -1,3 +1,4 @@
+'use client';
 import HomeButton from '@/components/common/button';
 import HomeInput from '@/components/common/input';
 import { addProductSchema } from '@/components/utils/validation';
