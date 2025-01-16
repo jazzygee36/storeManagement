@@ -11,6 +11,7 @@ import useAuth from '@/components/hook/useAuth';
 import { AppDispatch, RootState } from '@/components/state/store';
 import { salesSchema } from '@/components/utils/validation';
 import { z } from 'zod';
+import { Card, CardContent } from '@/components/ui/card';
 
 type FormData = z.infer<typeof salesSchema>;
 
@@ -22,7 +23,7 @@ const StaffSellProduct = () => {
 
   const [data, setData] = useState<FormData>({
     productName: '',
-    unitPrice: '',
+    sellingPrice: '',
     qtyBuy: '',
     totalPrice: '',
   });
@@ -48,7 +49,7 @@ const StaffSellProduct = () => {
     if (selectedProduct) {
       setData({
         productName: selectedProduct.productName,
-        unitPrice: selectedProduct.unitPrice.toString(),
+        sellingPrice: selectedProduct.salesPrice.toString(),
         qtyBuy: '',
         totalPrice: '',
       });
@@ -57,13 +58,13 @@ const StaffSellProduct = () => {
 
   const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const qty = e.target.value;
-    const unitPrice = parseFloat(data.unitPrice || '0');
+    const sellingPrice = parseFloat(data.sellingPrice || '0');
     const quantity = parseFloat(qty || '0');
 
     setData((prevData) => ({
       ...prevData,
       qtyBuy: qty,
-      totalPrice: qty ? formatNumber(unitPrice * quantity) : '',
+      totalPrice: qty ? formatNumber(sellingPrice * quantity) : '',
     }));
   };
 
@@ -87,7 +88,7 @@ const StaffSellProduct = () => {
     // Reset the form
     setData({
       productName: '',
-      unitPrice: '',
+      sellingPrice: '',
       qtyBuy: '',
       totalPrice: '',
     });
@@ -107,70 +108,77 @@ const StaffSellProduct = () => {
       ) : (
         <PaperBackground title={''}>
           <div className='grid grid-cols-1 md:grid-cols-2 gap-5'>
-            <form
-              onSubmit={handleSubmitSales}
-              className='md:w-[60%] w-full m-auto border border-gray-300 p-5 rounded-lg bg-gray-200'
-            >
-              <div>
-                <label className='text-sm'>Product Name</label>
-                <select
-                  name='productName'
-                  value={data.productName}
-                  onChange={handleProductSelect}
-                  className=' px-2 border border-gray-300 h-[44px] rounded-md w-full capitalize focus:outline-none'
+            <Card className='w-full md:w-[60%] m-auto py-5'>
+              <CardContent>
+                <form
+                  onSubmit={handleSubmitSales}
+                  // className='md:w-[60%] w-full m-auto border border-gray-300 p-5 rounded-lg bg-gray-200'
                 >
-                  <option value=''>Select Product</option>
-                  {products.map((product) => (
-                    <option key={product._id} value={product.productName}>
-                      {product.productName}
-                    </option>
-                  ))}
-                </select>
-                {errors.productName && (
-                  <p className='text-red-500 text-[13px]'>
-                    {errors.productName}
-                  </p>
-                )}
-              </div>
-              <div className='my-2'>
-                <HomeInput
-                  placeholder='Enter quantity'
-                  name='qtyBuy'
-                  value={data.qtyBuy}
-                  onChange={handleQuantityChange}
-                  label='Quantity'
-                />
-                {errors.qtyBuy && (
-                  <p className='text-red-500 text-[13px]'>{errors.qtyBuy}</p>
-                )}
-              </div>
-              <div className='my-2'>
-                <HomeInput
-                  name='unitPrice'
-                  value={data.unitPrice}
-                  readOnly={true}
-                  placeholder={'Selling Price'}
-                  label='Selling Price'
-                />
-              </div>
-              <div className='my-2'>
-                <HomeInput
-                  label='Total Price'
-                  name='totalPrice'
-                  value={data.totalPrice}
-                  readOnly
-                  placeholder={'Total Price'}
-                />
-              </div>
-              <div className='w-[50%] md:w-[100%] mt-5 m-auto'>
-                <HomeButton
-                  title={'Add to Sales'}
-                  bg={'blue'}
-                  color={'white'}
-                  type='submit'
-                />
-              </div>
-            </form>
+                  <div>
+                    <label className='text-sm'>Product Name</label>
+                    <select
+                      name='productName'
+                      value={data.productName}
+                      onChange={handleProductSelect}
+                      className=' px-2 border border-gray-300 h-[44px] rounded-md w-full capitalize focus:outline-none'
+                    >
+                      <option value=''>Select Product</option>
+                      {products.map((product) => (
+                        <option key={product._id} value={product.productName}>
+                          {product.productName}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.productName && (
+                      <p className='text-red-500 text-[13px]'>
+                        {errors.productName}
+                      </p>
+                    )}
+                  </div>
+                  <div className='my-5'>
+                    <HomeInput
+                      placeholder=''
+                      name='qtyBuy'
+                      value={data.qtyBuy}
+                      onChange={handleQuantityChange}
+                      label='Quantity'
+                    />
+                    {errors.qtyBuy && (
+                      <p className='text-red-500 text-[13px]'>
+                        {errors.qtyBuy}
+                      </p>
+                    )}
+                  </div>
+                  <div className='my-5'>
+                    <HomeInput
+                      name='sellingPrice'
+                      value={data.sellingPrice}
+                      readOnly={true}
+                      placeholder={''}
+                      label='Selling Price'
+                    />
+                  </div>
+                  <div className='my-5'>
+                    <HomeInput
+                      label='Total Price'
+                      name='totalPrice'
+                      value={data.totalPrice}
+                      readOnly
+                      placeholder={''}
+                    />
+                  </div>
+                  <div className='w-[100%] mt-5 m-auto'>
+                    <HomeButton
+                      title={'Add to Sales'}
+                      color={'white'}
+                      type='submit'
+                      className='w-[100%] mt-5 m-auto'
+                    />
+                  </div>
+                </form>
+              </CardContent>
+            </Card>
+
             <div>
               <table className='min-w-full'>
                 <thead>
@@ -199,7 +207,7 @@ const StaffSellProduct = () => {
                         {sale.productName}
                       </td>
                       <td className='px-4 py-2 text-sm'>
-                        {formatNumber(parseFloat(sale.unitPrice))}
+                        {formatNumber(parseFloat(sale.sellingPrice))}
                       </td>
                       <td className='px-4 py-2 text-sm'>{sale.qtyBuy}</td>
                       <td className='px-4 py-2 text-sm flex items-center justify-between'>
@@ -219,20 +227,24 @@ const StaffSellProduct = () => {
                   ))}
                 </tbody>
               </table>
-              <div className='flex justify-around items-center mt-4'>
-                <h2 className='font-semibold'>Grand Total</h2>
-                <div className='font-bold underline'>
-                  N{formatNumber(grandTotal)}
-                </div>
-              </div>
-              <div className='w-[50%] md:w-[40%] mt-5 m-auto'>
-                <HomeButton
-                  title={'Complete Sales'}
-                  bg={'blue'}
-                  color={'white'}
-                  type='submit'
-                />
-              </div>
+              {sales.length > 0 && (
+                <>
+                  <div className='flex justify-around items-center mt-4'>
+                    <h2 className='font-semibold'>Grand Total</h2>
+                    <div className='font-bold underline'>
+                      N{formatNumber(grandTotal)}
+                    </div>
+                  </div>
+
+                  <div className='w-[50%] md:w-[40%] mt-5 m-auto'>
+                    <HomeButton
+                      title={'Complete Sales'}
+                      color={'white'}
+                      type='submit'
+                    />
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </PaperBackground>

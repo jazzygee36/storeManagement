@@ -12,10 +12,22 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import { setUserSignUp } from '@/components/api/slices/signUpSlice';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { cn } from '@/lib/utils';
+import Loading from '@/components/common/loadingState';
 
 type FormData = z.infer<typeof registerSchema>;
 
-const Register = () => {
+function RegisterForm({
+  className,
+  ...props
+}: React.ComponentPropsWithoutRef<'div'>) {
   const dispatch = useDispatch();
   const router = useRouter();
   const [data, setData] = useState<FormData>({
@@ -48,13 +60,16 @@ const Register = () => {
     setErrors({}); // Clear errors before submission
 
     try {
+      setLoading(true);
+
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/register`,
         data
       );
       dispatch(setUserSignUp(res.data)); // Update Redux store
 
-      router.push('/admin-login'); // Redirect on success
+      router.push('/'); // Redirect on success
+      setLoading(false);
     } catch (err) {
       if (axios.isAxiosError(err)) {
         if (err.response?.data?.message) {
@@ -74,14 +89,95 @@ const Register = () => {
     }
   };
   return (
-    <>
-      <BackArrow />
+    <div
+      className={cn(
+        'h-screen flex flex-col gap-6 m-auto w-full items-center justify-center',
+        className
+      )}
+      {...props}
+    >
+      <Card>
+        <CardHeader>
+          <CardTitle className='text-2xl text-center'>
+            Create an Account
+          </CardTitle>
+          <CardDescription>
+            Welcome to StockTaker! we give you control over your business
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleRegisterSubmit}>
+            {errors.general && (
+              <p className='text-red-500 text-[13px] text-center '>
+                {errors.general}
+              </p>
+            )}
+            <div className='flex flex-col gap-6'>
+              <div>
+                <HomeInput
+                  label='Username'
+                  type='text'
+                  placeholder='Username'
+                  // required
+                  value={data.username}
+                  name='username'
+                  onChange={handleChange}
+                />
+                {errors.username && (
+                  <p className='text-red-500 text-[13px]'>{errors.username}</p>
+                )}
+              </div>
+              <div className='grid gap-2'>
+                <HomeInput
+                  label='Email'
+                  type='email'
+                  placeholder='Enter Email'
+                  value={data.email}
+                  name='email'
+                  onChange={handleChange}
+                />
+                {errors.email && (
+                  <p className='text-red-500 text-[13px]'>{errors.email}</p>
+                )}
+              </div>
+              <div className='grid gap-2'>
+                <HomeInput
+                  label='Password'
+                  type='password'
+                  placeholder='Enter Password'
+                  value={data.password}
+                  name='password'
+                  onChange={handleChange}
+                />
+                {errors.password && (
+                  <p className='text-red-500 text-[13px]'>{errors.password}</p>
+                )}
+              </div>
 
-      <div className=' h-screen w-full grid grid-cols-1 md:grid-cols-2 items-center px-6'>
-        <div className='hidden md:block m-auto'>
-          <Image src={Logo} alt='logo' />
-        </div>
-        <div>
+              <HomeButton
+                type='submit'
+                title={loading ? <Loading /> : 'Sign up'}
+                color={'white'}
+              />
+            </div>
+          </form>
+          <div className='mt-4 text-center text-sm w-full'>
+            Alredy have an account?{' '}
+            <span
+              className='underline underline-offset-4 cursor-pointer text-blue-600'
+              onClick={() => router.push('/')}
+            >
+              Login
+            </span>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+    // <div className='hidden md:block m-auto'>
+    //   {/* <Image src={Logo} alt='logo' /> */}
+    //   Welcome to StockTaker
+    // </div>
+    /* <div>
           <div className='mb-[24px] flex justify-center'>
             <Image src={SmallLogo} alt='logo' />
           </div>
@@ -133,9 +229,9 @@ const Register = () => {
             )}
             {/* <p className='text-[14px] text-[#D0D5DD]'>
             Must be at least 8 characters.
-          </p> */}
+          </p> */
 
-            <p className='text-[14px] text-[#667085]  font-medium mb-5  cursor-pointer'>
+    /* <p className='text-[14px] text-[#667085]  font-medium mb-5  cursor-pointer'>
               Must be at least 8 characters.
             </p>
             {errors && (
@@ -143,29 +239,16 @@ const Register = () => {
             )}
             <HomeButton
               title={loading ? 'LOADING...' : 'Get Started'}
-              bg={'#4285F4'}
               type={'submit'}
               color='white'
               disabled={loading}
             />
           </form>
-          <div className='mt-2'>
-            <h3 className='text-center'>
-              Already have an account?{' '}
-              <span
-                className='text-[#4285F4] cursor-pointer'
-                onClick={() => {
-                  window.location.href = '/';
-                }}
-              >
-                Log in
-              </span>
-            </h3>
-          </div>
-        </div>
-      </div>
-    </>
-  );
-};
+          
+        </div> */
 
-export default Register;
+    // </>
+  );
+}
+
+export default RegisterForm;

@@ -1,5 +1,7 @@
 import React from 'react';
 import { InputProps } from '../utils/interface';
+import { Input } from '../ui/input';
+import { Label } from '../ui/label';
 
 const HomeInput = ({
   name,
@@ -12,16 +14,15 @@ const HomeInput = ({
   readOnly,
 }: InputProps) => {
   return (
-    <div className={`flex flex-col justify-center mt-${mt}`}>
-      <label className='text-[14px] font-medium mb-[6px] '>{label}</label>
-      <input
+    <div className={`grid gap-2 `}>
+      <Label>{label}</Label>
+      <Input
         name={name}
         value={value}
         onChange={onChange}
         type={type}
         placeholder={placeholder}
         readOnly={readOnly}
-        className={`w-full h-11 border border-[#D0D5DD] rounded-md px-3 outline-none `}
       />
     </div>
   );

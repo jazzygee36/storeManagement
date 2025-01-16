@@ -12,8 +12,8 @@ export interface InputProps {
 }
 
 export interface ButtonProps {
-  title: string;
-  bg: string;
+  title: ReactNode;
+  className?: string;
   type?: 'submit' | 'button';
   color: string;
   onClick?: () => void;

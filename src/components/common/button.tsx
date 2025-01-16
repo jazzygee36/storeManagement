@@ -1,24 +1,25 @@
 import React from 'react';
 import { ButtonProps } from '../utils/interface';
+import { Button } from '../ui/button';
 
 const HomeButton = ({
   title,
-  bg,
+  className,
   color,
   onClick,
   type,
   disabled,
 }: ButtonProps) => {
   return (
-    <button
+    <Button
       disabled={disabled}
-      style={{ backgroundColor: bg, color: color }}
-      className={`h-[44px] rounded-md w-full font-inter text-[16px] px-4  `}
+      style={{ color: color }}
       onClick={onClick}
       type={type}
+      className={`${className} h-[44px]`}
     >
       {title}
-    </button>
+    </Button>
   );
 };
 

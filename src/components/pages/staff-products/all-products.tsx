@@ -4,6 +4,14 @@ import { fetchStaffProducts } from '@/components/api/slices/staffProductsSlice';
 import { AppDispatch, RootState } from '@/components/state/store';
 import HomeButton from '@/components/common/button';
 import { useRouter } from 'next/navigation';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 
 type Status = 'Out-of-stock' | 'In-stock' | 'Low';
 
@@ -31,16 +39,17 @@ const StaffProducts = () => {
   }, [dispatch]);
 
   return (
-    <div className='overflow-x-auto mt-5'>
-      <div className='flex justify-between items-center mb-5'>
-        <h2 className='text-lg font-semibold '>Staff Products</h2>
-        <div>
-          <HomeButton
-            title={'Sell Product'}
-            bg={'orange'}
-            color={'white'}
-            onClick={() => router.push('/staff-sales')}
-          />
+    <>
+      <div className='overflow-x-auto mt-5'>
+        <div className='flex justify-between items-center mb-5'>
+          <h2 className='text-lg font-semibold '>Staff Products</h2>
+          <div>
+            <HomeButton
+              title={'Sell Product'}
+              color={'white'}
+              onClick={() => router.push('/staff-sales')}
+            />
+          </div>
         </div>
       </div>
       {loading ? (
@@ -48,63 +57,63 @@ const StaffProducts = () => {
       ) : error ? (
         <p className='text-red-500'>{error}</p>
       ) : products.length > 0 ? (
-        <table className='min-w-full border-collapse border border-gray-300'>
-          <thead>
-            <tr className='bg-gray-100'>
-              <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
+        <Table>
+          {/* <TableCaption>A list of your recent invoices.</TableCaption> */}
+          <TableHeader>
+            <TableRow className='bg-gray-100 '>
+              <TableHead className='text-black font-bold uppercase'>
+                {' '}
                 Item Name
-              </th>
-              <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
+              </TableHead>
+              <TableHead className='text-black font-bold uppercase text-center'>
                 Qty Stock
-              </th>
-              <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
+              </TableHead>
+              <TableHead className='text-black font-bold uppercase text-center'>
                 Selling Price
-              </th>
-              <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
+              </TableHead>
+              <TableHead className='text-black font-bold uppercase text-center'>
                 Qty Remaining
-              </th>
-              <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
+              </TableHead>
+              <TableHead className='text-black font-bold uppercase text-center'>
                 Status
-              </th>
-            </tr>
-          </thead>
-          <tbody>
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {products.map((product) => {
               const statusColor =
                 STATUS_COLORS[product.availability as Status] || 'gray';
 
               return (
-                <tr
-                  key={product._id}
-                  className='even:bg-gray-50 hover:bg-gray-100 cursor-pointer capitalize'
-                >
-                  <td className='border border-gray-200 px-4 py-2 text-sm'>
+                <TableRow key={product._id}>
+                  <TableCell className='font-medium'>
                     {product.productName}
-                  </td>
-                  <td className='border border-gray-200 px-4 py-2 text-sm'>
+                  </TableCell>
+                  <TableCell className='text-center'>
                     {product.qtyBought}
-                  </td>
-                  <td className='border border-gray-200 px-4 py-2 text-sm'>
+                  </TableCell>
+                  <TableCell className='text-center'>
+                    {' '}
                     {formatNumber(product.salesPrice)}
-                  </td>
-                  <td className='border border-gray-200 px-4 py-2 text-sm'>
+                  </TableCell>
+                  <TableCell className='text-center'>
                     {product.qtyRemaining}
-                  </td>
-                  <td
-                    className='border border-gray-200 px-4 py-2 text-sm'
+                  </TableCell>
+                  <TableCell
+                    className='text-center'
                     style={{ color: statusColor }}
                   >
-                    {product.availability || 'Unknown'}
-                  </td>
-                </tr>
+                    {product.availability || 'unknown'}
+                  </TableCell>
+                </TableRow>
               );
             })}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       ) : (
         <p className='text-gray-500'>No products attached to this staff.</p>
       )}
-    </div>
+    </>
   );
 };
 

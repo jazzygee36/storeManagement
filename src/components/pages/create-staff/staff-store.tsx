@@ -96,7 +96,6 @@ const StaffStore = () => {
                     <div className='w-[70%] md:w-[40%] flex justify-end'>
                       <HomeButton
                         title={'Delete'}
-                        bg={'red'}
                         type={'submit'}
                         color={'white'}
                         onClick={() => openModal(staff._id)}
@@ -114,12 +113,7 @@ const StaffStore = () => {
           Are you sure you want to delete this staff?
         </h1>
         <div className='flex justify-center gap-4 mt-5'>
-          <HomeButton
-            title='Cancel'
-            onClick={closeModal}
-            bg='blue'
-            color='white'
-          />
+          <HomeButton title='Cancel' onClick={closeModal} color='white' />
           <HomeButton
             title={deleting ? deleting : 'Delete'}
             onClick={() => {
@@ -132,7 +126,6 @@ const StaffStore = () => {
                 handleStaffDelete(selectedStaffId);
               }
             }}
-            bg='red'
             color='white'
           />
         </div>
