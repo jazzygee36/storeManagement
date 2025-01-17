@@ -249,4 +249,3 @@ const StaffSellProduct = () => {
 };
 
 export default StaffSellProduct;
-export const dynamic = 'force-dynamic';
