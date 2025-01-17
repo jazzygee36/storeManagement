@@ -1,4 +1,5 @@
 'use client';
+
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -13,7 +14,6 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import ReusableModal from '@/components/common/modal';
-
 import MainStaffDashboard from '@/components/common/staff-dashboard/main-staff-dashboard';
 import useAuth from '@/components/hook/useAuth';
 
@@ -27,7 +27,7 @@ const STATUS_COLORS: Record<Status, string> = {
   'Cash & POS': 'purple',
 };
 
-const StaffSalesReport: React.FC<{ staffId: string }> = ({ staffId }) => {
+const StaffSalesReport: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { sales, loading, error } = useSelector(
     (state: RootState) => state.sales
@@ -47,12 +47,13 @@ const StaffSalesReport: React.FC<{ staffId: string }> = ({ staffId }) => {
     return () => {
       dispatch(resetError());
     };
-  }, [dispatch, staffId]);
+  }, [dispatch]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+
   return (
     <MainStaffDashboard>
       {!isAuthenticated ? (
@@ -60,7 +61,6 @@ const StaffSalesReport: React.FC<{ staffId: string }> = ({ staffId }) => {
       ) : (
         <div className='p-5'>
           <h2 className='font-bold '>Daily Sales Report</h2>
-
           {loading && <Loading />}
           {error && <h2>{error}</h2>}
           {!loading && !error && Object.keys(sales).length === 0 && (

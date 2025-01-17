@@ -50,6 +50,8 @@ export const fetchSales = createAsyncThunk(
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_BASE_URL}/daily-sales-report/${staffId}`
       );
+      console.log(response.data.salesByDate);
+
       return response.data?.salesByDate as GroupedSales; // Grouped by date
     } catch (error: unknown) {
       const axiosError = error as AxiosError;
