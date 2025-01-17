@@ -97,7 +97,7 @@ const StaffSalesReport: React.FC<{ staffId: string }> = ({ staffId }) => {
           )}
           <ReusableModal isOpen={isModalOpen} onClose={closeModal}>
             {Object.entries(sales).map(([date, saleData]) => (
-              <Table>
+              <Table key={saleData.grandTotal}>
                 <TableHeader>
                   <TableRow>
                     <TableHead>
@@ -124,6 +124,7 @@ const StaffSalesReport: React.FC<{ staffId: string }> = ({ staffId }) => {
 
                     return (
                       <TableRow key={sale.id}>
+                        {date}
                         <TableHead>{sale.productName || 'N/A'}</TableHead>
                         <TableHead>{sale.qtySold}</TableHead>
                         <TableHead>{sale.sellingPrice}</TableHead>

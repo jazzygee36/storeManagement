@@ -34,6 +34,15 @@ const initialState: SalesState = {
   error: null,
 };
 
+// Define a type for Axios errors
+interface AxiosError {
+  response?: {
+    data?: {
+      message?: string;
+    };
+  };
+}
+
 export const fetchSales = createAsyncThunk(
   'sales/fetchSales',
   async (staffId: string, thunkAPI) => {
@@ -41,12 +50,11 @@ export const fetchSales = createAsyncThunk(
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_BASE_URL}/daily-sales-report/${staffId}`
       );
-      console.log('Fetched sales data:', response.data?.salesByDate);
-      return response.data?.salesByDate; // Grouped by date
-    } catch (error: any) {
-      console.error('Error fetching sales:', error);
+      return response.data?.salesByDate as GroupedSales; // Grouped by date
+    } catch (error: unknown) {
+      const axiosError = error as AxiosError;
       return thunkAPI.rejectWithValue(
-        error.response?.data?.message || 'Failed to fetch sales'
+        axiosError.response?.data?.message || 'Failed to fetch sales'
       );
     }
   }
@@ -67,10 +75,11 @@ export const addSale = createAsyncThunk(
         `${process.env.NEXT_PUBLIC_BASE_URL}/${staffId}/daily-sales`,
         sales
       );
-      return response.data; // Assuming the backend returns the added sale
-    } catch (error: any) {
+      return response.data as Sale[]; // Assuming the backend returns the added sale
+    } catch (error: unknown) {
+      const axiosError = error as AxiosError;
       return thunkAPI.rejectWithValue(
-        error.response?.data?.message || 'Failed to add sale'
+        axiosError.response?.data?.message || 'Failed to add sale'
       );
     }
   }
@@ -98,13 +107,10 @@ const salesSlice = createSlice({
         state.sales = action.payload; // Update with grouped sales
       }
     );
-    builder.addCase(
-      fetchSales.rejected,
-      (state, action: PayloadAction<any>) => {
-        state.loading = false;
-        state.error = action.payload;
-      }
-    );
+    builder.addCase(fetchSales.rejected, (state, action) => {
+      state.loading = false;
+      state.error = (action.payload as string) || 'Unknown error';
+    });
 
     // Handle addSale
     builder.addCase(addSale.pending, (state) => {
@@ -115,7 +121,6 @@ const salesSlice = createSlice({
       addSale.fulfilled,
       (state, action: PayloadAction<Sale[]>) => {
         state.loading = false;
-        // Assuming the sale data is returned as an array of sales
         action.payload.forEach((sale) => {
           const saleDate = sale.date || 'Unknown Date'; // Handle if no date is provided
           if (!state.sales[saleDate]) {
@@ -126,9 +131,9 @@ const salesSlice = createSlice({
         });
       }
     );
-    builder.addCase(addSale.rejected, (state, action: PayloadAction<any>) => {
+    builder.addCase(addSale.rejected, (state, action) => {
       state.loading = false;
-      state.error = action.payload;
+      state.error = (action.payload as string) || 'Unknown error';
     });
   },
 });
