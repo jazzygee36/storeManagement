@@ -11,7 +11,7 @@ const StaffStore = () => {
 
   return (
     <MainStaffDashboard>
-      <>
+      <div className='mx-4'>
         {!isAuthenticated ? (
           <Loading />
         ) : (
@@ -21,7 +21,7 @@ const StaffStore = () => {
             </CardContent>
           </Card>
         )}
-      </>
+      </div>
     </MainStaffDashboard>
   );
 };

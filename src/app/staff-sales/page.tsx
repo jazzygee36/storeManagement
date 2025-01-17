@@ -11,23 +11,30 @@ import { AppDispatch, RootState } from '@/components/state/store';
 import { salesSchema } from '@/components/utils/validation';
 import { z } from 'zod';
 import { Card, CardContent } from '@/components/ui/card';
+import { addSale } from '@/components/api/slices/salesSlice';
+import { useToast } from '@/components/hook/context/useContext';
 
 type FormData = z.infer<typeof salesSchema>;
 
 const StaffSellProduct = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { products } = useSelector((state: RootState) => state.staffProduct);
-
+  const { sales, loading, error } = useSelector(
+    (state: RootState) => state.sales
+  );
+  console.log('sales', sales);
   const isAuthenticated = useAuth();
 
-  const [data, setData] = useState<FormData>({
+  const [data, setData] = useState<FormData & { paymentMethod?: string }>({
     productName: '',
     sellingPrice: '',
     qtyBuy: '',
     totalPrice: '',
+    paymentMethod: '',
   });
 
-  const [sales, setSales] = useState<FormData[]>([]); // Array to hold sales data
+  const [currentSales, setCurrentSales] = useState<FormData[]>([]);
+
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   const formatNumber = (num: number): string =>
@@ -81,10 +88,8 @@ const StaffSellProduct = () => {
       return;
     }
 
-    // Add current data to the sales array
-    setSales((prevSales) => [...prevSales, data]);
+    setCurrentSales((prevSales) => [...prevSales, data]);
 
-    // Reset the form
     setData({
       productName: '',
       sellingPrice: '',
@@ -94,11 +99,80 @@ const StaffSellProduct = () => {
     setErrors({});
   };
 
-  // Calculate the grand total
-  const grandTotal = sales.reduce((total, sale) => {
+  const handlePaymentMethodChange = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setData((prevData) => ({
+      ...prevData,
+      paymentMethod: e.target.value,
+    }));
+  };
+
+  const grandTotal = currentSales.reduce((total, sale) => {
     const totalPrice = parseFloat(sale.totalPrice.replace(/,/g, '')) || 0;
     return total + totalPrice;
   }, 0);
+
+  const handleSales = () => {
+    const staffId = localStorage.getItem('staffId') || '';
+
+    if (!staffId) {
+      console.error('Staff ID is missing');
+      return;
+    }
+
+    if (!data.paymentMethod) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        paymentMethod: 'Select a payment method',
+      }));
+      return;
+    }
+
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      paymentMethod: '',
+    }));
+
+    if (currentSales.length === 0) {
+      return;
+    }
+
+    const salesData = currentSales.map((sale) => {
+      const selectedProduct = products.find(
+        (product) => product.productName === sale.productName
+      );
+
+      if (!selectedProduct) {
+        return null; // Skip the sale if the product is not found
+      }
+
+      return {
+        productId: selectedProduct._id,
+        sellingPrice: parseFloat(sale.sellingPrice.replace(/,/g, '')),
+        qtySold: parseInt(sale.qtyBuy, 10),
+        totalPrice: parseFloat(sale.totalPrice.replace(/,/g, '')),
+        paymentMethod: data.paymentMethod,
+        date: new Date().toISOString(),
+      };
+    });
+
+    const validSales = salesData.filter((sale) => sale !== null);
+
+    if (validSales.length === 0) {
+      console.warn('No valid sales to process');
+      return;
+    }
+
+    dispatch(
+      addSale({
+        sales: validSales,
+        staffId,
+      })
+    );
+
+    setCurrentSales([]);
+  };
 
   return (
     <MainStaffDashboard>
@@ -108,17 +182,14 @@ const StaffSellProduct = () => {
         <div className='grid grid-cols-1 md:grid-cols-2 gap-5'>
           <Card className='w-full md:w-[60%] m-auto py-5'>
             <CardContent>
-              <form
-                onSubmit={handleSubmitSales}
-                // className='md:w-[60%] w-full m-auto border border-gray-300 p-5 rounded-lg bg-gray-200'
-              >
+              <form onSubmit={handleSubmitSales}>
                 <div>
                   <label className='text-sm'>Product Name</label>
                   <select
                     name='productName'
                     value={data.productName}
                     onChange={handleProductSelect}
-                    className=' px-2 border border-gray-300 h-[44px] rounded-md w-full capitalize focus:outline-none'
+                    className='px-2 border border-gray-300 h-[44px] rounded-md w-full capitalize focus:outline-none'
                   >
                     <option value=''>Select Product</option>
                     {products.map((product) => (
@@ -150,7 +221,6 @@ const StaffSellProduct = () => {
                     name='sellingPrice'
                     value={data.sellingPrice}
                     readOnly={true}
-                    placeholder={''}
                     label='Selling Price'
                   />
                 </div>
@@ -160,7 +230,6 @@ const StaffSellProduct = () => {
                     name='totalPrice'
                     value={data.totalPrice}
                     readOnly
-                    placeholder={''}
                   />
                 </div>
                 <div className='w-[100%] mt-5 m-auto'>
@@ -176,7 +245,7 @@ const StaffSellProduct = () => {
           </Card>
 
           <div>
-            <table className='min-w-full'>
+            <table className='w-full'>
               <thead>
                 <tr className='bg-gray-100'>
                   <th className='border border-gray-300 px-4 py-2 text-left text-sm'>
@@ -194,7 +263,7 @@ const StaffSellProduct = () => {
                 </tr>
               </thead>
               <tbody>
-                {sales.map((sale, index) => (
+                {currentSales.map((sale, index) => (
                   <tr
                     key={index}
                     className='bg-white rounded-lg shadow-md cursor-pointer my-2'
@@ -211,7 +280,7 @@ const StaffSellProduct = () => {
                       <h2
                         className='text-[red] font-semibold'
                         onClick={() => {
-                          setSales((prevSales) =>
+                          setCurrentSales((prevSales) =>
                             prevSales.filter((_, i) => i !== index)
                           );
                         }}
@@ -223,9 +292,33 @@ const StaffSellProduct = () => {
                 ))}
               </tbody>
             </table>
-            {sales.length > 0 && (
+
+            {currentSales.length > 0 && (
               <>
-                <div className='flex justify-around items-center mt-4'>
+                <div className='flex items-center justify-around gap-5 my-3'>
+                  <h2>Payment Method</h2>
+                  <div>
+                    <select
+                      value={data.paymentMethod || ''} // Default to 'Cash'
+                      onChange={handlePaymentMethodChange}
+                      className='h-[44px] border boder-gray-200 outline-none rounded-md px-2'
+                    >
+                      <option value=''>Select</option>
+
+                      <option value='Cash'>Cash</option>
+                      <option value='Transfer'>Transfer</option>
+                      <option value='POS'>POS</option>
+                      <option value='Cash & POS'>Cash & POS</option>
+                      <option value='Cash & Transfer'>Cash & Transfer</option>
+                    </select>
+                    {errors.paymentMethod && (
+                      <p className='text-red-500 text-[13px]'>
+                        {errors.paymentMethod}
+                      </p>
+                    )}
+                  </div>
+                </div>
+                <div className='flex justify-around items-center'>
                   <h2 className='font-semibold'>Grand Total</h2>
                   <div className='font-bold underline'>
                     N{formatNumber(grandTotal)}
@@ -236,7 +329,8 @@ const StaffSellProduct = () => {
                   <HomeButton
                     title={'Complete Sales'}
                     color={'white'}
-                    type='submit'
+                    type='button'
+                    onClick={handleSales}
                   />
                 </div>
               </>

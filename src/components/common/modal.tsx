@@ -22,10 +22,14 @@ const ReusableModal: React.FC<ModalProps> = ({
     };
 
     if (isOpen) {
+      document.body.style.overflow = 'hidden'; // Prevent background scrolling
       document.addEventListener('keydown', handleKeyDown);
+    } else {
+      document.body.style.overflow = ''; // Restore background scrolling
     }
 
     return () => {
+      document.body.style.overflow = ''; // Cleanup on unmount
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, [isOpen, onClose]);
@@ -43,7 +47,15 @@ const ReusableModal: React.FC<ModalProps> = ({
           &times;
         </button>
         {title && <h2 className='text-xl font-semibold mb-4'>{title}</h2>}
-        <div>{children}</div>
+        <div
+          className='max-h-[70vh] overflow-y-auto'
+          style={{
+            scrollbarWidth: 'thin', // Optional: Custom scrollbar styling
+            scrollbarColor: 'gray lightgray',
+          }}
+        >
+          {children}
+        </div>
       </div>
     </div>,
     document.body

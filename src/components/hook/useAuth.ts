@@ -7,7 +7,8 @@ const useAuth = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const router = useRouter();
   const TOKEN_KEY = 'token';
-  const INACTIVITY_TIMEOUT = 10 * 60 * 1000; // 10 minutes
+  const INACTIVITY_TIMEOUT = 30 * 60 * 1000; // 30 minutes
+  let timeoutId: NodeJS.Timeout | null = null;
 
   const logout = () => {
     if (typeof window !== 'undefined') {
@@ -15,6 +16,11 @@ const useAuth = () => {
     }
     setIsAuthenticated(false);
     router.push('/');
+  };
+
+  const resetTimeout = () => {
+    if (timeoutId) clearTimeout(timeoutId);
+    timeoutId = setTimeout(logout, INACTIVITY_TIMEOUT);
   };
 
   useEffect(() => {
@@ -52,27 +58,23 @@ const useAuth = () => {
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
-    const debounce = (fn: () => void, delay: number) => {
-      let timer: NodeJS.Timeout;
-      return () => {
-        clearTimeout(timer);
-        timer = setTimeout(fn, delay);
-      };
+    const handleActivity = () => {
+      resetTimeout();
     };
 
-    const resetTimeout = debounce(() => {
-      logout();
-    }, INACTIVITY_TIMEOUT);
-
     const events = ['mousemove', 'keydown', 'click', 'scroll'];
-    events.forEach((event) => window.addEventListener(event, resetTimeout));
+    events.forEach((event) => window.addEventListener(event, handleActivity));
+
+    // Start the inactivity timeout when the component is mounted
+    resetTimeout();
 
     return () => {
       events.forEach((event) =>
-        window.removeEventListener(event, resetTimeout)
+        window.removeEventListener(event, handleActivity)
       );
+      if (timeoutId) clearTimeout(timeoutId); // Cleanup timeout on unmount
     };
-  }, [INACTIVITY_TIMEOUT]);
+  }, []);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
