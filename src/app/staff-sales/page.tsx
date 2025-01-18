@@ -20,7 +20,6 @@ const StaffSellProduct = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { addToast } = useToast();
   const { products } = useSelector((state: RootState) => state.staffProduct);
-  const { sales } = useSelector((state: RootState) => state.sales);
   const isAuthenticated = useAuth();
 
   const [data, setData] = useState<FormData & { paymentMethod?: string }>({

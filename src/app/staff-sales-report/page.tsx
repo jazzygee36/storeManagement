@@ -15,8 +15,7 @@ import {
 import ReusableModal from '@/components/common/modal';
 import MainStaffDashboard from '@/components/common/staff-dashboard/main-staff-dashboard';
 import useAuth from '@/components/hook/useAuth';
-
-type Status = 'Transfer' | 'Cash' | 'POS' | 'Cash & Transfer' | 'Cash & POS';
+import { Sale, Status } from '@/components/utils/interface';
 
 const STATUS_COLORS: Record<Status, string> = {
   Transfer: 'blue',
@@ -32,7 +31,7 @@ const StaffSalesReport: React.FC = () => {
     (state: RootState) => state.sales
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedSales, setSelectedSales] = useState<any[]>([]);
+  const [selectedSales, setSelectedSales] = useState<Sale[]>([]);
 
   const isAuthenticated = useAuth();
 
@@ -42,7 +41,6 @@ const StaffSalesReport: React.FC = () => {
   useEffect(() => {
     const staffId = localStorage.getItem('staffId');
     if (staffId) {
-      console.log('Fetching sales for staffId:', staffId);
       dispatch(fetchSales(staffId));
     }
 
@@ -51,7 +49,7 @@ const StaffSalesReport: React.FC = () => {
     };
   }, [dispatch]);
 
-  const openModal = (salesData: any[]) => {
+  const openModal = (salesData: Sale[]) => {
     setSelectedSales(salesData);
     setIsModalOpen(true);
   };
@@ -115,10 +113,9 @@ const StaffSalesReport: React.FC = () => {
               </TableHeader>
               <TableBody>
                 {selectedSales.map((sale) => {
-                  const statusColor =
-                    STATUS_COLORS[sale.paymentMethod as Status];
+                  const statusColor = STATUS_COLORS[sale.paymentMethod];
                   return (
-                    <TableRow key={sale.id || sale.productName}>
+                    <TableRow key={sale.id}>
                       <TableCell>{sale.productName || 'N/A'}</TableCell>
                       <TableCell>{sale.qtySold}</TableCell>
                       <TableCell>{formatNumber(sale.sellingPrice)}</TableCell>

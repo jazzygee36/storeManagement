@@ -55,3 +55,20 @@ export interface ProductItem {
   amtGain: number;
   status: string;
 }
+
+// types.ts
+export type Status =
+  | 'Transfer'
+  | 'Cash'
+  | 'POS'
+  | 'Cash & Transfer'
+  | 'Cash & POS';
+
+export interface Sale {
+  id: string;
+  productName?: string; // Optional productName
+  qtySold: number;
+  sellingPrice: number;
+  totalPrice: number;
+  paymentMethod: Status; // paymentMethod should be a Status type, not a string
+}

@@ -15,7 +15,7 @@ const Toast: React.FC<ToastProps> = ({ message, type = 'info', onClose }) => {
 
   return (
     <div
-      className={`fixed top-5 right-5 px-4 py-2 rounded shadow-lg transition duration-300 ${typeStyles[type]}`}
+      className={`fixed top-5 right-5 px-4 z-[100] py-2 rounded shadow-lg transition duration-300 ${typeStyles[type]}`}
     >
       <div className='flex justify-between items-center'>
         <span>{message}</span>
