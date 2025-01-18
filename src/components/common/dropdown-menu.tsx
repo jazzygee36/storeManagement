@@ -17,7 +17,7 @@ const DropdownMenu = ({ productId }: { productId: string }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [position, setPosition] = useState<'up' | 'down'>('down');
   const menuRef = useRef<HTMLDivElement>(null);
-
+  const [deleting, setDeleting] = useState('Delete');
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
   const { addToast } = useToast();
@@ -62,6 +62,7 @@ const DropdownMenu = ({ productId }: { productId: string }) => {
     if (!userId) {
       return;
     }
+    setDeleting('Deleting...');
 
     dispatch(deleteProduct(productId))
       .unwrap()
@@ -69,6 +70,7 @@ const DropdownMenu = ({ productId }: { productId: string }) => {
         dispatch(fetchUserProfile(userId));
         closeModal();
         showToast();
+        setDeleting('Deleting...');
       })
       .catch((error) => {
         console.error('Failed to delete product:', error);
@@ -126,7 +128,7 @@ const DropdownMenu = ({ productId }: { productId: string }) => {
             color='white'
           />
           <HomeButton
-            title='Delete'
+            title={deleting ? deleting : 'Delete'}
             onClick={handleProductDelete}
             bg='red'
             color='white'

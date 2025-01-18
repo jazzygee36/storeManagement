@@ -78,14 +78,9 @@ const Sidebar = () => {
       </div>
 
       {/* Logout Section */}
-      <div className='flex items-center gap-3 mb-6'>
+      <div className='flex items-center gap-3 mb-6' onClick={handleLogOut}>
         <LogoutIcon />
-        <button
-          onClick={handleLogOut}
-          className='text-[red] hover:text-red-700'
-        >
-          LogOut
-        </button>
+        <button className='text-[red] hover:text-red-700'>LogOut</button>
       </div>
     </div>
   );

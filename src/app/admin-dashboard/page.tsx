@@ -21,7 +21,7 @@ const Dashboard = () => {
           <div className='grid grid-cols-1 md:grid-cols-2 gap-5'>
             <Card>
               <CardHeader className='text-[16px] text-gray-800 font-medium font-inter'>
-                Sales Overview
+                Store Value
               </CardHeader>
               <CardContent>
                 <SalesOverview />

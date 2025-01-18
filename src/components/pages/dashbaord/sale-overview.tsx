@@ -10,8 +10,8 @@ const SalesOverview = () => {
         <Image src={Sales} alt='sales' className='m-auto mb-4' />
 
         <div className='flex justify-evenly items-center'>
-          <h2>N50,000</h2>
-          <h2>Sales</h2>
+          <h2>N0</h2>
+          <h2>Value</h2>
         </div>
       </div>
 
@@ -19,7 +19,7 @@ const SalesOverview = () => {
         <Image src={Profit} alt='profit' className='m-auto mb-4' />
 
         <div className='flex justify-evenly items-center'>
-          <h2>N20,000</h2>
+          <h2>N0</h2>
           <h2>Profit</h2>
         </div>
       </div>
