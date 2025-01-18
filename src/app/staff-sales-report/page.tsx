@@ -15,15 +15,15 @@ import {
 import ReusableModal from '@/components/common/modal';
 import MainStaffDashboard from '@/components/common/staff-dashboard/main-staff-dashboard';
 import useAuth from '@/components/hook/useAuth';
-import { Sale, Status } from '@/components/utils/interface';
+import { Sale } from '@/components/utils/interface';
 
-const STATUS_COLORS: Record<Status, string> = {
-  Transfer: 'blue',
-  Cash: 'green',
-  POS: 'orange',
-  'Cash & Transfer': 'black',
-  'Cash & POS': 'purple',
-};
+// const STATUS_COLORS: Record<PaymentType, string> = {
+//   Transfer: 'blue',
+//   Cash: 'green',
+//   POS: 'orange',
+//   'Cash & Transfer': 'black',
+//   'Cash & POS': 'purple',
+// };
 
 const StaffSalesReport: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -41,6 +41,7 @@ const StaffSalesReport: React.FC = () => {
   useEffect(() => {
     const staffId = localStorage.getItem('staffId');
     if (staffId) {
+      console.log('Fetching sales for staffId:', staffId);
       dispatch(fetchSales(staffId));
     }
 
@@ -113,16 +114,14 @@ const StaffSalesReport: React.FC = () => {
               </TableHeader>
               <TableBody>
                 {selectedSales.map((sale) => {
-                  const statusColor = STATUS_COLORS[sale.paymentMethod];
+                  // const statusColor = STATUS_COLORS[sale.paymentMethod]; // Make sure paymentMethod is typed as Status
                   return (
                     <TableRow key={sale.id}>
                       <TableCell>{sale.productName || 'N/A'}</TableCell>
                       <TableCell>{sale.qtySold}</TableCell>
                       <TableCell>{formatNumber(sale.sellingPrice)}</TableCell>
                       <TableCell>{formatNumber(sale.totalPrice)}</TableCell>
-                      <TableCell style={{ color: statusColor }}>
-                        {sale.paymentMethod}
-                      </TableCell>
+                      <TableCell>{sale.paymentMethod}</TableCell>
                     </TableRow>
                   );
                 })}

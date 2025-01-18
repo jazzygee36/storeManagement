@@ -57,7 +57,7 @@ export interface ProductItem {
 }
 
 // types.ts
-export type Status =
+export type PaymentType =
   | 'Transfer'
   | 'Cash'
   | 'POS'
@@ -70,5 +70,5 @@ export interface Sale {
   qtySold: number;
   sellingPrice: number;
   totalPrice: number;
-  paymentMethod: Status; // paymentMethod should be a Status type, not a string
+  paymentMethod: string; // paymentMethod should be a Status type, not a string
 }
