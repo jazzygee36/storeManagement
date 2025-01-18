@@ -14,7 +14,7 @@ const Navigation = [
     path: '/staff-sales',
   },
   {
-    description: ' Sales Report',
+    description: ' Daily Sales',
     path: '/staff-sales-report',
   },
 ];
@@ -61,8 +61,6 @@ const StaffHeader = () => {
     return activeNavItem?.description || 'Dashboard';
   };
 
-  const username = localStorage.getItem('username');
-
   return (
     <div className='w-full flex justify-between items-center px-5 py-3 bg-white rounded-lg shadow-md m-auto'>
       {/* Title Section */}
@@ -74,7 +72,7 @@ const StaffHeader = () => {
       <div className='flex items-center gap-4'>
         <NotificationIcon />
         <div className='w-8 h-8 bg-slate-400 rounded-full flex justify-center items-center text-white font-semibold text-sm uppercase'>
-          {`${username?.[1] || 'ST'}`}
+          {'ST'}
         </div>
 
         {/* Dropdown Menu */}

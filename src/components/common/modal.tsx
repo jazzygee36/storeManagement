@@ -50,10 +50,15 @@ const ReusableModal: React.FC<ModalProps> = ({
         <div
           className='max-h-[70vh] overflow-y-auto'
           style={{
-            scrollbarWidth: 'thin', // Optional: Custom scrollbar styling
-            scrollbarColor: 'gray lightgray',
+            scrollbarWidth: 'none', // Hide scrollbar for Firefox
+            msOverflowStyle: 'none', // Hide scrollbar for Internet Explorer and Edge
           }}
         >
+          <style jsx>{`
+            div::-webkit-scrollbar {
+              display: none; /* Hide scrollbar for Chrome, Safari, and Opera */
+            }
+          `}</style>
           {children}
         </div>
       </div>

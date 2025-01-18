@@ -1,14 +1,13 @@
 'use client';
-
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
 import { AppDispatch, RootState } from '@/components/state/store';
 import { fetchSales, resetError } from '@/components/api/slices/salesSlice';
 import Loading from '@/components/common/loadingState';
 import {
   Table,
   TableBody,
+  TableCell,
   TableHead,
   TableHeader,
   TableRow,
@@ -32,6 +31,9 @@ const StaffSalesReport: React.FC = () => {
   const { sales, loading, error } = useSelector(
     (state: RootState) => state.sales
   );
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedSales, setSelectedSales] = useState<any[]>([]);
+
   const isAuthenticated = useAuth();
 
   const formatNumber = (num: number): string =>
@@ -49,10 +51,15 @@ const StaffSalesReport: React.FC = () => {
     };
   }, [dispatch]);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const openModal = (salesData: any[]) => {
+    setSelectedSales(salesData);
+    setIsModalOpen(true);
+  };
 
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedSales([]);
+  };
 
   return (
     <MainStaffDashboard>
@@ -60,11 +67,11 @@ const StaffSalesReport: React.FC = () => {
         <Loading />
       ) : (
         <div className='p-5'>
-          <h2 className='font-bold '>Daily Sales Report</h2>
+          <h2 className='font-bold'>Daily Sales Report</h2>
           {loading && <Loading />}
           {error && <h2>{error}</h2>}
           {!loading && !error && Object.keys(sales).length === 0 && (
-            <h2 className='flex justify-center m-auto text-center font-'>
+            <h2 className='flex justify-center m-auto text-center'>
               No sales data available.
             </h2>
           )}
@@ -85,7 +92,7 @@ const StaffSalesReport: React.FC = () => {
                       </TableHead>
                       <TableHead
                         className='text-right cursor-pointer text-blue-600'
-                        onClick={() => openModal()}
+                        onClick={() => openModal(saleData.sales)}
                       >
                         View more
                       </TableHead>
@@ -96,48 +103,34 @@ const StaffSalesReport: React.FC = () => {
             </>
           )}
           <ReusableModal isOpen={isModalOpen} onClose={closeModal}>
-            {Object.entries(sales).map(([date, saleData]) => (
-              <Table key={saleData.grandTotal}>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>
-                      <strong>Product Name</strong>
-                    </TableHead>
-                    <TableHead>
-                      <strong>Quantity Sold</strong>
-                    </TableHead>
-                    <TableHead>
-                      <strong>Selling Price</strong>
-                    </TableHead>
-                    <TableHead>
-                      <strong>Total Price</strong>
-                    </TableHead>
-                    <TableHead>
-                      <strong>Payment Method</strong>
-                    </TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody className='w-full'>
-                  {saleData.sales.map((sale) => {
-                    const statusColor =
-                      STATUS_COLORS[sale.paymentMethod as Status];
-
-                    return (
-                      <TableRow key={sale.id}>
-                        {date}
-                        <TableHead>{sale.productName || 'N/A'}</TableHead>
-                        <TableHead>{sale.qtySold}</TableHead>
-                        <TableHead>{sale.sellingPrice}</TableHead>
-                        <TableHead>{sale.totalPrice}</TableHead>
-                        <TableHead style={{ color: statusColor }}>
-                          {sale.paymentMethod}
-                        </TableHead>
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
-            ))}
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Product Name</TableHead>
+                  <TableHead>Quantity Sold</TableHead>
+                  <TableHead>Selling Price</TableHead>
+                  <TableHead>Total Price</TableHead>
+                  <TableHead>Payment Method</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {selectedSales.map((sale) => {
+                  const statusColor =
+                    STATUS_COLORS[sale.paymentMethod as Status];
+                  return (
+                    <TableRow key={sale.id || sale.productName}>
+                      <TableCell>{sale.productName || 'N/A'}</TableCell>
+                      <TableCell>{sale.qtySold}</TableCell>
+                      <TableCell>{formatNumber(sale.sellingPrice)}</TableCell>
+                      <TableCell>{formatNumber(sale.totalPrice)}</TableCell>
+                      <TableCell style={{ color: statusColor }}>
+                        {sale.paymentMethod}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
           </ReusableModal>
         </div>
       )}

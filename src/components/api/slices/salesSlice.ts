@@ -50,8 +50,6 @@ export const fetchSales = createAsyncThunk(
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_BASE_URL}/daily-sales-report/${staffId}`
       );
-      console.log(response.data.salesByDate);
-
       return response.data?.salesByDate as GroupedSales; // Grouped by date
     } catch (error: unknown) {
       const axiosError = error as AxiosError;
@@ -62,14 +60,18 @@ export const fetchSales = createAsyncThunk(
   }
 );
 
-// Async thunk for adding a new sale
 export const addSale = createAsyncThunk(
   'sales/addSale',
   async (
     {
       sales,
       staffId,
-    }: { sales: Omit<Sale, 'id' | 'paymentMethod'>[]; staffId: string },
+      showToast,
+    }: {
+      sales: Omit<Sale, 'id' | 'paymentMethod'>[];
+      staffId: string;
+      showToast: () => void;
+    },
     thunkAPI
   ) => {
     try {
@@ -77,9 +79,15 @@ export const addSale = createAsyncThunk(
         `${process.env.NEXT_PUBLIC_BASE_URL}/${staffId}/daily-sales`,
         sales
       );
-      return response.data as Sale[]; // Assuming the backend returns the added sale
+
+      // Show a success toast
+      showToast();
+
+      // Ensure the response is always normalized as an array
+      return Array.isArray(response.data) ? response.data : [response.data];
     } catch (error: unknown) {
       const axiosError = error as AxiosError;
+
       return thunkAPI.rejectWithValue(
         axiosError.response?.data?.message || 'Failed to add sale'
       );
@@ -87,7 +95,6 @@ export const addSale = createAsyncThunk(
   }
 );
 
-// Create the sales slice
 const salesSlice = createSlice({
   name: 'sales',
   initialState,
@@ -97,7 +104,6 @@ const salesSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    // Handle fetchSales
     builder.addCase(fetchSales.pending, (state) => {
       state.loading = true;
       state.error = null;
@@ -106,7 +112,7 @@ const salesSlice = createSlice({
       fetchSales.fulfilled,
       (state, action: PayloadAction<GroupedSales>) => {
         state.loading = false;
-        state.sales = action.payload; // Update with grouped sales
+        state.sales = action.payload;
       }
     );
     builder.addCase(fetchSales.rejected, (state, action) => {
@@ -114,7 +120,6 @@ const salesSlice = createSlice({
       state.error = (action.payload as string) || 'Unknown error';
     });
 
-    // Handle addSale
     builder.addCase(addSale.pending, (state) => {
       state.loading = true;
       state.error = null;
@@ -123,13 +128,15 @@ const salesSlice = createSlice({
       addSale.fulfilled,
       (state, action: PayloadAction<Sale[]>) => {
         state.loading = false;
+
+        // Ensure action.payload is processed as an array
         action.payload.forEach((sale) => {
-          const saleDate = sale.date || 'Unknown Date'; // Handle if no date is provided
+          const saleDate = sale.date || 'Unknown Date';
           if (!state.sales[saleDate]) {
             state.sales[saleDate] = { sales: [], grandTotal: 0 };
           }
           state.sales[saleDate].sales.push(sale);
-          state.sales[saleDate].grandTotal += sale.totalPrice; // Update grand total
+          state.sales[saleDate].grandTotal += sale.totalPrice;
         });
       }
     );

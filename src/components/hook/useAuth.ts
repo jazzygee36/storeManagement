@@ -7,28 +7,22 @@ const useAuth = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const router = useRouter();
   const TOKEN_KEY = 'token';
-  const INACTIVITY_TIMEOUT = 30 * 60 * 1000; // 30 minutes
-  let timeoutId: NodeJS.Timeout | null = null;
 
   const logout = () => {
     if (typeof window !== 'undefined') {
-      localStorage.removeItem(TOKEN_KEY);
+      // localStorage.removeItem(TOKEN_KEY);
     }
     setIsAuthenticated(false);
     router.push('/');
-  };
-
-  const resetTimeout = () => {
-    if (timeoutId) clearTimeout(timeoutId);
-    timeoutId = setTimeout(logout, INACTIVITY_TIMEOUT);
   };
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
     const token = localStorage.getItem(TOKEN_KEY);
+
     if (!token) {
-      logout();
+      setIsAuthenticated(false); // User is not authenticated
       return;
     }
 
@@ -40,54 +34,19 @@ const useAuth = () => {
     })
       .then((res) => {
         if (res.ok) {
-          setIsAuthenticated(true);
+          setIsAuthenticated(true); // User is authenticated
         } else {
-          logout();
+          logout(); // Invalid token, log out
         }
       })
       .catch((err) => {
         if (err.name !== 'AbortError') {
           console.error('Auth fetch error:', err);
-          logout();
+          logout(); // Log out on error
         }
       });
 
     return () => abortController.abort();
-  }, [router]);
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-
-    const handleActivity = () => {
-      resetTimeout();
-    };
-
-    const events = ['mousemove', 'keydown', 'click', 'scroll'];
-    events.forEach((event) => window.addEventListener(event, handleActivity));
-
-    // Start the inactivity timeout when the component is mounted
-    resetTimeout();
-
-    return () => {
-      events.forEach((event) =>
-        window.removeEventListener(event, handleActivity)
-      );
-      if (timeoutId) clearTimeout(timeoutId); // Cleanup timeout on unmount
-    };
-  }, []);
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-
-    const handleTabClose = () => {
-      localStorage.removeItem(TOKEN_KEY);
-    };
-
-    window.addEventListener('beforeunload', handleTabClose);
-
-    return () => {
-      window.removeEventListener('beforeunload', handleTabClose);
-    };
   }, []);
 
   return isAuthenticated;

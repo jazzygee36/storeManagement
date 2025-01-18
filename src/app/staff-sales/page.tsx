@@ -12,14 +12,15 @@ import { salesSchema } from '@/components/utils/validation';
 import { z } from 'zod';
 import { Card, CardContent } from '@/components/ui/card';
 import { addSale } from '@/components/api/slices/salesSlice';
+import { useToast } from '@/components/hook/context/useContext';
 
 type FormData = z.infer<typeof salesSchema>;
 
 const StaffSellProduct = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const { addToast } = useToast();
   const { products } = useSelector((state: RootState) => state.staffProduct);
   const { sales } = useSelector((state: RootState) => state.sales);
-  console.log('sales', sales);
   const isAuthenticated = useAuth();
 
   const [data, setData] = useState<FormData & { paymentMethod?: string }>({
@@ -165,6 +166,7 @@ const StaffSellProduct = () => {
       addSale({
         sales: validSales,
         staffId,
+        showToast: () => addToast('Sale recorded successfully', 'success'),
       })
     );
 
