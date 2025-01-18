@@ -190,11 +190,17 @@ const StaffSellProduct = () => {
                     className='px-2 border border-gray-300 h-[44px] rounded-md w-full capitalize focus:outline-none'
                   >
                     <option value=''>Select Product</option>
-                    {products.map((product) => (
-                      <option key={product._id} value={product.productName}>
-                        {product.productName}
-                      </option>
-                    ))}
+                    {products
+                      .filter(
+                        (product) =>
+                          product.availability === 'In-stock' ||
+                          product.availability === 'Low'
+                      ) // Filter products to only show those in stock
+                      .map((product) => (
+                        <option key={product._id} value={product.productName}>
+                          {product.productName}
+                        </option>
+                      ))}
                   </select>
                   {errors.productName && (
                     <p className='text-red-500 text-[13px]'>
@@ -202,6 +208,7 @@ const StaffSellProduct = () => {
                     </p>
                   )}
                 </div>
+
                 <div className='my-5'>
                   <HomeInput
                     placeholder=''
