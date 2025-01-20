@@ -79,14 +79,6 @@ const Dashboard = () => {
               <CardHeader className='text-[16px] text-gray-800 font-medium font-inter'>
                 <div className='flex justify-between gap-2 items-center '>
                   <h3> Store Value</h3>
-                  <div className='flex gap-2 items-center '>
-                    <h3>
-                      Revenue Value:{' '}
-                      <span className='font-bold text-[14px]'>
-                        N{formatNumber(totalRevenueValue)}
-                      </span>
-                    </h3>
-                  </div>
                 </div>
               </CardHeader>
               <CardContent>
@@ -112,9 +104,11 @@ const Dashboard = () => {
           <div className='grid grid-cols-1 md:grid-cols-2 gap-5 mt-5'>
             <Card>
               <CardHeader className='text-[16px] text-gray-800 font-medium font-inter'>
-                Top Selling Stock
+                Total Revenue Value
               </CardHeader>
-              <CardContent>{/* <TopSelling /> */}</CardContent>
+              <CardContent className='flex justify-center m-auto text-center'>
+                <TopSelling totalRevenueValue={totalRevenueValue} />
+              </CardContent>
             </Card>
 
             <Card>
