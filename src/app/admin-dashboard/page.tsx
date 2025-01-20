@@ -16,9 +16,6 @@ import { ProductItem } from '@/components/utils/interface';
 const Dashboard = () => {
   const isAuthenticated = useAuth();
 
-  const formatNumber = (num: number): string =>
-    new Intl.NumberFormat().format(num);
-
   const dispatch = useDispatch<AppDispatch>();
   const { products } = useSelector((state: RootState) => state.userProfile) as {
     products: ProductItem[];
