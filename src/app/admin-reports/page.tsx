@@ -36,7 +36,7 @@ const SalesReports: React.FC = () => {
       const userId = localStorage.getItem('userId');
       try {
         const response = await axios(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/${userId}/satff/sales/report`
+          `${process.env.NEXT_PUBLIC_BASE_URL}/${userId}/staff/sales/report`
         );
 
         setSalesReports(response.data?.salesReports);
@@ -54,6 +54,13 @@ const SalesReports: React.FC = () => {
     startIndex,
     startIndex + itemsPerPage
   );
+
+  const calculateProfit = (reports: SalesReport['reports']): number => {
+    return reports.reduce((totalProfit, item) => {
+      const profit = item.totalPrice * 0.2; // Assume a 20% profit margin
+      return totalProfit + profit;
+    }, 0);
+  };
 
   const formatNumber = (num: number): string =>
     new Intl.NumberFormat().format(num);
@@ -83,32 +90,38 @@ const SalesReports: React.FC = () => {
             <TableHeader>
               <TableRow>
                 <TableHead>Staff Name</TableHead>
-                <TableHead>Total Price</TableHead>
+                <TableHead>Total Sales</TableHead>
+                <TableHead>Profit</TableHead>
                 <TableHead className='text-center'>More</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {currentSlice.map((report) => (
-                <TableRow
-                  key={report.username}
-                  className='capitalize sales-report '
-                >
-                  <TableCell>{report.username}</TableCell>
+              {currentSlice.map((report) => {
+                const totalProfit = calculateProfit(report.reports);
+                console.log('report', report);
+                return (
+                  <TableRow
+                    key={report.username}
+                    className='capitalize sales-report '
+                  >
+                    <TableCell>{report.username}</TableCell>
 
-                  <TableCell>N{formatNumber(report.totalPrice)}</TableCell>
-                  <TableCell className='text-center cursor-pointer'>
-                    View More
-                  </TableCell>
-                  {/* <ul>
-                {report.reports.map((item) => (
-                  <li key={item._id}>
-                    Date: {new Date(item.date).toLocaleDateString()} - $
-                    {item.totalPrice.toFixed(2)}
-                  </li>
-                ))}
-              </ul> */}
-                </TableRow>
+                    <TableCell>N{formatNumber(report.totalPrice)}</TableCell>
+                    <TableCell>N{formatNumber(totalProfit)}</TableCell>
+                    <TableCell className='text-center cursor-pointer'>
+                      View More
+                    </TableCell>
+                    {/* <ul>
+              {report.reports.map((item) => (
+                <li key={item._id}>
+                  Date: {new Date(item.date).toLocaleDateString()} - $
+                  {item.totalPrice.toFixed(2)}
+                </li>
               ))}
+            </ul> */}
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
           <div className='w-full  flex justify-between items-center mt-5'>
