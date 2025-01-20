@@ -1,38 +1,30 @@
 'use client';
-import React, { useState } from 'react';
+
 import Image from 'next/image';
 import Stock from '@/components/assets/svg/Suppliers.svg';
 import OutOfStock from '@/components/assets/svg/Categories.svg';
-import { useRouter } from 'next/navigation';
-import Loading from '@/components/common/loadingState';
 
-const ProductSummary = () => {
-  const [loading, setLoading] = useState(false);
-  const router = useRouter();
-  const handleProduct = () => {
-    setLoading(true);
-    router.push('/admin-inventory');
-    setLoading(false);
-  };
+interface Props {
+  OutOfStockLength: number;
+  InStock: number;
+}
+
+const ProductSummary = ({ InStock, OutOfStockLength }: Props) => {
   return (
     <div className='grid grid-cols-2 gap-4 mt-3 justify-between items-center text-center text-sm'>
-      {loading ? (
-        <Loading />
-      ) : (
-        <>
-          <div className='cursor-pointer' onClick={handleProduct}>
-            <Image src={Stock} alt='sales' className='m-auto mb-4' />
+      <div>
+        <Image src={Stock} alt='sales' className='m-auto mb-4' />
+        <span>{InStock}</span>
 
-            <p className='text-[green] font-medium'>Product In-Stock</p>
-          </div>
+        <p className='text-[green] font-medium'>Product In-Stock</p>
+      </div>
 
-          <div className='cursor-pointer' onClick={handleProduct}>
-            <Image src={OutOfStock} alt='sales' className='m-auto mb-4' />
+      <div>
+        <Image src={OutOfStock} alt='sales' className='m-auto mb-4' />
+        <span>{OutOfStockLength}</span>
 
-            <p className='text-[red] font-medium'>Product Out-Of-Stock</p>
-          </div>
-        </>
-      )}
+        <p className='text-[red] font-medium'>Product Out-Of-Stock</p>
+      </div>
     </div>
   );
 };
