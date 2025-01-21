@@ -11,6 +11,7 @@ const HomeInput = ({
   value,
   onChange,
   readOnly,
+  defaultValue,
   onInputChange,
 }: InputProps) => {
   return (
@@ -27,6 +28,7 @@ const HomeInput = ({
         type={type}
         placeholder={placeholder}
         readOnly={readOnly}
+        defaultValue={defaultValue}
       />
     </div>
   );

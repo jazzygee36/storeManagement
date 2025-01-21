@@ -5,6 +5,8 @@ import { format } from 'date-fns';
 import DropdownMenu from '@/components/common/dropdown-menu';
 import ReusableModal from '@/components/common/modal';
 import { LocalProductItem, ProductItem } from '@/components/utils/interface';
+import HomeInput from '@/components/common/input';
+import HomeButton from '@/components/common/button';
 
 type Status = 'Out-of-stock' | 'In-stock' | 'Low';
 
@@ -28,6 +30,7 @@ const Products = ({
   totalPages,
 }: Props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editModalOpen, setEditModalOpen] = useState(false);
   const [selectedTransaction, setSelectedTransaction] =
     useState<LocalProductItem | null>(null);
 
@@ -141,7 +144,11 @@ const Products = ({
                     onClick={(e) => e.stopPropagation()}
                     className='border border-gray-200 px-4 py-2 text-sm'
                   >
-                    <DropdownMenu productId={product._id || ''} />
+                    <DropdownMenu
+                      productId={product._id || ''}
+                      product={localProduct} // Pass the current product
+                      openEditModal={(product) => openModal(product)} // Callback for editing
+                    />
                   </td>
                 </tr>
               );
@@ -231,6 +238,66 @@ const Products = ({
         ) : (
           <p>Loading...</p>
         )}
+      </ReusableModal>
+
+      <ReusableModal isOpen={isModalOpen} onClose={closeModal}>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            // Handle save logic here
+          }}
+        >
+          <h2 className='text-lg font-bold mb-4 text-center'>Edit Product</h2>
+          {selectedTransaction && (
+            <div className='space-y-4'>
+              <div className='flex justify-between gap-3'>
+                <HomeInput
+                  type='text'
+                  label='  Product Name'
+                  // className='w-full border rounded px-3 py-2'
+                  defaultValue={selectedTransaction.product}
+                />
+
+                <HomeInput
+                  type='text'
+                  label=' Buying Price'
+                  // className='w-full border rounded px-3 py-2'
+                  defaultValue={selectedTransaction.buyingPrice}
+                />
+              </div>
+              {/* <div className='flex justify-between gap-3'> */}
+              <HomeInput
+                type='text'
+                label='Quantity Bought'
+                // className='w-full border rounded px-3 py-2'
+                defaultValue={selectedTransaction.buyingPrice}
+              />
+
+              <HomeInput
+                type='text'
+                label='Selling Price'
+                // className='w-full border rounded px-3 py-2'
+                defaultValue={selectedTransaction.sellingPrice}
+              />
+              {/* </div> */}
+            </div>
+          )}
+          <div className='mt-6 flex justify-center gap-4'>
+            <HomeButton
+              type='button'
+              onClick={closeModal}
+              title={' Cancel'}
+              color={'white'} // className='px-4 py-2 bg-gray-500 text-white rounded'
+            />
+
+            <HomeButton
+              type='submit'
+              className='px-4 py-2 bg-blue-600 text-white rounded'
+              title={' Save Changes'}
+              color={'white'}
+            />
+          </div>
+        </form>
       </ReusableModal>
     </>
   );

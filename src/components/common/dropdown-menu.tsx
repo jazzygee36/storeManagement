@@ -9,8 +9,17 @@ import { AppDispatch } from '../state/store';
 import { deleteProduct } from '../api/slices/deleteSlice';
 import { fetchUserProfile } from '../api/slices/userProfileSlice';
 import { useToast } from '../hook/context/useContext';
+import { LocalProductItem } from '../utils/interface';
 
-const DropdownMenu = ({ productId }: { productId: string }) => {
+const DropdownMenu = ({
+  productId,
+  product,
+  openEditModal,
+}: {
+  productId: string;
+  product: LocalProductItem;
+  openEditModal: (product: LocalProductItem) => void;
+}) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -97,8 +106,8 @@ const DropdownMenu = ({ productId }: { productId: string }) => {
                 className='px-4 py-2 text-sm hover:bg-gray-100 cursor-pointer'
                 onClick={(e) => {
                   e.stopPropagation();
-                  console.log('Edit clicked');
                   setIsOpen(false);
+                  openEditModal(product); // Pass product details for editing
                 }}
               >
                 Edit

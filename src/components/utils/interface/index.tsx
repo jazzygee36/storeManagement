@@ -10,6 +10,7 @@ export interface InputProps {
   mt?: string;
   readOnly?: boolean;
   onInputChange?: (value: string) => void;
+  defaultValue?: string | number;
 }
 
 export interface ButtonProps {
