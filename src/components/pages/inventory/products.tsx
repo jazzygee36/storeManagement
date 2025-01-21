@@ -249,36 +249,41 @@ const Products = ({
           <h2 className='text-lg font-bold mb-4 text-center'>Edit Product</h2>
           {selectedTransaction && (
             <div className='space-y-4'>
+              <HomeInput
+                type='text'
+                label='  Product Name'
+                // className='w-full border rounded px-3 py-2'
+                defaultValue={selectedTransaction.product}
+              />
               <div className='flex justify-between gap-3'>
-                <HomeInput
-                  type='text'
-                  label='  Product Name'
-                  // className='w-full border rounded px-3 py-2'
-                  defaultValue={selectedTransaction.product}
-                />
-
                 <HomeInput
                   type='text'
                   label=' Buying Price'
                   // className='w-full border rounded px-3 py-2'
                   defaultValue={selectedTransaction.buyingPrice}
                 />
+                <HomeInput
+                  type='text'
+                  label='Quantity Bought'
+                  // className='w-full border rounded px-3 py-2'
+                  defaultValue={selectedTransaction.qty}
+                />
               </div>
               {/* <div className='flex justify-between gap-3'> */}
-              <HomeInput
-                type='text'
-                label='Quantity Bought'
-                // className='w-full border rounded px-3 py-2'
-                defaultValue={selectedTransaction.buyingPrice}
-              />
-
-              <HomeInput
-                type='text'
-                label='Selling Price'
-                // className='w-full border rounded px-3 py-2'
-                defaultValue={selectedTransaction.sellingPrice}
-              />
-              {/* </div> */}
+              <div className='flex justify-between gap-3'>
+                <HomeInput
+                  type='text'
+                  label='Selling Price'
+                  // className='w-full border rounded px-3 py-2'
+                  defaultValue={selectedTransaction.sellingPrice}
+                />
+                <HomeInput
+                  type='date'
+                  label='Expired (Optional)'
+                  // className='w-full border rounded px-3 py-2'
+                  defaultValue={selectedTransaction.sellingPrice}
+                />
+              </div>
             </div>
           )}
           <div className='mt-6 flex justify-center gap-4'>
