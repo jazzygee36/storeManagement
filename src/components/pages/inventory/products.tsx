@@ -30,7 +30,6 @@ const Products = ({
   totalPages,
 }: Props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editModalOpen, setEditModalOpen] = useState(false);
   const [selectedTransaction, setSelectedTransaction] =
     useState<LocalProductItem | null>(null);
 
