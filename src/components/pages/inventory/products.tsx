@@ -30,17 +30,23 @@ const Products = ({
   totalPages,
 }: Props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedTransaction, setSelectedTransaction] =
     useState<LocalProductItem | null>(null);
 
-  const openModal = (transaction: LocalProductItem) => {
+  // const openModal = (transaction: LocalProductItem) => {
+  //   setSelectedTransaction(transaction);
+  //   setIsModalOpen(true);
+  // };
+  const openModal = (transaction: LocalProductItem, isEdit = false) => {
     setSelectedTransaction(transaction);
-    setIsModalOpen(true);
+    isEdit ? setIsEditModalOpen(true) : setIsModalOpen(true);
   };
 
   const closeModal = () => {
     setSelectedTransaction(null);
     setIsModalOpen(false);
+    setIsEditModalOpen(false); // Close the edit modal explicitly
   };
 
   const formatNumber = (num: number): string =>
@@ -146,7 +152,7 @@ const Products = ({
                     <DropdownMenu
                       productId={product._id || ''}
                       product={localProduct} // Pass the current product
-                      openEditModal={(product) => openModal(product)} // Callback for editing
+                      openEditModal={() => openModal(localProduct, true)} // Callback for editing
                     />
                   </td>
                 </tr>
@@ -239,7 +245,7 @@ const Products = ({
         )}
       </ReusableModal>
 
-      <ReusableModal isOpen={isModalOpen} onClose={closeModal}>
+      <ReusableModal isOpen={isEditModalOpen} onClose={closeModal}>
         <form
           onSubmit={(e) => {
             e.preventDefault();
