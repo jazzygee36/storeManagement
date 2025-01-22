@@ -118,11 +118,6 @@ const AllProductModal = ({ closeModal }: { closeModal: () => void }) => {
               name='unitPrice'
               onChange={handleChange}
               label='Buying Price'
-              onKeyPress={(event: React.KeyboardEvent<HTMLInputElement>) => {
-                if (!/[0-9 +]/.test(event.key)) {
-                  event.preventDefault();
-                }
-              }}
             />
             {errors.buyingPrice && (
               <p className='text-red-500 text-[13px]'>{errors.buyingPrice}</p>
@@ -136,11 +131,6 @@ const AllProductModal = ({ closeModal }: { closeModal: () => void }) => {
               name='qtyBought'
               onChange={handleChange}
               label='Quantity Bought'
-              onKeyPress={(event: React.KeyboardEvent<HTMLInputElement>) => {
-                if (!/[0-9 +]/.test(event.key)) {
-                  event.preventDefault();
-                }
-              }}
             />
             {errors.qtyBought && (
               <p className='text-red-500 text-[13px]'>{errors.qtyBought}</p>
@@ -156,11 +146,6 @@ const AllProductModal = ({ closeModal }: { closeModal: () => void }) => {
               name='salesPrice'
               onChange={handleChange}
               label='Selling Price'
-              onKeyPress={(event: React.KeyboardEvent<HTMLInputElement>) => {
-                if (!/[0-9 +]/.test(event.key)) {
-                  event.preventDefault();
-                }
-              }}
             />
             {errors.salesPrice && (
               <p className='text-red-500 text-[13px]'>{errors.salesPrice}</p>

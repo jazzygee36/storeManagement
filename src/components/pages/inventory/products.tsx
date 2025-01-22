@@ -34,6 +34,10 @@ const Products = ({
   const [selectedTransaction, setSelectedTransaction] =
     useState<LocalProductItem | null>(null);
 
+  // const openModal = (transaction: LocalProductItem) => {
+  //   setSelectedTransaction(transaction);
+  //   setIsModalOpen(true);
+  // };
   const openModal = (transaction: LocalProductItem, isEdit = false) => {
     setSelectedTransaction(transaction);
     isEdit ? setIsEditModalOpen(true) : setIsModalOpen(true);
@@ -72,27 +76,6 @@ const Products = ({
     qtyRemaining: product.qtyRemaining,
   });
 
-  const getLabelValue = (label: string): string | number => {
-    if (!selectedTransaction) return '';
-    switch (label) {
-      case 'Product':
-        return selectedTransaction.product;
-      case 'Buying Price':
-        return formatNumber(selectedTransaction.buyingPrice);
-      case 'Quantity':
-        return selectedTransaction.qty;
-      case 'Selling Price':
-        return formatNumber(selectedTransaction.sellingPrice);
-      case 'Purchase Amount':
-        return formatNumber(selectedTransaction.purchaseAmt);
-      case 'Expected Gain':
-        return formatNumber(selectedTransaction.amtGain);
-      case 'Status':
-        return selectedTransaction.availability;
-      default:
-        return '';
-    }
-  };
   return (
     <>
       <div className='overflow-x-auto mt-5'>
@@ -128,11 +111,9 @@ const Products = ({
               return (
                 <tr
                   key={index}
-                  onClick={() => {
-                    if (product._id) {
-                      handleProductClick(product._id, localProduct);
-                    }
-                  }}
+                  onClick={() =>
+                    product._id && handleProductClick(product._id, localProduct)
+                  }
                   className='even:bg-gray-50 cursor-pointer'
                 >
                   <td className='capitalize border border-gray-200 px-4 py-2 text-sm font-semibold bg-blue-800 text-white'>
@@ -234,7 +215,24 @@ const Products = ({
                         : undefined
                     }
                   >
-                    {getLabelValue(label)}
+                    {(() => {
+                      switch (label) {
+                        case 'Product':
+                          return selectedTransaction.product;
+                        case 'Buying Price':
+                          return formatNumber(selectedTransaction.buyingPrice);
+                        case 'Quantity':
+                          return selectedTransaction.qty;
+                        case 'Selling Price':
+                          return formatNumber(selectedTransaction.sellingPrice);
+                        case 'Purchase Amount':
+                          return formatNumber(selectedTransaction.purchaseAmt);
+                        case 'Expected Gain':
+                          return formatNumber(selectedTransaction.amtGain);
+                        case 'Status':
+                          return selectedTransaction.availability;
+                      }
+                    })()}
                   </p>
                 </div>
                 {/* Add an <hr /> after each item except the last one */}
@@ -269,26 +267,17 @@ const Products = ({
                   label=' Buying Price'
                   // className='w-full border rounded px-3 py-2'
                   defaultValue={selectedTransaction.buyingPrice}
-                  // onKeyPress={(
-                  //   event: React.KeyboardEvent<HTMLInputElement>
-                  // ) => {
-                  //   if (!/[0-9 +]/.test(event.key)) {
-                  //     event.preventDefault();
-                  //   }
-                  // }}
+                  onKeyPress={(event: any) => {
+                    if (!/[0-9 +]/.test(event.key)) {
+                      event.preventDefault();
+                    }
+                  }}
                 />
                 <HomeInput
                   type='text'
                   label='Quantity Bought'
                   // className='w-full border rounded px-3 py-2'
                   defaultValue={selectedTransaction.qty}
-                  // onKeyPress={(
-                  //   event: React.KeyboardEvent<HTMLInputElement>
-                  // ) => {
-                  //   if (!/[0-9 +]/.test(event.key)) {
-                  //     event.preventDefault();
-                  //   }
-                  // }}
                 />
               </div>
               {/* <div className='flex justify-between gap-3'> */}
@@ -298,13 +287,6 @@ const Products = ({
                   label='Selling Price'
                   // className='w-full border rounded px-3 py-2'
                   defaultValue={selectedTransaction.sellingPrice}
-                  // onKeyPress={(
-                  //   event: React.KeyboardEvent<HTMLInputElement>
-                  // ) => {
-                  //   if (!/[0-9 +]/.test(event.key)) {
-                  //     event.preventDefault();
-                  //   }
-                  // }}
                 />
                 <HomeInput
                   type='date'
