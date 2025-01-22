@@ -161,7 +161,7 @@ function AdminLoginForm({
             <div className='mt-4 text-center text-sm'>
               Don&apos;t have an account?{' '}
               <span
-                className='underline underline-offset-4 cursor-pointer'
+                className='underline underline-offset-4 cursor-pointer text-blue-700'
                 onClick={() => router.push('/register')}
               >
                 Sign up

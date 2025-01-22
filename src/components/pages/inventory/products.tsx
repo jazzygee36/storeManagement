@@ -267,12 +267,22 @@ const Products = ({
                   label=' Buying Price'
                   // className='w-full border rounded px-3 py-2'
                   defaultValue={selectedTransaction.buyingPrice}
+                  onKeyPress={(event: any) => {
+                    if (!/[0-9 +]/.test(event.key)) {
+                      event.preventDefault();
+                    }
+                  }}
                 />
                 <HomeInput
                   type='text'
                   label='Quantity Bought'
                   // className='w-full border rounded px-3 py-2'
                   defaultValue={selectedTransaction.qty}
+                  onKeyPress={(event: any) => {
+                    if (!/[0-9 +]/.test(event.key)) {
+                      event.preventDefault();
+                    }
+                  }}
                 />
               </div>
               {/* <div className='flex justify-between gap-3'> */}
@@ -282,6 +292,11 @@ const Products = ({
                   label='Selling Price'
                   // className='w-full border rounded px-3 py-2'
                   defaultValue={selectedTransaction.sellingPrice}
+                  onKeyPress={(event: any) => {
+                    if (!/[0-9 +]/.test(event.key)) {
+                      event.preventDefault();
+                    }
+                  }}
                 />
                 <HomeInput
                   type='date'

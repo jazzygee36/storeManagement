@@ -11,6 +11,7 @@ export interface InputProps {
   readOnly?: boolean;
   onInputChange?: (value: string) => void;
   defaultValue?: string | number;
+  onKeyPress?: React.KeyboardEventHandler<HTMLInputElement>;
 }
 
 export interface ButtonProps {

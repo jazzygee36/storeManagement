@@ -62,7 +62,7 @@ const Inventory = () => {
         <Loading />
       ) : (
         <>
-          <div className='mt-5'>
+          <div className='mt-3'>
             <Card>
               <CardHeader className='w-full'>
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-4 justify-between items-center'>
