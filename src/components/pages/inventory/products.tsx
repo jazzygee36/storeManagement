@@ -128,9 +128,11 @@ const Products = ({
               return (
                 <tr
                   key={index}
-                  onClick={() =>
-                    product._id && handleProductClick(product._id, localProduct)
-                  }
+                  onClick={() => {
+                    if (product._id) {
+                      handleProductClick(product._id, localProduct);
+                    }
+                  }}
                   className='even:bg-gray-50 cursor-pointer'
                 >
                   <td className='capitalize border border-gray-200 px-4 py-2 text-sm font-semibold bg-blue-800 text-white'>
