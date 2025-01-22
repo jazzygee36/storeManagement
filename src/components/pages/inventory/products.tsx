@@ -34,10 +34,6 @@ const Products = ({
   const [selectedTransaction, setSelectedTransaction] =
     useState<LocalProductItem | null>(null);
 
-  // const openModal = (transaction: LocalProductItem) => {
-  //   setSelectedTransaction(transaction);
-  //   setIsModalOpen(true);
-  // };
   const openModal = (transaction: LocalProductItem, isEdit = false) => {
     setSelectedTransaction(transaction);
     isEdit ? setIsEditModalOpen(true) : setIsModalOpen(true);
@@ -76,6 +72,27 @@ const Products = ({
     qtyRemaining: product.qtyRemaining,
   });
 
+  const getLabelValue = (label: string): string | number => {
+    if (!selectedTransaction) return '';
+    switch (label) {
+      case 'Product':
+        return selectedTransaction.product;
+      case 'Buying Price':
+        return formatNumber(selectedTransaction.buyingPrice);
+      case 'Quantity':
+        return selectedTransaction.qty;
+      case 'Selling Price':
+        return formatNumber(selectedTransaction.sellingPrice);
+      case 'Purchase Amount':
+        return formatNumber(selectedTransaction.purchaseAmt);
+      case 'Expected Gain':
+        return formatNumber(selectedTransaction.amtGain);
+      case 'Status':
+        return selectedTransaction.availability;
+      default:
+        return '';
+    }
+  };
   return (
     <>
       <div className='overflow-x-auto mt-5'>
@@ -215,24 +232,7 @@ const Products = ({
                         : undefined
                     }
                   >
-                    {(() => {
-                      switch (label) {
-                        case 'Product':
-                          return selectedTransaction.product;
-                        case 'Buying Price':
-                          return formatNumber(selectedTransaction.buyingPrice);
-                        case 'Quantity':
-                          return selectedTransaction.qty;
-                        case 'Selling Price':
-                          return formatNumber(selectedTransaction.sellingPrice);
-                        case 'Purchase Amount':
-                          return formatNumber(selectedTransaction.purchaseAmt);
-                        case 'Expected Gain':
-                          return formatNumber(selectedTransaction.amtGain);
-                        case 'Status':
-                          return selectedTransaction.availability;
-                      }
-                    })()}
+                    {getLabelValue(label)}
                   </p>
                 </div>
                 {/* Add an <hr /> after each item except the last one */}
