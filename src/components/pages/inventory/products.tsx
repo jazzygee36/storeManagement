@@ -267,11 +267,11 @@ const Products = ({
                   label=' Buying Price'
                   // className='w-full border rounded px-3 py-2'
                   defaultValue={selectedTransaction.buyingPrice}
-                  onKeyPress={(event: any) => {
-                    if (!/[0-9 +]/.test(event.key)) {
-                      event.preventDefault();
-                    }
-                  }}
+                  // onKeyPress={(event: any) => {
+                  //   if (!/[0-9 +]/.test(event.key)) {
+                  //     event.preventDefault();
+                  //   }
+                  // }}
                 />
                 <HomeInput
                   type='text'
