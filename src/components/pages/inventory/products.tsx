@@ -267,7 +267,9 @@ const Products = ({
                   label=' Buying Price'
                   // className='w-full border rounded px-3 py-2'
                   defaultValue={selectedTransaction.buyingPrice}
-                  onKeyPress={(event: any) => {
+                  onKeyPress={(
+                    event: React.KeyboardEvent<HTMLInputElement>
+                  ) => {
                     if (!/[0-9 +]/.test(event.key)) {
                       event.preventDefault();
                     }
@@ -278,7 +280,9 @@ const Products = ({
                   label='Quantity Bought'
                   // className='w-full border rounded px-3 py-2'
                   defaultValue={selectedTransaction.qty}
-                  onKeyPress={(event: any) => {
+                  onKeyPress={(
+                    event: React.KeyboardEvent<HTMLInputElement>
+                  ) => {
                     if (!/[0-9 +]/.test(event.key)) {
                       event.preventDefault();
                     }
@@ -292,7 +296,9 @@ const Products = ({
                   label='Selling Price'
                   // className='w-full border rounded px-3 py-2'
                   defaultValue={selectedTransaction.sellingPrice}
-                  onKeyPress={(event: any) => {
+                  onKeyPress={(
+                    event: React.KeyboardEvent<HTMLInputElement>
+                  ) => {
                     if (!/[0-9 +]/.test(event.key)) {
                       event.preventDefault();
                     }

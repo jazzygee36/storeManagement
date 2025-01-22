@@ -118,7 +118,7 @@ const AllProductModal = ({ closeModal }: { closeModal: () => void }) => {
               name='unitPrice'
               onChange={handleChange}
               label='Buying Price'
-              onKeyPress={(event: any) => {
+              onKeyPress={(event: React.KeyboardEvent<HTMLInputElement>) => {
                 if (!/[0-9 +]/.test(event.key)) {
                   event.preventDefault();
                 }
@@ -136,7 +136,7 @@ const AllProductModal = ({ closeModal }: { closeModal: () => void }) => {
               name='qtyBought'
               onChange={handleChange}
               label='Quantity Bought'
-              onKeyPress={(event: any) => {
+              onKeyPress={(event: React.KeyboardEvent<HTMLInputElement>) => {
                 if (!/[0-9 +]/.test(event.key)) {
                   event.preventDefault();
                 }
@@ -156,7 +156,7 @@ const AllProductModal = ({ closeModal }: { closeModal: () => void }) => {
               name='salesPrice'
               onChange={handleChange}
               label='Selling Price'
-              onKeyPress={(event: any) => {
+              onKeyPress={(event: React.KeyboardEvent<HTMLInputElement>) => {
                 if (!/[0-9 +]/.test(event.key)) {
                   event.preventDefault();
                 }
