@@ -31,7 +31,6 @@ const StaffSellProduct = () => {
   });
 
   const [currentSales, setCurrentSales] = useState<FormData[]>([]);
-
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   const formatNumber = (num: number): string =>
@@ -63,6 +62,21 @@ const StaffSellProduct = () => {
     const qty = e.target.value;
     const sellingPrice = parseFloat(data.sellingPrice || '0');
     const quantity = parseFloat(qty || '0');
+    const selectedProduct = products.find(
+      (product) => product.productName === data.productName
+    );
+
+    if (
+      selectedProduct &&
+      quantity > parseFloat(selectedProduct.qtyRemaining)
+    ) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        qtyBuy: `Quantity exceeds available stock (${selectedProduct.qtyRemaining}).`,
+      }));
+    } else {
+      setErrors((prevErrors) => ({ ...prevErrors, qtyBuy: '' }));
+    }
 
     setData((prevData) => ({
       ...prevData,
@@ -172,13 +186,19 @@ const StaffSellProduct = () => {
     setCurrentSales([]);
   };
 
+  const handleRemoveSale = (index: number) => {
+    setCurrentSales((prevSales) =>
+      prevSales.filter((_, saleIndex) => saleIndex !== index)
+    );
+  };
+
   return (
     <MainStaffDashboard>
       {!isAuthenticated ? (
         <Loading />
       ) : (
         <div className='grid grid-cols-1 md:grid-cols-2 gap-5'>
-          <Card className='w-full md:w-[60%] m-auto py-5'>
+          <Card className='w-[95%] md:w-[60%] m-auto py-5'>
             <CardContent>
               <form onSubmit={handleSubmitSales}>
                 <div>
@@ -195,7 +215,7 @@ const StaffSellProduct = () => {
                         (product) =>
                           product.availability === 'In-stock' ||
                           product.availability === 'Low'
-                      ) // Filter products to only show those in stock
+                      )
                       .map((product) => (
                         <option key={product._id} value={product.productName}>
                           {product.productName}
@@ -216,11 +236,19 @@ const StaffSellProduct = () => {
                     value={data.qtyBuy}
                     onChange={handleQuantityChange}
                     label='Quantity'
+                    onKeyPress={(
+                      event: React.KeyboardEvent<HTMLInputElement>
+                    ) => {
+                      if (!/[0-9 +]/.test(event.key)) {
+                        event.preventDefault();
+                      }
+                    }}
                   />
                   {errors.qtyBuy && (
                     <p className='text-red-500 text-[13px]'>{errors.qtyBuy}</p>
                   )}
                 </div>
+
                 <div className='my-5'>
                   <HomeInput
                     name='sellingPrice'
@@ -243,6 +271,12 @@ const StaffSellProduct = () => {
                     color={'white'}
                     type='submit'
                     className='w-[100%] mt-5 m-auto'
+                    disabled={
+                      !data.productName ||
+                      !data.qtyBuy ||
+                      !!errors.qtyBuy ||
+                      parseFloat(data.qtyBuy || '0') === 0
+                    }
                   />
                 </div>
               </form>
@@ -267,79 +301,82 @@ const StaffSellProduct = () => {
                   </th>
                 </tr>
               </thead>
-              <tbody>
-                {currentSales.map((sale, index) => (
-                  <tr
-                    key={index}
-                    className='bg-white rounded-lg shadow-md cursor-pointer my-2'
-                  >
-                    <td className='px-4 py-2 text-sm capitalize'>
-                      {sale.productName}
-                    </td>
-                    <td className='px-4 py-2 text-sm'>
-                      {formatNumber(parseFloat(sale.sellingPrice))}
-                    </td>
-                    <td className='px-4 py-2 text-sm'>{sale.qtyBuy}</td>
-                    <td className='px-4 py-2 text-sm flex items-center justify-between'>
-                      <div>{sale.totalPrice}</div>
-                      <h2
-                        className='text-[red] font-semibold'
-                        onClick={() => {
-                          setCurrentSales((prevSales) =>
-                            prevSales.filter((_, i) => i !== index)
-                          );
-                        }}
+              {currentSales.length > 0 && (
+                <>
+                  <tbody>
+                    {currentSales.map((sale, index) => (
+                      <tr
+                        key={index}
+                        className='bg-white rounded-lg shadow-md cursor-pointer my-2'
                       >
-                        X
-                      </h2>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
+                        <td className='px-4 py-2 text-sm capitalize'>
+                          {sale.productName}
+                        </td>
+                        <td className='px-4 py-2 text-sm'>
+                          {formatNumber(parseFloat(sale.sellingPrice))}
+                        </td>
+                        <td className='px-4 py-2 text-sm'>{sale.qtyBuy}</td>
+                        <td className='px-4 py-2 text-sm flex items-center justify-between'>
+                          <div>{sale.totalPrice}</div>{' '}
+                          <span
+                            className='text-red-600 text-bold'
+                            onClick={() => handleRemoveSale(index)}
+                          >
+                            {' '}
+                            X
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                  <tfoot>
+                    <tr className='mt-5'>
+                      <td
+                        colSpan={3}
+                        className='px-4 py-2 text-lg font-bold text-center'
+                      >
+                        Grand Total:
+                      </td>
+                      <td className='px-4 py-2 text-lg font-bold text-left'>
+                        {formatNumber(grandTotal)}
+                      </td>
+                    </tr>
+                  </tfoot>
+                </>
+              )}
             </table>
 
-            {currentSales.length > 0 && (
-              <>
-                <div className='flex items-center justify-around gap-5 my-3'>
-                  <h2>Payment Method</h2>
-                  <div>
-                    <select
-                      value={data.paymentMethod || ''} // Default to 'Cash'
-                      onChange={handlePaymentMethodChange}
-                      className='h-[44px] border boder-gray-200 outline-none rounded-md px-2'
-                    >
-                      <option value=''>Select</option>
-
-                      <option value='Cash'>Cash</option>
-                      <option value='Transfer'>Transfer</option>
-                      <option value='POS'>POS</option>
-                      <option value='Cash & POS'>Cash & POS</option>
-                      <option value='Cash & Transfer'>Cash & Transfer</option>
-                    </select>
-                    {errors.paymentMethod && (
-                      <p className='text-red-500 text-[13px]'>
-                        {errors.paymentMethod}
-                      </p>
-                    )}
-                  </div>
-                </div>
-                <div className='flex justify-around items-center'>
-                  <h2 className='font-semibold'>Grand Total</h2>
-                  <div className='font-bold underline'>
-                    N{formatNumber(grandTotal)}
-                  </div>
-                </div>
-
-                <div className='w-[50%] md:w-[40%] mt-5 m-auto'>
-                  <HomeButton
-                    title={'Complete Sales'}
-                    color={'white'}
-                    type='button'
-                    onClick={handleSales}
-                  />
-                </div>
-              </>
-            )}
+            <div className='mt-5 flex justify-around items-center'>
+              <label className='text-sm'>Payment Method</label>
+              <div>
+                <select
+                  name='paymentMethod'
+                  value={data.paymentMethod}
+                  onChange={handlePaymentMethodChange}
+                  className='px-2 border border-gray-300 h-[44px] rounded-md w-[100%] capitalize focus:outline-none'
+                >
+                  <option value=''>Select Payment Method</option>
+                  <option value='Cash'>Cash</option>
+                  <option value='POS'>POS</option>
+                  <option value='Transfer'>Transfer</option>
+                </select>
+                {errors.paymentMethod && (
+                  <p className='text-red-500 text-[13px]'>
+                    {errors.paymentMethod}
+                  </p>
+                )}
+              </div>
+            </div>
+            <div className='w-[50%] mt-5 m-auto'>
+              <HomeButton
+                title={'Complete Sale'}
+                color={'white'}
+                type='button'
+                onClick={handleSales}
+                className='w-[100%] mt-5 m-auto'
+                disabled={currentSales.length === 0 || !data.paymentMethod}
+              />
+            </div>
           </div>
         </div>
       )}

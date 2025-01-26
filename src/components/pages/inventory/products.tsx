@@ -40,7 +40,11 @@ const Products = ({
   // };
   const openModal = (transaction: LocalProductItem, isEdit = false) => {
     setSelectedTransaction(transaction);
-    isEdit ? setIsEditModalOpen(true) : setIsModalOpen(true);
+    if (isEdit) {
+      setIsEditModalOpen(true);
+    } else {
+      setIsModalOpen(true);
+    }
   };
 
   const closeModal = () => {
@@ -267,17 +271,26 @@ const Products = ({
                   label=' Buying Price'
                   // className='w-full border rounded px-3 py-2'
                   defaultValue={selectedTransaction.buyingPrice}
-                  // onKeyPress={(event: any) => {
-                  //   if (!/[0-9 +]/.test(event.key)) {
-                  //     event.preventDefault();
-                  //   }
-                  // }}
+                  onKeyPress={(
+                    event: React.KeyboardEvent<HTMLInputElement>
+                  ) => {
+                    if (!/[0-9 +]/.test(event.key)) {
+                      event.preventDefault();
+                    }
+                  }}
                 />
                 <HomeInput
                   type='text'
                   label='Quantity Bought'
                   // className='w-full border rounded px-3 py-2'
                   defaultValue={selectedTransaction.qty}
+                  onKeyPress={(
+                    event: React.KeyboardEvent<HTMLInputElement>
+                  ) => {
+                    if (!/[0-9 +]/.test(event.key)) {
+                      event.preventDefault();
+                    }
+                  }}
                 />
               </div>
               {/* <div className='flex justify-between gap-3'> */}
@@ -287,6 +300,13 @@ const Products = ({
                   label='Selling Price'
                   // className='w-full border rounded px-3 py-2'
                   defaultValue={selectedTransaction.sellingPrice}
+                  onKeyPress={(
+                    event: React.KeyboardEvent<HTMLInputElement>
+                  ) => {
+                    if (!/[0-9 +]/.test(event.key)) {
+                      event.preventDefault();
+                    }
+                  }}
                 />
                 <HomeInput
                   type='date'

@@ -118,7 +118,7 @@ const Stores = () => {
           </Card>
           <ReusableModal isOpen={isModalOpen} onClose={closeModal}>
             <h3 className='text-center'>Create Staff</h3>
-            <form onSubmit={handleCreateStaffSubmit}>
+            <form onSubmit={handleCreateStaffSubmit} className='mx-3'>
               <p className='text-red-500 text-[13px] text-center my-2'>
                 {apiErr}
               </p>
@@ -135,10 +135,11 @@ const Stores = () => {
               </div>
               <div>
                 <HomeInput
-                  placeholder={'Phone Number'}
+                  placeholder={'Password'}
                   value={data.phoneNumber}
                   name='phoneNumber'
                   onChange={handleChange}
+                  type='password'
                 />
                 {errors.phoneNumber && (
                   <p className='text-red-500 text-[13px]'>

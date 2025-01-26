@@ -16,8 +16,8 @@ const HomeInput = ({
   readOnly,
   defaultValue,
   onInputChange,
-}: // onKeyPress,
-InputProps) => {
+  onKeyPress,
+}: InputProps) => {
   const [visible, setVisible] = useState<boolean>(false);
   const handleTogglePassword = () => {
     setVisible(!visible);
@@ -39,7 +39,7 @@ InputProps) => {
           placeholder={placeholder}
           readOnly={readOnly}
           defaultValue={defaultValue}
-          // onKeyPress={onKeyPress}
+          onKeyPress={onKeyPress}
           className='w-full'
         />
         {type === 'password' && (

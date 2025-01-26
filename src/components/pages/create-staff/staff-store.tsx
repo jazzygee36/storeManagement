@@ -7,6 +7,8 @@ import { AppDispatch, RootState } from '@/components/state/store';
 import { useToast } from '@/components/hook/context/useContext';
 import ReusableModal from '@/components/common/modal';
 import { deleteStaff } from '@/components/api/slices/deleteStaffSlice';
+import VisibleEyeIcon from '@/components/assets/icons/visibleEye';
+import CloseEyeIcon from '@/components/assets/icons/closeEye';
 
 interface StaffProps {
   _id: string;
@@ -21,6 +23,11 @@ const StaffStore = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedStaffId, setSelectedStaffId] = useState<string | null>(null);
   const [deleting, setDeleting] = useState('Delete');
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+
+  const handleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
 
   const openModal = (staffId: string) => {
     setSelectedStaffId(staffId);
@@ -91,7 +98,15 @@ const StaffStore = () => {
                   <div className='grid grid-cols-1 md:grid-cols-2 w-full items-center justify-between'>
                     <div>
                       <h1>{staff.username}</h1>
-                      <h1>{staff.phoneNumber}</h1>
+                      <div className='flex gap-8 items-center'>
+                        <h1>{showPassword ? staff.phoneNumber : '********'}</h1>
+                        <p
+                          onClick={handleShowPassword}
+                          className='cursor-pointer'
+                        >
+                          {showPassword ? <VisibleEyeIcon /> : <CloseEyeIcon />}
+                        </p>
+                      </div>
                     </div>
                     <div className='w-[70%] md:w-[40%] flex justify-end'>
                       <HomeButton

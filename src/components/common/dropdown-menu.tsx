@@ -24,7 +24,7 @@ const DropdownMenu = ({
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [position, setPosition] = useState<'up' | 'down'>('down');
+  const [position, setPosition] = useState<'up' | 'down'>('up');
   const menuRef = useRef<HTMLDivElement>(null);
   const [deleting, setDeleting] = useState('Delete');
   const openModal = () => setIsModalOpen(true);
@@ -49,7 +49,7 @@ const DropdownMenu = ({
     if (menuRef.current) {
       const rect = menuRef.current.getBoundingClientRect();
       const viewportHeight = window.innerHeight;
-      setPosition(viewportHeight - rect.bottom < 100 ? 'up' : 'down');
+      setPosition(viewportHeight - rect.bottom > 100 ? 'up' : 'down');
     }
   }, []);
 
