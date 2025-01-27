@@ -21,18 +21,15 @@ const DropdownMenu = ({
   openEditModal: (product: LocalProductItem) => void;
 }) => {
   const dispatch = useDispatch<AppDispatch>();
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [position, setPosition] = useState<'up' | 'down'>('up');
+  const [position, setPosition] = useState<'up' | 'down'>('down');
   const menuRef = useRef<HTMLDivElement>(null);
   const [deleting, setDeleting] = useState('Delete');
+  const { addToast } = useToast();
+
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
-  const { addToast } = useToast();
-  const showToast = () => {
-    addToast('Product deleted successfully', 'error');
-  };
 
   const toggleDropdown = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -49,7 +46,9 @@ const DropdownMenu = ({
     if (menuRef.current) {
       const rect = menuRef.current.getBoundingClientRect();
       const viewportHeight = window.innerHeight;
-      setPosition(viewportHeight - rect.bottom > 100 ? 'up' : 'down');
+
+      // Determine if the dropdown fits below; if not, show above
+      setPosition(viewportHeight - rect.bottom < 100 ? 'up' : 'down');
     }
   }, []);
 
@@ -68,21 +67,20 @@ const DropdownMenu = ({
 
   const handleProductDelete = () => {
     const userId = localStorage.getItem('userId');
-    if (!userId) {
-      return;
-    }
-    setDeleting('Deleting...');
+    if (!userId) return;
 
+    setDeleting('Deleting...');
     dispatch(deleteProduct(productId))
       .unwrap()
       .then(() => {
         dispatch(fetchUserProfile(userId));
         closeModal();
-        showToast();
-        setDeleting('Deleting...');
+        addToast('Product deleted successfully', 'error');
+        setDeleting('Delete');
       })
       .catch((error) => {
         console.error('Failed to delete product:', error);
+        setDeleting('Delete');
       });
   };
 
@@ -97,7 +95,7 @@ const DropdownMenu = ({
         {/* Dropdown Menu */}
         {isOpen && (
           <div
-            className={`absolute right-0 z-50 w-48 bg-white border rounded shadow-lg ${
+            className={`absolute right-0 z-[100] w-48 bg-white border rounded shadow-lg transition-transform duration-200 ${
               position === 'up' ? 'bottom-full mb-2' : 'mt-2'
             }`}
           >
@@ -114,9 +112,7 @@ const DropdownMenu = ({
               </li>
               <li
                 className='px-4 py-2 text-sm hover:bg-gray-100 cursor-pointer text-[red]'
-                onClick={() => {
-                  openModal();
-                }}
+                onClick={openModal}
               >
                 Delete
               </li>
@@ -125,6 +121,7 @@ const DropdownMenu = ({
         )}
       </div>
 
+      {/* Modal */}
       <ReusableModal isOpen={isModalOpen} onClose={closeModal}>
         <h1 className='text-center'>
           Are you sure you want to delete this product?
@@ -137,7 +134,7 @@ const DropdownMenu = ({
             color='white'
           />
           <HomeButton
-            title={deleting ? deleting : 'Delete'}
+            title={deleting}
             onClick={handleProductDelete}
             bg='red'
             color='white'

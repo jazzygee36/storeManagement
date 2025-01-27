@@ -19,6 +19,7 @@ import {
 } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import Loading from '@/components/common/loadingState';
+import BackArrow from '@/components/assets/icons/back';
 
 type FormData = z.infer<typeof registerSchema>;
 
@@ -83,85 +84,92 @@ export default function RegisterPage() {
   };
 
   return (
-    <div
-      className={cn(
-        'h-screen flex flex-col gap-6 m-auto w-full items-center justify-center'
-      )}
-    >
-      <Card>
-        <CardHeader>
-          <CardTitle className='text-2xl text-center'>
-            Create an Account
-          </CardTitle>
-          <CardDescription>
-            Welcome to StockTaker! We give you control over your business.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleRegisterSubmit}>
-            {errors.general && (
-              <p className='text-red-500 text-[13px] text-center'>
-                {errors.general}
-              </p>
-            )}
-            <div className='flex flex-col gap-6'>
-              <div>
-                <HomeInput
-                  label='Username'
-                  type='text'
-                  placeholder='Username'
-                  value={data.username}
-                  name='username'
-                  onChange={handleChange}
+    <>
+      <BackArrow />
+      <div
+        className={cn(
+          'h-screen flex flex-col gap-6 m-auto w-[95%] md:w-full items-center justify-center'
+        )}
+      >
+        <Card>
+          <CardHeader>
+            <CardTitle className='text-2xl text-center'>
+              Create an Account
+            </CardTitle>
+            <CardDescription>
+              Welcome to StockTaker! We give you control over your business.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleRegisterSubmit}>
+              {errors.general && (
+                <p className='text-red-500 text-[13px] text-center'>
+                  {errors.general}
+                </p>
+              )}
+              <div className='flex flex-col gap-6'>
+                <div>
+                  <HomeInput
+                    label='Username'
+                    type='text'
+                    placeholder='Username'
+                    value={data.username}
+                    name='username'
+                    onChange={handleChange}
+                  />
+                  {errors.username && (
+                    <p className='text-red-500 text-[13px]'>
+                      {errors.username}
+                    </p>
+                  )}
+                </div>
+                <div className='grid gap-2'>
+                  <HomeInput
+                    label='Email'
+                    type='email'
+                    placeholder='Enter Email'
+                    value={data.email}
+                    name='email'
+                    onChange={handleChange}
+                  />
+                  {errors.email && (
+                    <p className='text-red-500 text-[13px]'>{errors.email}</p>
+                  )}
+                </div>
+                <div className='grid gap-2'>
+                  <HomeInput
+                    label='Password'
+                    type='password'
+                    placeholder='Enter Password'
+                    value={data.password}
+                    name='password'
+                    onChange={handleChange}
+                  />
+                  {errors.password && (
+                    <p className='text-red-500 text-[13px]'>
+                      {errors.password}
+                    </p>
+                  )}
+                </div>
+                <HomeButton
+                  type='submit'
+                  title={loading ? <Loading /> : 'Sign up'}
+                  color='white'
                 />
-                {errors.username && (
-                  <p className='text-red-500 text-[13px]'>{errors.username}</p>
-                )}
               </div>
-              <div className='grid gap-2'>
-                <HomeInput
-                  label='Email'
-                  type='email'
-                  placeholder='Enter Email'
-                  value={data.email}
-                  name='email'
-                  onChange={handleChange}
-                />
-                {errors.email && (
-                  <p className='text-red-500 text-[13px]'>{errors.email}</p>
-                )}
-              </div>
-              <div className='grid gap-2'>
-                <HomeInput
-                  label='Password'
-                  type='password'
-                  placeholder='Enter Password'
-                  value={data.password}
-                  name='password'
-                  onChange={handleChange}
-                />
-                {errors.password && (
-                  <p className='text-red-500 text-[13px]'>{errors.password}</p>
-                )}
-              </div>
-              <HomeButton
-                type='submit'
-                title={loading ? <Loading /> : 'Sign up'}
-                color='white'
-              />
+            </form>
+            <div className='mt-4 text-center text-sm w-full'>
+              Already have an account?{' '}
+              <span
+                className='underline underline-offset-4 cursor-pointer text-blue-600'
+                onClick={() => router.push('/login')}
+              >
+                Login
+              </span>
             </div>
-          </form>
-          <div className='mt-4 text-center text-sm w-full'>
-            Already have an account?{' '}
-            <span
-              className='underline underline-offset-4 cursor-pointer text-blue-600'
-              onClick={() => router.push('/')}
-            >
-              Login
-            </span>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
+          </CardContent>
+        </Card>
+      </div>
+    </>
   );
 }

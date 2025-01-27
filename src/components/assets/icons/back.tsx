@@ -3,7 +3,7 @@ import React from 'react';
 const BackArrow = () => {
   return (
     <svg
-      className='w-6 h-6 text-gray-800 dark:text-white cursor-pointer '
+      className='w-6 h-6 text-gray-800 dark:text-white cursor-pointer  left-3 top-3 fixed '
       aria-hidden='true'
       xmlns='http://www.w3.org/2000/svg'
       width='24'
