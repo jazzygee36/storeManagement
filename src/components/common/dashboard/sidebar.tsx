@@ -1,7 +1,5 @@
 'use client';
 import { useState, useEffect } from 'react';
-import Image from 'next/image';
-import DashboardLogo from '@/components/assets/svg/dasboardLogo.svg';
 import DashbaordIcon from '@/components/assets/icons/dashboard';
 import InventoryIcon from '@/components/assets/icons/inventory';
 import StoreIcon from '@/components/assets/icons/store';
@@ -35,6 +33,12 @@ const Navigation = [
 const Sidebar = () => {
   const router = useRouter();
   const [activePath, setActivePath] = useState<string>('');
+  const [companyName, setCompanyName] = useState<string>('');
+
+  useEffect(() => {
+    const storedName = localStorage.getItem('companyName');
+    setCompanyName(storedName || '');
+  }, []);
 
   useEffect(() => {
     // Set the active path based on the current URL
@@ -55,15 +59,20 @@ const Sidebar = () => {
     <div className=' px-6 h-screen flex flex-col justify-normal md:justify-between gap-8 md:gap-0'>
       {/* Top Section */}
       <div>
-        <div className='m-auto mt-6'>
-          <Image src={DashboardLogo} alt='logo' />
+        <div className='m-auto mt-6 flex gap-2 items-center'>
+          <div className='w-8 h-8 bg-purple-600 rounded-full flex justify-center items-center text-white font-semibold text-sm'>
+            {companyName?.[0]}
+          </div>
+          <h1 className='font-semibold text-purple-600 text-[18px] uppercase'>
+            {companyName?.slice(0, 9)}
+          </h1>
         </div>
         <div className='mt-10 flex flex-col gap-10'>
           {Navigation.map((navigate) => (
             <button
               key={navigate.description}
               className={`flex gap-3 items-center cursor-pointer ${
-                activePath === navigate.path ? 'text-[#4285F4]' : ''
+                activePath === navigate.path ? 'text-purple-600' : ''
               }`}
               onClick={(e) => {
                 e.preventDefault(); // Prevent default browser behavior

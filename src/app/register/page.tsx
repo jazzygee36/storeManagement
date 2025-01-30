@@ -20,14 +20,19 @@ import {
 import { cn } from '@/lib/utils';
 import Loading from '@/components/common/loadingState';
 import BackArrow from '@/components/assets/icons/back';
+import { useToast } from '@/components/hook/context/useContext';
 
 type FormData = z.infer<typeof registerSchema>;
 
 export default function RegisterPage() {
   const dispatch = useDispatch();
   const router = useRouter();
+  const { addToast } = useToast();
+  const showToast = () => {
+    addToast(' Successfully registered', 'success');
+  };
   const [data, setData] = useState<FormData>({
-    username: '',
+    companyName: '',
     email: '',
     password: '',
   });
@@ -49,7 +54,7 @@ export default function RegisterPage() {
       setErrors({
         email: validationErrors.email?._errors[0] || '',
         password: validationErrors.password?._errors[0] || '',
-        username: validationErrors.username?._errors[0] || '',
+        companyName: validationErrors.companyName?._errors[0] || '',
       });
       return; // Exit if validation fails
     }
@@ -62,8 +67,12 @@ export default function RegisterPage() {
         `${process.env.NEXT_PUBLIC_BASE_URL}/register`,
         data
       );
-      dispatch(setUserSignUp(res.data)); // Update Redux store
-      router.push('/'); // Redirect on success
+      if (res.data.message === 'Successfully registered') {
+        showToast();
+        dispatch(setUserSignUp(res.data)); // Update Redux store
+      }
+
+      router.push('/login'); // Redirect on success
     } catch (err) {
       if (axios.isAxiosError(err)) {
         if (err.response?.data?.message) {
@@ -110,11 +119,11 @@ export default function RegisterPage() {
               <div className='flex flex-col gap-6'>
                 <div>
                   <HomeInput
-                    label='Username'
+                    label='Company name'
                     type='text'
-                    placeholder='Username'
-                    value={data.username}
-                    name='username'
+                    placeholder='Company name'
+                    value={data.companyName}
+                    name='companyName'
                     onChange={handleChange}
                   />
                   {errors.username && (
@@ -155,6 +164,7 @@ export default function RegisterPage() {
                   type='submit'
                   title={loading ? <Loading /> : 'Sign up'}
                   color='white'
+                  className='bg-purple-600'
                 />
               </div>
             </form>

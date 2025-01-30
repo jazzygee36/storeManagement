@@ -7,12 +7,12 @@ import BackArrow from '@/components/assets/icons/back';
 
 const Login = () => {
   return (
-    <>
+    <div className='h-screen'>
       <BackArrow />
 
-      <div className='  m-auto relative top-12'>
+      <div className='  h-screen flex  items-center justify-center mt-12'>
         <Tabs defaultValue='admin' className='w-full h-screen '>
-          <TabsList className='grid w-full md:w-[25%] h-[44px] m-auto grid-cols-2 mb-5 mt-3 '>
+          <TabsList className='grid w-[60%] md:w-[25%] h-[44px] m-auto grid-cols-2 mb-5 mt-3 '>
             <TabsTrigger value='admin'>Admin Login</TabsTrigger>
             <TabsTrigger value='staff'>Staff Login</TabsTrigger>
           </TabsList>
@@ -32,7 +32,7 @@ const Login = () => {
           </TabsContent>
         </Tabs>
       </div>
-    </>
+    </div>
   );
 };
 

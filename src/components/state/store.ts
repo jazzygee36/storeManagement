@@ -8,6 +8,7 @@ import deleteStaffReducer from '../api/slices/deleteStaffSlice';
 import staffLoginReducer from '../api/slices/staffLoginSlice';
 import staffProductReducer from '../api/slices/staffProductsSlice';
 import salesReducer from '../api/slices/salesSlice';
+import productUpdateReducer from '../api/slices/updateProductSlice';
 
 export const store = configureStore({
   reducer: {
@@ -20,6 +21,7 @@ export const store = configureStore({
     staffLogin: staffLoginReducer,
     staffProduct: staffProductReducer,
     sales: salesReducer,
+    updateProducts: productUpdateReducer,
   },
 });
 

@@ -18,6 +18,7 @@ import {
 import HomeInput from '@/components/common/input';
 import HomeButton from '@/components/common/button';
 import Loading from '@/components/common/loadingState';
+import { useToast } from '@/components/hook/context/useContext';
 
 type FormData = z.infer<typeof createStaffSchema>;
 
@@ -27,6 +28,10 @@ function StaffLoginForm({
 }: React.ComponentPropsWithoutRef<'div'>) {
   const router = useRouter();
   const dispatch = useDispatch();
+  const { addToast } = useToast();
+  const showToast = () => {
+    addToast(' Successfully login', 'success');
+  };
 
   const [data, setData] = useState<FormData>({
     username: '',
@@ -61,9 +66,12 @@ function StaffLoginForm({
         `${process.env.NEXT_PUBLIC_BASE_URL}/staff/login`,
         data
       );
-      dispatch(setStaffLogin(res.data)); // Update Redux store
-      localStorage.setItem('token', res.data.token);
-      localStorage.setItem('staffId', res.data.staffId);
+      if (res.data.message === 'Login successful') {
+        showToast();
+        dispatch(setStaffLogin(res.data)); // Update Redux store
+        localStorage.setItem('token', res.data.token);
+        localStorage.setItem('staffId', res.data.staffId);
+      }
 
       router.push('/staff-store'); // Redirect on success
       setLoading(false);
@@ -140,6 +148,7 @@ function StaffLoginForm({
                 type='submit'
                 title={loading ? <Loading /> : 'Login'}
                 color={'white'}
+                className='bg-purple-600'
               />
             </div>
           </form>

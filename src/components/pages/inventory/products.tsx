@@ -7,6 +7,12 @@ import ReusableModal from '@/components/common/modal';
 import { LocalProductItem, ProductItem } from '@/components/utils/interface';
 import HomeInput from '@/components/common/input';
 import HomeButton from '@/components/common/button';
+import { useDispatch } from 'react-redux';
+import { RootState } from '@/components/state/store';
+import { updateProduct } from '@/components/api/slices/updateProductSlice';
+import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit';
+import { fetchUserProfile } from '@/components/api/slices/userProfileSlice';
+import { useToast } from '@/components/hook/context/useContext';
 
 type Status = 'Out-of-stock' | 'In-stock' | 'Low';
 
@@ -29,11 +35,19 @@ const Products = ({
   setCurrentPage,
   totalPages,
 }: Props) => {
+  const dispatch = useDispatch<ThunkDispatch<RootState, unknown, AnyAction>>();
+  // const { loading, success, error } = useSelector(
+  //   (state: RootState) => state.updateProducts
+  // );
+  const { addToast } = useToast();
+  const showToast = () => {
+    addToast(' Product Updated', 'success');
+  };
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedTransaction, setSelectedTransaction] =
     useState<LocalProductItem | null>(null);
-
+  console.log('selectedTransaction', selectedTransaction);
   // const openModal = (transaction: LocalProductItem) => {
   //   setSelectedTransaction(transaction);
   //   setIsModalOpen(true);
@@ -78,7 +92,32 @@ const Products = ({
     availability: product.availability,
     // remainingItems: product.qtyRemaning,
     qtyRemaining: product.qtyRemaining,
+    productId: product._id || '',
   });
+
+  const handleEditProductUpdate = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!selectedTransaction) return;
+
+    const productId = selectedTransaction?.productId; // Replace with actual ID
+    const productData = {
+      productName: selectedTransaction.product,
+      unitPrice: selectedTransaction.buyingPrice,
+      qtyBought: selectedTransaction.qty,
+      salesPrice: selectedTransaction.sellingPrice,
+      qtyRemaining: selectedTransaction.qtyRemaining,
+      exp: selectedTransaction.exp || undefined,
+    };
+
+    const userId = localStorage.getItem('userId');
+    if (userId) {
+      dispatch(updateProduct({ productId, productData }));
+      dispatch(fetchUserProfile(userId));
+    }
+    closeModal();
+    showToast();
+  };
 
   return (
     <>
@@ -250,22 +289,22 @@ const Products = ({
       </ReusableModal>
 
       <ReusableModal isOpen={isEditModalOpen} onClose={closeModal}>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            // Handle save logic here
-          }}
-        >
+        <form onSubmit={handleEditProductUpdate}>
           <h2 className='text-lg font-bold mb-4 text-center'>Edit Product</h2>
           {selectedTransaction && (
             <div className='space-y-4'>
-              <HomeInput
-                type='text'
-                label='  Product Name'
-                // className='w-full border rounded px-3 py-2'
-                defaultValue={selectedTransaction.product}
-              />
               <div className='flex justify-between gap-3'>
+                <HomeInput
+                  type='text'
+                  label='  Product Name'
+                  // className='w-full border rounded px-3 py-2'
+                  defaultValue={selectedTransaction.product}
+                  onChange={(e) =>
+                    setSelectedTransaction((prev) =>
+                      prev ? { ...prev, productName: e.target.value } : null
+                    )
+                  }
+                />
                 <HomeInput
                   type='text'
                   label=' Buying Price'
@@ -278,7 +317,20 @@ const Products = ({
                       event.preventDefault();
                     }
                   }}
+                  onChange={(e) =>
+                    setSelectedTransaction((prev) =>
+                      prev
+                        ? {
+                            ...prev,
+                            buyingPrice: parseFloat(e.target.value) || 0,
+                          }
+                        : null
+                    )
+                  }
                 />
+              </div>
+
+              <div className='flex justify-between gap-3'>
                 <HomeInput
                   type='text'
                   label='Quantity Bought'
@@ -291,6 +343,36 @@ const Products = ({
                       event.preventDefault();
                     }
                   }}
+                  onChange={(e) =>
+                    setSelectedTransaction((prev) =>
+                      prev
+                        ? { ...prev, qty: parseInt(e.target.value, 10) || 0 }
+                        : null
+                    )
+                  }
+                />
+                <HomeInput
+                  type='text'
+                  label=' QtyRemaining'
+                  // className='w-full border rounded px-3 py-2'
+                  defaultValue={selectedTransaction.qtyRemaining}
+                  onKeyPress={(
+                    event: React.KeyboardEvent<HTMLInputElement>
+                  ) => {
+                    if (!/[0-9 +]/.test(event.key)) {
+                      event.preventDefault();
+                    }
+                  }}
+                  onChange={(e) =>
+                    setSelectedTransaction((prev) =>
+                      prev
+                        ? {
+                            ...prev,
+                            qtyRemaining: parseFloat(e.target.value) || 0,
+                          }
+                        : null
+                    )
+                  }
                 />
               </div>
               {/* <div className='flex justify-between gap-3'> */}
@@ -307,12 +389,22 @@ const Products = ({
                       event.preventDefault();
                     }
                   }}
+                  onChange={(e) =>
+                    setSelectedTransaction((prev) =>
+                      prev
+                        ? {
+                            ...prev,
+                            sellingPrice: parseFloat(e.target.value) || 0,
+                          }
+                        : null
+                    )
+                  }
                 />
                 <HomeInput
                   type='date'
                   label='Expired (Optional)'
                   // className='w-full border rounded px-3 py-2'
-                  defaultValue={selectedTransaction.sellingPrice}
+                  defaultValue={selectedTransaction.exp || ''}
                 />
               </div>
             </div>

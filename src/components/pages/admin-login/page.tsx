@@ -20,6 +20,7 @@ import {
 import HomeInput from '@/components/common/input';
 import HomeButton from '@/components/common/button';
 import Loading from '@/components/common/loadingState';
+import { useToast } from '@/components/hook/context/useContext';
 
 type FormData = z.infer<typeof loginSchema>;
 
@@ -29,7 +30,10 @@ function AdminLoginForm({
 }: React.ComponentPropsWithoutRef<'div'>) {
   const router = useRouter();
   const dispatch = useDispatch();
-
+  const { addToast } = useToast();
+  const showToast = () => {
+    addToast(' Successfully login', 'success');
+  };
   const [data, setData] = useState<FormData>({
     email: '',
     password: '',
@@ -66,9 +70,13 @@ function AdminLoginForm({
         `${process.env.NEXT_PUBLIC_BASE_URL}/login`,
         data
       );
-      dispatch(setUserLogin(res.data)); // Update Redux store
-      localStorage.setItem('token', res.data.token);
-      localStorage.setItem('userId', res.data.userId);
+      if (res.data.message === 'Login successfully') {
+        showToast();
+        dispatch(setUserLogin(res.data)); // Update Redux store
+        localStorage.setItem('token', res.data.token);
+        localStorage.setItem('userId', res.data.userId);
+        localStorage.setItem('companyName', res.data.companyName);
+      }
 
       router.push('/admin-dashboard'); // Redirect on success
       setLoading(false);
@@ -152,6 +160,7 @@ function AdminLoginForm({
                 type='submit'
                 title={loading ? <Loading /> : 'Login'}
                 color={'white'}
+                className='bg-purple-600'
               />
 
               <Button variant='outline' className='w-full'>

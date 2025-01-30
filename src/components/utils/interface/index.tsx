@@ -26,6 +26,7 @@ export interface ButtonProps {
 }
 
 export interface LocalProductItem {
+  productId: string;
   product: string;
   buyingPrice: number;
   qty: number;

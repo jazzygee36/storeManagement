@@ -1,10 +1,14 @@
 'use client';
 
 import HomeButton from '@/components/common/button';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 
 import Footer from '@/components/common/footer';
 import { testimonies } from '@/components/utils/testimonies';
 import { useRouter } from 'next/navigation';
+import Tracking from '@/components/assets/icons/tracking';
+import Adding from '@/components/assets/icons/adding';
+import Analysis from '@/components/assets/icons/analysis';
 
 function LandingPageTabs() {
   const router = useRouter();
@@ -62,40 +66,54 @@ function LandingPageTabs() {
             />
           </div>
         </div> */}
-        {/* <div className='text-center my-10'>
-          <h3 className=' font-medium text-xl md:text-2xl font-inter'>
+        <div className=' my-12 mx-5 '>
+          <h3 className=' font-semibold text-xl md:text-2xl font-inter text-center'>
             Why Choose Our Inventory Management System
           </h3>
-          <p className='text-gray-500 text-base'>
+          <p className='text-gray-500 text-base text-center'>
             Unlock seamless inventory control, boost efficiency and stay ahead
             with smart automation and real-time-insights.
           </p>
-          <div className='grid grid-cols-1 md:grid-cols-3 items-center justify-center gap-3 mt-3'>
+          <div className='grid grid-cols-1 md:grid-cols-3 items-center justify-center gap-3 mt-7'>
             <Card className=''>
-              <CardHeader className='font-medium text-lg'>
-                Real-Time Inventory Tracking
+              <CardHeader className='font-medium text-lg flex flex-col gap-2'>
+                <Tracking />
+                <h1> Real-Time Inventory Tracking</h1>
               </CardHeader>
               <CardContent>
-                <p className='text-sm'>
+                <p className='text-sm text-gray-600'>
                   Track Inventory levels across all locations with instant
-                  updates
+                  updates, ensuring accurate inventory manegement at all time.
                 </p>
               </CardContent>
             </Card>
             <Card className=''>
-              <CardHeader className='font-medium text-lg'>
-                Knowing your Revenue
+              <CardHeader className='font-medium text-lg flex flex-col gap-2'>
+                <Adding />
+                <h1> Quick Product Add & Update</h1>
               </CardHeader>
-              <CardContent></CardContent>
+              <CardContent>
+                <p className='text-sm text-gray-600'>
+                  Add new products and update existing listing effortlessly,
+                  ensurig your inventory date is always accurate and up-to-date.
+                </p>
+              </CardContent>
             </Card>
             <Card className=''>
-              <CardHeader className='font-medium text-lg'>
-                Comprehensive Analytics
+              <CardHeader className='font-medium text-lg flex flex-col gap-2'>
+                <Analysis />
+                <h1> Comprehensive Analytics</h1>
               </CardHeader>
-              <CardContent></CardContent>
+              <CardContent>
+                <p className='text-sm text-gray-600'>
+                  Gain in-depth insights with advanced reporting tools, enabling
+                  you to make data-driven decisions on inventory tunover and
+                  demand forecasting.
+                </p>
+              </CardContent>
             </Card>
           </div>
-        </div> */}
+        </div>
         <div className='my-8'>
           <div className='bg-purple-500 text-white w-32 m-auto p-2 text-center rounded-full'>
             Testimonies
