@@ -11,22 +11,26 @@ import { fetchUserProfile } from '../api/slices/userProfileSlice';
 import { useToast } from '../hook/context/useContext';
 import { LocalProductItem } from '../utils/interface';
 
+interface DropdownMenuProps {
+  productId: string;
+  product: LocalProductItem;
+  openEditModal: (product: LocalProductItem) => void;
+}
+
 const DropdownMenu = ({
   productId,
   product,
   openEditModal,
-}: {
-  productId: string;
-  product: LocalProductItem;
-  openEditModal: (product: LocalProductItem) => void;
-}) => {
+}: DropdownMenuProps) => {
   const dispatch = useDispatch<AppDispatch>();
+  const { addToast } = useToast();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [position, setPosition] = useState<'up' | 'down'>('down');
-  const menuRef = useRef<HTMLDivElement>(null);
   const [deleting, setDeleting] = useState('Delete');
-  const { addToast } = useToast();
+
+  const menuRef = useRef<HTMLDivElement>(null);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -46,9 +50,12 @@ const DropdownMenu = ({
     if (menuRef.current) {
       const rect = menuRef.current.getBoundingClientRect();
       const viewportHeight = window.innerHeight;
+      const menuHeight = 60; // Adjust this to the height of your bottom menu
 
-      // Determine if the dropdown fits below; if not, show above
-      setPosition(viewportHeight - rect.bottom < 100 ? 'up' : 'down');
+      // Check if there is enough space below the dropdown
+      setPosition(
+        viewportHeight - rect.bottom - menuHeight < 100 ? 'up' : 'down'
+      );
     }
   }, []);
 
@@ -60,9 +67,7 @@ const DropdownMenu = ({
       document.removeEventListener('mousedown', handleClickOutside);
     }
 
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isOpen, handleClickOutside, calculatePosition]);
 
   const handleProductDelete = () => {
@@ -87,17 +92,18 @@ const DropdownMenu = ({
   return (
     <>
       <div className='relative' ref={menuRef}>
-        {/* More Icon */}
         <div onClick={toggleDropdown} className='cursor-pointer'>
           <MoreIcon />
         </div>
 
-        {/* Dropdown Menu */}
         {isOpen && (
           <div
-            className={`absolute right-0 z-[100] w-48 bg-white border rounded shadow-lg transition-transform duration-200 ${
-              position === 'up' ? 'bottom-full mb-2' : 'mt-2'
-            }`}
+            className={`absolute z-50 w-48 bg-white border rounded shadow-lg transition-transform duration-200`}
+            style={{
+              [position === 'up' ? 'bottom' : 'top']: '100%',
+              right: 0,
+              [position === 'up' ? 'top' : 'bottom']: 'auto', // Adjust to position upwards or downwards
+            }}
           >
             <ul className='py-1'>
               <li
@@ -105,13 +111,13 @@ const DropdownMenu = ({
                 onClick={(e) => {
                   e.stopPropagation();
                   setIsOpen(false);
-                  openEditModal(product); // Pass product details for editing
+                  openEditModal(product);
                 }}
               >
                 Edit
               </li>
               <li
-                className='px-4 py-2 text-sm hover:bg-gray-100 cursor-pointer text-[red]'
+                className='px-4 py-2 text-sm hover:bg-gray-100 cursor-pointer text-red-600'
                 onClick={openModal}
               >
                 Delete
@@ -121,7 +127,6 @@ const DropdownMenu = ({
         )}
       </div>
 
-      {/* Modal */}
       <ReusableModal isOpen={isModalOpen} onClose={closeModal}>
         <h1 className='text-center'>
           Are you sure you want to delete this product?

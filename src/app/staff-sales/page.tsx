@@ -270,7 +270,7 @@ const StaffSellProduct = () => {
                     title={'Add to Sales'}
                     color={'white'}
                     type='submit'
-                    className='w-[100%] mt-5 m-auto'
+                    className='w-[100%] mt-5 m-auto bg-purple-600'
                     disabled={
                       !data.productName ||
                       !data.qtyBuy ||
@@ -373,7 +373,7 @@ const StaffSellProduct = () => {
                 color={'white'}
                 type='button'
                 onClick={handleSales}
-                className='w-[100%] mt-5 m-auto'
+                className='w-[100%] mt-5 m-auto bg-purple-600'
                 disabled={currentSales.length === 0 || !data.paymentMethod}
               />
             </div>

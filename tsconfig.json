@@ -28,7 +28,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/app/staff-dashboard",
-    "src/app/staff-store"
+    "src/app/staff-store",
+    "src/app/admin-monthly-review"
   ],
   "exclude": ["node_modules"]
 }

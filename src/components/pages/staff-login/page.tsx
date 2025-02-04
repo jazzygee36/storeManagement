@@ -73,7 +73,7 @@ function StaffLoginForm({
         localStorage.setItem('staffId', res.data.staffId);
       }
 
-      router.push('/staff-store'); // Redirect on success
+      router.push('/staff-sales'); // Redirect on success
       setLoading(false);
     } catch (err) {
       if (axios.isAxiosError(err) && err.response) {

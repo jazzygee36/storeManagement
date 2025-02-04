@@ -1,10 +1,5 @@
 export const testimonies = [
   {
-    name: 'Uncle Sam',
-    description:
-      'This application has completely revolutionized the way we manage our inventory. Tasks that used to take hours are now completed in minutes. The intuitive interface and real-time updates have saved us so much time and eliminated unnecessary errors!',
-  },
-  {
     name: 'Mrs Anita',
     description:
       'Thanks to this application, we no longer worry about discrepancies in our stock levels. Its powerful tracking features and automatic updates ensure that every item is accounted for with absolute precision. It’s a game-changer for our business operations!',

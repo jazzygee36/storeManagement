@@ -129,7 +129,9 @@ function LandingPageTabs() {
                   <h3 className='font-medium text-lg text-center text-purple-500'>
                     {people.name}
                   </h3>
-                  <p className='text-sm mt-2 truncate '>{people.description}</p>
+                  <p className='text-sm mt-2 text-left '>
+                    {people.description}
+                  </p>
                 </div>
               ))}
             </div>

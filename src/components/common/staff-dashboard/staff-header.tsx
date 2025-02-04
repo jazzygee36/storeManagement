@@ -10,7 +10,7 @@ const Navigation = [
     path: '/staff-store',
   },
   {
-    description: 'Sell Product',
+    description: 'Point Of Sales',
     path: '/staff-sales',
   },
   {

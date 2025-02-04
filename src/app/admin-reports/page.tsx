@@ -1,4 +1,5 @@
 'use client';
+
 import HomeButton from '@/components/common/button';
 import MainDashboard from '@/components/common/dashboard/main-dasboard';
 import Loading from '@/components/common/loadingState';
@@ -14,23 +15,30 @@ import {
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 
-interface SalesReport {
+interface Report {
+  _id: string;
+  date: string;
+  totalPrice: number;
+}
+
+interface StaffReport {
   username: string;
   totalPrice: number;
-  reports: {
-    _id: string;
-    date: string;
-    totalPrice: number;
-  }[];
+  totalProfit: number;
+  reports: Report[];
+}
+
+interface SalesReport {
+  date: string;
+  staffReports: StaffReport[];
 }
 
 const SalesReports: React.FC = () => {
   const isAuthenticated = useAuth();
   const [salesReports, setSalesReports] = useState<SalesReport[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const itemsPerPage = 10;
 
-  // Fetch sales reports from the backend
   useEffect(() => {
     const fetchSalesReports = async () => {
       const userId = localStorage.getItem('userId');
@@ -38,8 +46,14 @@ const SalesReports: React.FC = () => {
         const response = await axios(
           `${process.env.NEXT_PUBLIC_BASE_URL}/${userId}/staff/sales/report`
         );
-
-        setSalesReports(response.data?.salesReports);
+        if (Array.isArray(response.data?.salesReports)) {
+          setSalesReports(response.data.salesReports);
+        } else {
+          console.error(
+            'salesReports is not an array',
+            response.data?.salesReports
+          );
+        }
       } catch (error) {
         console.error('Error fetching sales reports:', error);
       }
@@ -48,96 +62,81 @@ const SalesReports: React.FC = () => {
     fetchSalesReports();
   }, []);
 
-  // Calculate the current slice
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentSlice = salesReports.slice(
-    startIndex,
-    startIndex + itemsPerPage
-  );
-
-  const calculateProfit = (reports: SalesReport['reports']): number => {
-    return reports.reduce((totalProfit, item) => {
-      const profit = item.totalPrice * 0.2; // Assume a 20% profit margin
-      return totalProfit + profit;
-    }, 0);
-  };
-
   const formatNumber = (num: number): string =>
     new Intl.NumberFormat().format(num);
-  // Total pages
+
+  const calculateProfit = (reports?: Report[]): number =>
+    reports?.reduce((total, item) => total + item.totalPrice * 0.2, 0) || 0;
+
   const totalPages = Math.ceil(salesReports.length / itemsPerPage);
-
-  // Handlers for pagination
-  const handleNext = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage((prev) => prev + 1);
-    }
-  };
-
-  const handlePrevious = () => {
-    if (currentPage > 1) {
-      setCurrentPage((prev) => prev - 1);
-    }
-  };
+  const currentSlice = salesReports.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   return (
     <MainDashboard>
       {!isAuthenticated ? (
         <Loading />
       ) : (
-        <div className='sales-reports'>
+        <div className='p-6 bg-white shadow-md rounded-lg'>
           <Table>
             <TableHeader>
               <TableRow>
+                <TableHead>Date</TableHead>
                 <TableHead>Staff Name</TableHead>
                 <TableHead>Total Sales</TableHead>
                 <TableHead>Profit</TableHead>
-                <TableHead className='text-center'>More</TableHead>
+                {/* <TableHead className='text-center'>More</TableHead> */}
               </TableRow>
             </TableHeader>
             <TableBody>
-              {currentSlice.map((report) => {
-                const totalProfit = calculateProfit(report.reports);
-                console.log('report', report);
-                return (
-                  <TableRow
-                    key={report.username}
-                    className='capitalize sales-report '
-                  >
-                    <TableCell>{report.username}</TableCell>
-
-                    <TableCell>N{formatNumber(report.totalPrice)}</TableCell>
-                    <TableCell>N{formatNumber(totalProfit)}</TableCell>
-                    <TableCell className='text-center cursor-pointer'>
-                      View More
-                    </TableCell>
-                    {/* <ul>
-              {report.reports.map((item) => (
-                <li key={item._id}>
-                  Date: {new Date(item.date).toLocaleDateString()} - $
-                  {item.totalPrice.toFixed(2)}
-                </li>
-              ))}
-            </ul> */}
-                  </TableRow>
-                );
-              })}
+              {salesReports.length > 0 ? (
+                currentSlice.map(({ date, staffReports }, index) => (
+                  <React.Fragment key={index}>
+                    {staffReports.map(
+                      ({ username, totalPrice, reports }, reportIndex) => (
+                        <TableRow key={reportIndex}>
+                          <TableCell>
+                            {new Date(date).toLocaleDateString()}
+                          </TableCell>
+                          <TableCell className='capitalize'>
+                            {username}
+                          </TableCell>
+                          <TableCell>N{formatNumber(totalPrice)}</TableCell>
+                          <TableCell>
+                            N{formatNumber(calculateProfit(reports))}
+                          </TableCell>
+                          {/* <TableCell className='text-center cursor-pointer'>
+                            View More
+                          </TableCell> */}
+                        </TableRow>
+                      )
+                    )}
+                  </React.Fragment>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={5} className='text-center'>
+                    No Sales Reports Available
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
-          <div className='w-full  flex justify-between items-center mt-5'>
+          <div className='w-full flex justify-between items-center mt-8'>
             <HomeButton
               title='Previous'
-              onClick={handlePrevious}
+              onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
               disabled={currentPage === 1}
               color={''}
             />
-
             <span>
               Page {currentPage} of {totalPages}
             </span>
             <HomeButton
               title='Next'
-              onClick={handleNext}
+              onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
               disabled={currentPage === totalPages}
               color={''}
             />

@@ -98,7 +98,7 @@ const Dashboard = () => {
             </Card>
           </div>
 
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-5 mt-5'>
+          <div className='grid grid-cols-1 md:grid-cols-2 gap-5 my-5'>
             <Card>
               <CardHeader className='text-[16px] text-gray-800 font-medium font-inter'>
                 Total Revenue Value

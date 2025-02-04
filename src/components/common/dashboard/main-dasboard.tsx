@@ -30,9 +30,9 @@ const MainDashboard = ({ children }: { children: React.ReactNode }) => {
       {/* Sidebar */}
       <div
         ref={sidebarRef}
-        className={`fixed z-20 top-0 left-0 h-screen bg-white shadow-lg transition-transform ${
+        className={`fixed z-[100] top-0 left-0 h-screen bg-white shadow-lg transition-transform ${
           isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        } lg:translate-x-0 lg:relative lg:w-64`}
+        } lg:translate-x-0 lg:relative lg:w-64 w-[50%]`}
       >
         <Sidebar />
       </div>
@@ -46,7 +46,7 @@ const MainDashboard = ({ children }: { children: React.ReactNode }) => {
       )}
 
       {/* Main Content */}
-      <div className='flex-1 w-full h-screen overflow-y-auto bg-gray-100'>
+      <div className='flex-1 w-full h-screen overflow-y-auto bg-gray-100 '>
         {/* Header */}
         <Header onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
 

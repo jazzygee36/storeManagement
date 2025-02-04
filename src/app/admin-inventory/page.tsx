@@ -11,7 +11,6 @@ import Products from '@/components/pages/inventory/products';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/components/state/store';
 import { fetchUserProfile } from '@/components/api/slices/userProfileSlice';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import HomeInput from '@/components/common/input';
 
 const Inventory = () => {
@@ -20,7 +19,7 @@ const Inventory = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
   const [filter, setFilter] = useState('');
-  const itemsPerPage = 7;
+  const itemsPerPage = 10;
 
   const dispatch = useDispatch<AppDispatch>();
   const { products, status, error } = useSelector(
@@ -63,52 +62,48 @@ const Inventory = () => {
       ) : (
         <>
           <div className='mt-3'>
-            <Card>
-              <CardHeader className='w-full'>
-                <div className='grid grid-cols-1 md:grid-cols-2 gap-4 justify-between items-center'>
-                  <div className='w-full'>
-                    <HomeInput
-                      placeholder={'Search Product'}
-                      onInputChange={(value) => setSearchTerm(value)}
-                    />
-                  </div>
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-4 justify-between items-center'>
+              <div className='w-full'>
+                <HomeInput
+                  placeholder={'Search Product'}
+                  onInputChange={(value) => setSearchTerm(value)}
+                />
+              </div>
 
-                  <div className='w-full flex justify-between md:justify-end gap-5'>
-                    <HomeButton
-                      title='Add Products'
-                      color='white'
-                      onClick={openModal}
-                      bg='blue'
-                    />
-                    <select
-                      aria-label='Filter products by stock status'
-                      className='border border-gray-300 p-2 rounded-md focus:outline-none'
-                      value={filter}
-                      onChange={(e) => setFilter(e.target.value)}
-                    >
-                      <option value=''>All stock</option>
-                      <option value='Out-of-stock'>Out of stock</option>
-                      <option value='In-stock'>In stock</option>
-                      <option value='Low'>Low</option>
-                    </select>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                {filteredProducts.length === 0 ? (
-                  <div className='text-center flex justify-center items-center h-40'>
-                    No products available.
-                  </div>
-                ) : (
-                  <Products
-                    productItems={productItems}
-                    currentPage={currentPage}
-                    setCurrentPage={setCurrentPage}
-                    totalPages={totalPages}
-                  />
-                )}
-              </CardContent>
-            </Card>
+              <div className='w-full flex justify-between md:justify-end gap-5'>
+                <HomeButton
+                  title='Add Products'
+                  color='white'
+                  onClick={openModal}
+                  // bg='purple'
+                  className='bg-purple-600'
+                />
+                <select
+                  aria-label='Filter products by stock status'
+                  className='border border-gray-300 p-2 rounded-md focus:outline-none'
+                  value={filter}
+                  onChange={(e) => setFilter(e.target.value)}
+                >
+                  <option value=''>All stock</option>
+                  <option value='Out-of-stock'>Out of stock</option>
+                  <option value='In-stock'>In stock</option>
+                  <option value='Low'>Low</option>
+                </select>
+              </div>
+            </div>
+
+            {filteredProducts.length === 0 ? (
+              <div className='text-center flex justify-center items-center h-40'>
+                No products available.
+              </div>
+            ) : (
+              <Products
+                productItems={productItems}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                totalPages={totalPages}
+              />
+            )}
           </div>
           <ReusableModal isOpen={isModalOpen} onClose={closeModal}>
             <AllProductModal closeModal={closeModal} />

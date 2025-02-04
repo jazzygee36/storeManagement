@@ -190,7 +190,7 @@ const Products = ({
                   </td>
                   <td
                     onClick={(e) => e.stopPropagation()}
-                    className='border border-gray-200 px-4 py-2 text-sm'
+                    className='border border-gray-200 px-4 py-2 text-sm relative overflow-visible'
                   >
                     <DropdownMenu
                       productId={product._id || ''}
@@ -205,26 +205,27 @@ const Products = ({
         </table>
       </div>
 
-      <div className='flex justify-between items-center mt-5 mb-3'>
-        <button
+      <div className='flex justify-between items-center mt-5 my-5'>
+        <HomeButton
           className='px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300 disabled:opacity-50'
           onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
           disabled={currentPage === 1}
-        >
-          Previous
-        </button>
+          title=' Previous'
+          color={'grey'}
+        />
+
         <p className='text-sm'>
           Page {currentPage} of {totalPages}
         </p>
-        <button
+        <HomeButton
           className='px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300 disabled:opacity-50'
           onClick={() =>
             setCurrentPage((prev) => Math.min(prev + 1, totalPages))
           }
           disabled={currentPage === totalPages}
-        >
-          Next
-        </button>
+          title=' Next'
+          color={'grey'}
+        />
       </div>
 
       <ReusableModal isOpen={isModalOpen} onClose={closeModal}>
