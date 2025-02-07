@@ -35,7 +35,7 @@ function StaffLoginForm({
 
   const [data, setData] = useState<FormData>({
     username: '',
-    phoneNumber: '',
+    password: '',
   });
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [loading, setLoading] = useState(false);
@@ -53,7 +53,7 @@ function StaffLoginForm({
       const validationErrors = result.error.format();
       setErrors({
         username: validationErrors.username?._errors[0] || '',
-        phoneNumber: validationErrors.phoneNumber?._errors[0] || '',
+        password: validationErrors.password?._errors[0] || '',
       });
       return; // Exit if validation fails
     }
@@ -133,8 +133,8 @@ function StaffLoginForm({
                   label='Password'
                   type='password'
                   placeholder='Enter password'
-                  value={data.phoneNumber}
-                  name='phoneNumber'
+                  value={data.password}
+                  name='password'
                   onChange={handleChange}
                 />
                 {errors.phoneNumber && (

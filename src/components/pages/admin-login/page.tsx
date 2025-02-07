@@ -8,7 +8,6 @@ import { useDispatch } from 'react-redux';
 import { setUserLogin } from '@/components/api/slices/loginSlice';
 // import { fetchUserProfile } from '@/components/api/slices/userProfileSlice';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -96,6 +95,7 @@ function AdminLoginForm({
       setLoading(false);
     }
   };
+
   return (
     <div
       className={cn(
@@ -133,16 +133,7 @@ function AdminLoginForm({
                   <p className='text-red-500 text-[13px]'>{errors.email}</p>
                 )}
               </div>
-              <div className='grid gap-2'>
-                {/* <div className='flex items-center'>
-                  <Label htmlFor='password'>Password</Label>
-                  <a
-                    href='#'
-                    className='ml-auto inline-block text-sm underline-offset-4 hover:underline'
-                  >
-                    Forgot your password?
-                  </a>
-                </div> */}
+              <div className=''>
                 <HomeInput
                   label='Password'
                   type='password'
@@ -155,17 +146,20 @@ function AdminLoginForm({
                   <p className='text-red-500 text-[13px]'>{errors.password}</p>
                 )}
               </div>
-
+              <div
+                className='relative -top-4 bottom-0 cursor-pointer'
+                onClick={() => router.push('/forget-password')}
+              >
+                <h2 className=' inline-block text-sm underline-offset-4 hover:underline'>
+                  Forgot password?
+                </h2>
+              </div>
               <HomeButton
                 type='submit'
                 title={loading ? <Loading /> : 'Login'}
                 color={'white'}
-                className='bg-purple-600'
+                className='bg-purple-600 relative'
               />
-
-              <Button variant='outline' className='w-full'>
-                Login with Google
-              </Button>
             </div>
             <div className='mt-4 text-center text-sm'>
               Don&apos;t have an account?{' '}

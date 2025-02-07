@@ -7,13 +7,13 @@ import { AppDispatch, RootState } from '@/components/state/store';
 import { useToast } from '@/components/hook/context/useContext';
 import ReusableModal from '@/components/common/modal';
 import { deleteStaff } from '@/components/api/slices/deleteStaffSlice';
-import VisibleEyeIcon from '@/components/assets/icons/visibleEye';
-import CloseEyeIcon from '@/components/assets/icons/closeEye';
+// import VisibleEyeIcon from '@/components/assets/icons/visibleEye';
+// import CloseEyeIcon from '@/components/assets/icons/closeEye';
 
 interface StaffProps {
   _id: string;
   username: string;
-  phoneNumber: string;
+  password: string;
 }
 const StaffStore = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -23,11 +23,11 @@ const StaffStore = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedStaffId, setSelectedStaffId] = useState<string | null>(null);
   const [deleting, setDeleting] = useState('Delete');
-  const [showPassword, setShowPassword] = useState<boolean>(false);
+  // const [showPassword, setShowPassword] = useState<boolean>(false);
 
-  const handleShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
+  // const handleShowPassword = () => {
+  //   setShowPassword(!showPassword);
+  // };
 
   const openModal = (staffId: string) => {
     setSelectedStaffId(staffId);
@@ -89,7 +89,7 @@ const StaffStore = () => {
         staffs.map((staff: StaffProps) => {
           return (
             <div
-              key={staff.phoneNumber}
+              key={staff.password}
               className='border border-gray-300 rounded-md w-full h-[100%] grid grid-cols-1 my-5'
             >
               <div className='flex justify-between items-center p-3 w-full'>
@@ -98,15 +98,15 @@ const StaffStore = () => {
                   <div className='grid grid-cols-1 md:grid-cols-2 w-full items-center justify-between'>
                     <div>
                       <h1>{staff.username}</h1>
-                      <div className='flex gap-8 items-center'>
-                        <h1>{showPassword ? staff.phoneNumber : '********'}</h1>
+                      {/* <div className='flex gap-8 items-center'>
+                        <h1>{showPassword ? staff.password : '********'}</h1>
                         <p
                           onClick={handleShowPassword}
                           className='cursor-pointer'
                         >
                           {showPassword ? <VisibleEyeIcon /> : <CloseEyeIcon />}
                         </p>
-                      </div>
+                      </div> */}
                     </div>
                     <div className='w-[70%] md:w-[40%] flex justify-end'>
                       <HomeButton

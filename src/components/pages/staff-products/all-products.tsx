@@ -49,6 +49,7 @@ const StaffProducts = () => {
               title={'Sell Product'}
               color={'white'}
               onClick={() => router.push('/staff-sales')}
+              className='bg-purple-600'
             />
           </div>
         </div>

@@ -29,7 +29,7 @@ const Stores = () => {
   const isAuthenticated = useAuth();
   const [data, setData] = useState<FormData>({
     username: '',
-    phoneNumber: '',
+    password: '',
   });
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   // const [loading, setLoading] = useState(false);
@@ -54,7 +54,7 @@ const Stores = () => {
       const validationErrors = result.error.format();
       setErrors({
         username: validationErrors.username?._errors[0] || '',
-        phoneNumber: validationErrors.phoneNumber?._errors[0] || '',
+        password: validationErrors.password?._errors[0] || '',
       });
       return; // Exit if validation fails
     }
@@ -75,7 +75,7 @@ const Stores = () => {
           showToast();
           closeModal();
         }
-        setData({ username: '', phoneNumber: '' });
+        setData({ username: '', password: '' });
 
         setLoading(loading);
       } catch (error) {
@@ -136,15 +136,13 @@ const Stores = () => {
               <div>
                 <HomeInput
                   placeholder={'Password'}
-                  value={data.phoneNumber}
-                  name='phoneNumber'
+                  value={data.password}
+                  name='password'
                   onChange={handleChange}
                   type='password'
                 />
-                {errors.phoneNumber && (
-                  <p className='text-red-500 text-[13px]'>
-                    {errors.phoneNumber}
-                  </p>
+                {errors.password && (
+                  <p className='text-red-500 text-[13px]'>{errors.password}</p>
                 )}
               </div>
               <div className='mt-5 '>

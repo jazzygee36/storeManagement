@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import DropdownMenu from '@/components/common/dropdown-menu';
 import ReusableModal from '@/components/common/modal';
@@ -43,11 +43,12 @@ const Products = ({
   const showToast = () => {
     addToast(' Product Updated', 'success');
   };
+  const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedTransaction, setSelectedTransaction] =
     useState<LocalProductItem | null>(null);
-  console.log('selectedTransaction', selectedTransaction);
+
   // const openModal = (transaction: LocalProductItem) => {
   //   setSelectedTransaction(transaction);
   //   setIsModalOpen(true);
@@ -95,9 +96,16 @@ const Products = ({
     productId: product._id || '',
   });
 
-  const handleEditProductUpdate = (e: React.FormEvent) => {
-    e.preventDefault();
+  useEffect(() => {
+    const userId = localStorage.getItem('userId');
+    if (userId) {
+      dispatch(fetchUserProfile(userId));
+    }
+  }, [dispatch]);
 
+  const handleEditProductUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
     if (!selectedTransaction) return;
 
     const productId = selectedTransaction?.productId; // Replace with actual ID
@@ -112,16 +120,31 @@ const Products = ({
 
     const userId = localStorage.getItem('userId');
     if (userId) {
-      dispatch(updateProduct({ productId, productData }));
-      dispatch(fetchUserProfile(userId));
+      // Dispatch actions and await their results
+      const productUpdate = await dispatch(
+        updateProduct({ productId, productData })
+      );
+      const userProfileUpdate = await dispatch(fetchUserProfile(userId));
+
+      // Wait for both updates to complete
+      const [productUpdateResult, userProfileUpdateResult] = await Promise.all([
+        productUpdate,
+        userProfileUpdate,
+      ]);
+
+      // Check if both updates were successful before showing the toast
+      if (productUpdateResult && userProfileUpdateResult) {
+        showToast();
+      }
+      setLoading(false);
     }
+
     closeModal();
-    showToast();
   };
 
   return (
     <>
-      <div className='overflow-x-auto mt-5'>
+      <div className='overflow-x-auto mt-5 pb-14'>
         <table className='min-w-full border-collapse border border-gray-300'>
           <thead>
             <tr className='bg-black text-white'>
@@ -421,7 +444,7 @@ const Products = ({
             <HomeButton
               type='submit'
               className='px-4 py-2 bg-blue-600 text-white rounded'
-              title={' Save Changes'}
+              title={loading ? 'Updating...' : ' Save Changes'}
               color={'white'}
             />
           </div>

@@ -11,7 +11,7 @@ interface StaffProfile {
   name: string;
   position: string;
   username: string; // Ensure this field exists
-  phoneNumber: string; // Ensure this field exists
+  password: string; // Ensure this field exists
   // Additional fields can be added as required
 }
 

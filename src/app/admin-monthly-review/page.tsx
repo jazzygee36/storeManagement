@@ -11,6 +11,8 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { saveAs } from 'file-saver';
 
 interface Report {
+  qtySold: number;
+  unitPrice: number;
   _id: string;
   date: string;
   totalPrice: number;
@@ -81,7 +83,11 @@ const MonthlyReview = () => {
     }, 0);
   };
   const calculateProfit = (reports?: Report[]): number =>
-    reports?.reduce((total, item) => total + item.totalPrice * 0.2, 0) || 0;
+    reports?.reduce(
+      (total, item) =>
+        total + (item.totalPrice - item.qtySold * item.unitPrice),
+      0
+    ) || 0;
 
   const calculateTotalProfit = (): number => {
     return filteredReports.reduce((sum, report) => {
@@ -135,7 +141,7 @@ const MonthlyReview = () => {
                 // className='w-[50%]'
               />
               <HomeButton
-                className='my-4 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700'
+                className='my-4 bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-black'
                 title='Export Report'
                 color={''}
                 onClick={handleExportReport}

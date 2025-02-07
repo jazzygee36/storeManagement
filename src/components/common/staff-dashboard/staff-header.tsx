@@ -17,6 +17,10 @@ const Navigation = [
     description: ' Daily Sales',
     path: '/staff-sales-report',
   },
+  // {
+  //   description: ' Receipt',
+  //   path: '/receipt',
+  // },
 ];
 
 const StaffHeader = () => {

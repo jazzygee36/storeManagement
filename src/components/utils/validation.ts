@@ -18,10 +18,23 @@ export const loginSchema = z.object({
     .min(3, 'Email is required'),
   password: z.string().min(6, 'Password must be at least 6 characters long'),
 });
+export const resetPasswordSchema = z
+  .object({
+    newPassword: z
+      .string()
+      .min(6, 'Password must be at least 6 characters long'),
+    confirmPassword: z
+      .string()
+      .min(6, 'Confirm Password must be at least 6 characters long'),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: 'Passwords must match',
+    path: ['confirmPassword'], // This ensures the error appears on the confirmPassword field
+  });
 
 export const createStaffSchema = z.object({
   username: z.string().min(3, 'Username is required'),
-  phoneNumber: z.string().min(11, 'Password must be at least 11 numbers long'),
+  password: z.string().min(6, 'Password must be at least 6 numbers long'),
 });
 
 export const addProductSchema = z.object({

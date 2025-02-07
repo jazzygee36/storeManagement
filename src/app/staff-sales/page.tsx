@@ -18,6 +18,7 @@ type FormData = z.infer<typeof salesSchema>;
 
 const StaffSellProduct = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const [loading, setLoading] = useState(false);
   const { addToast } = useToast();
   const { products } = useSelector((state: RootState) => state.staffProduct);
   const isAuthenticated = useAuth();
@@ -124,11 +125,10 @@ const StaffSellProduct = () => {
     return total + totalPrice;
   }, 0);
 
-  const handleSales = () => {
+  const handleSales = async () => {
     const staffId = localStorage.getItem('staffId') || '';
 
     if (!staffId) {
-      console.error('Staff ID is missing');
       return;
     }
 
@@ -149,41 +149,49 @@ const StaffSellProduct = () => {
       return;
     }
 
-    const salesData = currentSales.map((sale) => {
-      const selectedProduct = products.find(
-        (product) => product.productName === sale.productName
-      );
+    const salesData = currentSales
+      .map((sale) => {
+        const selectedProduct = products.find(
+          (product) => product.productName === sale.productName
+        );
 
-      if (!selectedProduct) {
-        return null; // Skip the sale if the product is not found
-      }
+        if (!selectedProduct) return null; // Skip invalid sales
 
-      return {
-        productId: selectedProduct._id,
-        sellingPrice: parseFloat(sale.sellingPrice.replace(/,/g, '')),
-        qtySold: parseInt(sale.qtyBuy, 10),
-        totalPrice: parseFloat(sale.totalPrice.replace(/,/g, '')),
-        paymentMethod: data.paymentMethod,
-        date: new Date().toISOString(),
-      };
-    });
+        return {
+          productId: selectedProduct._id,
+          sellingPrice: parseFloat(sale.sellingPrice.replace(/,/g, '')),
+          qtySold: parseInt(sale.qtyBuy, 10),
+          totalPrice: parseFloat(sale.totalPrice.replace(/,/g, '')),
+          paymentMethod: data.paymentMethod,
+          date: new Date().toISOString(),
+        };
+      })
+      .filter((sale) => sale !== null); // Remove null values
 
-    const validSales = salesData.filter((sale) => sale !== null);
-
-    if (validSales.length === 0) {
-      console.warn('No valid sales to process');
+    if (salesData.length === 0) {
       return;
     }
+    setLoading(true);
+    try {
+      const response = await dispatch(
+        addSale({
+          sales: salesData,
+          staffId,
+          showToast: () => addToast('Sale recorded successfully', 'success'),
+        })
+      ).unwrap(); // `unwrap` ensures we get the action payload
 
-    dispatch(
-      addSale({
-        sales: validSales,
-        staffId,
-        showToast: () => addToast('Sale recorded successfully', 'success'),
-      })
-    );
-
-    setCurrentSales([]);
+      if (response.length > 0) {
+        addToast('Sale recorded successfully', 'success');
+        setCurrentSales([]); // Clear sales only if successful
+      } else {
+        addToast('Sale failed. Please try again.', 'error');
+      }
+    } catch {
+      addToast('Sale failed. Please try again.', 'error');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleRemoveSale = (index: number) => {
@@ -345,38 +353,40 @@ const StaffSellProduct = () => {
                 </>
               )}
             </table>
-
-            <div className='mt-5 flex justify-around items-center'>
-              <label className='text-sm'>Payment Method</label>
-              <div>
-                <select
-                  name='paymentMethod'
-                  value={data.paymentMethod}
-                  onChange={handlePaymentMethodChange}
-                  className='px-2 border border-gray-300 h-[44px] rounded-md w-[100%] capitalize focus:outline-none'
-                >
-                  <option value=''>Select Payment Method</option>
-                  <option value='Cash'>Cash</option>
-                  <option value='POS'>POS</option>
-                  <option value='Transfer'>Transfer</option>
-                </select>
-                {errors.paymentMethod && (
-                  <p className='text-red-500 text-[13px]'>
-                    {errors.paymentMethod}
-                  </p>
-                )}
-              </div>
-            </div>
-            <div className='w-[50%] mt-5 m-auto'>
-              <HomeButton
-                title={'Complete Sale'}
-                color={'white'}
-                type='button'
-                onClick={handleSales}
-                className='w-[100%] mt-5 m-auto bg-purple-600'
-                disabled={currentSales.length === 0 || !data.paymentMethod}
-              />
-            </div>
+            {currentSales.length > 0 && (
+              <>
+                <div className='mt-5 flex justify-around items-center'>
+                  <label className='text-sm'>Payment Method</label>
+                  <div>
+                    <select
+                      name='paymentMethod'
+                      value={data.paymentMethod}
+                      onChange={handlePaymentMethodChange}
+                      className='px-2 border border-gray-300 h-[44px] rounded-md w-[100%] capitalize focus:outline-none'
+                    >
+                      <option value=''>Select Payment Method</option>
+                      <option value='Cash'>Cash</option>
+                      <option value='POS'>POS</option>
+                      <option value='Transfer'>Transfer</option>
+                    </select>
+                    {errors.paymentMethod && (
+                      <p className='text-red-500 text-[13px]'>
+                        {errors.paymentMethod}
+                      </p>
+                    )}
+                  </div>
+                </div>
+                <div className='w-[50%] mt-5 m-auto'>
+                  <HomeButton
+                    title={loading ? 'Processing...' : 'Complete Sales'}
+                    color={'white'}
+                    onClick={handleSales}
+                    className='w-[100%] mt-5 m-auto bg-green-600'
+                    disabled={loading}
+                  />
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}

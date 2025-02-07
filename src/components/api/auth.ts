@@ -1,24 +1,41 @@
-// src/app/api/auth/verifyToken/route.ts
-import { NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 
-const SECRET_KEY = process.env.JWT_SECRET_KEY || 'your-secret-key';
+const SECRET_KEY = process.env.JWT_SECRET_KEY;
 
 export async function GET(req: Request) {
-  const token = req.headers.get('Authorization')?.split(' ')[1]; // Extract token
-
-  if (!token) {
-    return NextResponse.json({ message: 'Token is missing' }, { status: 401 });
-  }
-
   try {
-    const decoded = jwt.verify(token, SECRET_KEY);
-    return NextResponse.json({ user: decoded });
-  } catch (error) {
-    console.log(error);
-    return NextResponse.json(
-      { message: 'Invalid or expired token' },
-      { status: 401 }
+    const authHeader = req.headers.get('authorization');
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return new Response(JSON.stringify({ message: 'Token is missing' }), {
+        status: 401,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    const token = authHeader.split(' ')[1]; // Extract token
+
+    const decoded = jwt.verify(token, SECRET_KEY as string);
+
+    return new Response(JSON.stringify({ user: decoded }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  } catch (error: unknown) {
+    let errorMessage = 'Invalid token';
+    if (error instanceof Error) {
+      errorMessage =
+        error.name === 'TokenExpiredError'
+          ? 'Token has expired'
+          : 'Invalid token';
+    }
+    return new Response(
+      JSON.stringify({
+        message: errorMessage,
+      }),
+      {
+        status: 401,
+        headers: { 'Content-Type': 'application/json' },
+      }
     );
   }
 }

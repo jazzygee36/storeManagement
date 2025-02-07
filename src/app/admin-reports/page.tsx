@@ -16,6 +16,8 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 
 interface Report {
+  qtySold: number;
+  unitPrice: number;
   _id: string;
   date: string;
   totalPrice: number;
@@ -66,7 +68,11 @@ const SalesReports: React.FC = () => {
     new Intl.NumberFormat().format(num);
 
   const calculateProfit = (reports?: Report[]): number =>
-    reports?.reduce((total, item) => total + item.totalPrice * 0.2, 0) || 0;
+    reports?.reduce(
+      (total, item) =>
+        total + (item.totalPrice - item.qtySold * item.unitPrice),
+      0
+    ) || 0;
 
   const totalPages = Math.ceil(salesReports.length / itemsPerPage);
   const currentSlice = salesReports.slice(
@@ -95,23 +101,25 @@ const SalesReports: React.FC = () => {
                 currentSlice.map(({ date, staffReports }, index) => (
                   <React.Fragment key={index}>
                     {staffReports.map(
-                      ({ username, totalPrice, reports }, reportIndex) => (
-                        <TableRow key={reportIndex}>
-                          <TableCell>
-                            {new Date(date).toLocaleDateString()}
-                          </TableCell>
-                          <TableCell className='capitalize'>
-                            {username}
-                          </TableCell>
-                          <TableCell>N{formatNumber(totalPrice)}</TableCell>
-                          <TableCell>
-                            N{formatNumber(calculateProfit(reports))}
-                          </TableCell>
-                          {/* <TableCell className='text-center cursor-pointer'>
+                      ({ username, totalPrice, reports }, reportIndex) => {
+                        return (
+                          <TableRow key={reportIndex}>
+                            <TableCell>
+                              {new Date(date).toLocaleDateString()}
+                            </TableCell>
+                            <TableCell className='capitalize'>
+                              {username}
+                            </TableCell>
+                            <TableCell>N{formatNumber(totalPrice)}</TableCell>
+                            <TableCell>
+                              N{formatNumber(calculateProfit(reports))}
+                            </TableCell>
+                            {/* <TableCell className='text-center cursor-pointer'>
                             View More
                           </TableCell> */}
-                        </TableRow>
-                      )
+                          </TableRow>
+                        );
+                      }
                     )}
                   </React.Fragment>
                 ))

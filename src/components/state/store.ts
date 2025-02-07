@@ -9,6 +9,8 @@ import staffLoginReducer from '../api/slices/staffLoginSlice';
 import staffProductReducer from '../api/slices/staffProductsSlice';
 import salesReducer from '../api/slices/salesSlice';
 import productUpdateReducer from '../api/slices/updateProductSlice';
+import emailVerificationReducer from '../api/slices/emailVerificationSlice';
+import passwordResetReducer from '../api/slices/resetPasswordVerification';
 
 export const store = configureStore({
   reducer: {
@@ -22,6 +24,8 @@ export const store = configureStore({
     staffProduct: staffProductReducer,
     sales: salesReducer,
     updateProducts: productUpdateReducer,
+    emailVerification: emailVerificationReducer,
+    passwordReset: passwordResetReducer,
   },
 });
 

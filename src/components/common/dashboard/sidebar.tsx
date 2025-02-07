@@ -75,7 +75,7 @@ const Sidebar = () => {
       <div>
         <div className='m-auto mt-6 flex gap-2 items-center'>
           <div className='w-6 h-6 bg-purple-600 rounded-md flex justify-center items-center text-white font-semibold text-md'>
-            {companyName?.[0] || 'Admin'}
+            {companyName?.[0] || 'AD'}
           </div>
           <h1 className='font-semibold text-purple-600 text-md uppercase'>
             {companyName?.slice(0, 9)}
